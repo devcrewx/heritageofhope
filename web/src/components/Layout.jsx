@@ -15,8 +15,8 @@ function Layout({ language, setLanguage }) {
   return (
     <div className={`site-shell ${language === 'bn' ? 'lang-bn' : 'lang-en'}`}>
       <header className="topbar" data-reveal>
-        <Link className="brand" to="/" aria-label="Heritage of Hope Foundation home">
-          <img src="/assets/profile_pic.webp" alt="Heritage of Hope Foundation logo" />
+        <Link className="brand" to="/" aria-label={resolve(language, text('Heritage of Hope Foundation home', 'Heritage of Hope Foundation-এর হোমপেজ'))}>
+          <img src="/assets/profile_pic.webp" alt={resolve(language, text('Heritage of Hope Foundation logo', 'Heritage of Hope Foundation লোগো'))} />
           <div>
             <p className="brand-name">Heritage of Hope Foundation</p>
             <p className="brand-sub">
@@ -25,7 +25,7 @@ function Layout({ language, setLanguage }) {
           </div>
         </Link>
 
-        <nav className="nav-links" aria-label="Primary">
+        <nav className="nav-links" aria-label={resolve(language, text('Primary navigation', 'প্রধান মেনু'))}>
           {navItems.map((item) => (
             <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
               {resolve(language, item.label)}
@@ -38,7 +38,7 @@ function Layout({ language, setLanguage }) {
             type="button"
             className="btn btn-ghost"
             onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-            aria-label="Toggle language"
+            aria-label={resolve(language, text('Toggle language', 'ভাষা বদলান'))}
           >
             {navCopy[language].switchTo}
           </button>
@@ -58,7 +58,7 @@ function Layout({ language, setLanguage }) {
               language,
               text(
                 'Children, women and communities in South 24 Parganas, West Bengal.',
-                'দক্ষিণ ২৪ পরগণার শিশু, নারী ও প্রান্তিক মানুষের সেবায় আমরা নিয়োজিত।',
+                'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
               ),
             )}
           </p>
@@ -67,7 +67,7 @@ function Layout({ language, setLanguage }) {
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
               </svg>
-              {resolve(language, text('Follow us on Facebook', 'ফেসবুকে আমাদের সাথে যুক্ত থাকুন'))}
+              {resolve(language, text('Follow us on Facebook', 'ফেসবুকে আমাদের সঙ্গে থাকুন'))}
             </a>
           </div>
         </div>

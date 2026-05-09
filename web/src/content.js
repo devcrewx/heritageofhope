@@ -10,11 +10,11 @@ export const resolve = (language, value) => {
 
 export const navItems = [
   { to: '/', label: text('Home', 'হোম') },
-  { to: '/about', label: text('About', 'আমাদের সম্পর্কে') },
-  { to: '/our-work', label: text('Our Work', 'কাজের ক্ষেত্র') },
-  { to: '/impact', label: text('Impact', 'প্রভাব') },
-  { to: '/gallery', label: text('Gallery', 'গ্যালারি') },
-  { to: '/get-involved', label: text('Get Involved', 'যুক্ত হোন') },
+  { to: '/about', label: text('About', 'আমাদের কথা') },
+  { to: '/our-work', label: text('Our Work', 'আমাদের কাজ') },
+  { to: '/impact', label: text('Impact', 'ফলাফল') },
+  { to: '/gallery', label: text('Gallery', 'ছবিঘর') },
+  { to: '/get-involved', label: text('Get Involved', 'সাথে থাকুন') },
   { to: '/contact', label: text('Contact', 'যোগাযোগ') },
 ]
 
@@ -26,7 +26,7 @@ export const featuredPrograms = [
     title: text('Kishalaya Pathsala', 'কিশলয় পাঠশালা'),
     description: text(
       'Community learning classes and study support for children in Kankandighi.',
-      'কঙ্কনদীঘির শিশুদের জন্য কমিউনিটি ক্লাস ও পড়াশোনার সহায়তা।',
+      'কঙ্কনদীঘির বাচ্চাদের জন্য পাড়ার পড়াশোনার ক্লাস আর সাহায্য।',
     ),
     highlight: text('Foundational learning', 'ভিত্তিমূলক শিক্ষা'),
   },
@@ -37,7 +37,7 @@ export const featuredPrograms = [
     title: text('Free Health Camps', 'বিনামূল্যের স্বাস্থ্য শিবির'),
     description: text(
       'Basic checkups, consultations, and referral help for families and children.',
-      'পরিবার ও শিশুদের জন্য প্রাথমিক পরীক্ষা, পরামর্শ ও রেফারেল সহায়তা।',
+      'পরিবার আর বাচ্চাদের জন্য বেসিক চেকআপ, পরামর্শ আর দরকার হলে অন্য জায়গায় পাঠানোর ব্যবস্থা।',
     ),
     highlight: text('Community first aid', 'কমিউনিটি ফার্স্ট এইড'),
   },
@@ -48,7 +48,7 @@ export const featuredPrograms = [
     title: text('Blood Donation Drives', 'রক্তদান উদ্যোগ'),
     description: text(
       'Volunteer blood donation for thalassemia support and emergency care.',
-      'থ্যালাসেমিয়া সহায়তা ও জরুরি সেবার জন্য স্বেচ্ছায় রক্তদান।',
+      'থ্যালাসেমিয়ার বাচ্চা আর জরুরি চিকিৎসার কাজে স্বেচ্ছায় রক্তদান।',
     ),
     highlight: text('Life-saving action', 'জীবনরক্ষাকারী উদ্যোগ'),
   },
@@ -59,7 +59,7 @@ export const featuredPrograms = [
     title: text('Winter Programme', 'শীতকালীন কর্মসূচি'),
     description: text(
       'Winter clothing, sweaters, and school bags for children in need.',
-      'প্রয়োজনীয় শিশুদের জন্য শীতের জামা, সোয়েটার ও স্কুল ব্যাগ।',
+      'যাদের দরকার, তাদের জন্য শীতের জামা, সোয়েটার আর স্কুল ব্যাগ।',
     ),
     highlight: text('Seasonal support', 'মৌসুমি সহায়তা'),
   },
@@ -70,7 +70,7 @@ export const featuredPrograms = [
     title: text('Monsoon Relief', 'বর্ষাকালীন সহায়তা'),
     description: text(
       'Raincoats, umbrellas, and essentials to keep school access steady.',
-      'শিক্ষায় বিঘ্ন না ঘটাতে রেনকোট, ছাতা ও জরুরি সামগ্রী প্রদান।',
+      'স্কুলে আসা-যাওয়া সহজ রাখতে রেনকোট, ছাতা আর দরকারি জিনিস দেওয়া।',
     ),
     highlight: text('Education without interruption', 'বিঘ্নহীন শিক্ষা'),
   },
@@ -81,7 +81,7 @@ export const featuredPrograms = [
     title: text('Bornporichoy', 'বর্ণপরিচয়'),
     description: text(
       'Early literacy sessions for children who need extra learning support.',
-      'অতিরিক্ত সহায়তা দরকার এমন শিশুদের জন্য প্রাথমিক সাক্ষরতা সেশন।',
+      'যাদের একটু বেশি সাহায্য লাগে, তাদের জন্য পড়া-লেখা শেখার ক্লাস।',
     ),
     highlight: text('Reading support', 'পড়ার সহায়তা'),
   },

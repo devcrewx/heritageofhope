@@ -22,11 +22,11 @@ function Home() {
         'Even small support helps us keep classes running, respond to health needs and serve families with dignity.',
     },
     bn: {
-      eyebrow: 'সেবার আলোয় প্রতিটি পদক্ষেপে নতুন প্রাণের ছোঁয়া',
+      eyebrow: 'ছোট ছোট কাজ, বড় ভরসা',
       title: 'প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।',
       intro:
-        'Heritage of Hope Foundation দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি ত্রাণের মাধ্যমে কাজ করে।',
-      heroTagline: 'মানুষের ক্ষমতায়ন | নিবন্ধিত সংস্থা',
+        'Heritage of Hope Foundation দক্ষিণ ২৪ পরগণায় পড়াশোনা, স্বাস্থ্য আর মৌসুমি সাহায্যের কাজ করে।',
+      heroTagline: 'মানুষের পাশে | নিবন্ধিত সংস্থা',
       primary: 'আমাদের কর্মসূচিতে সাহায্য করুন',
       secondary: 'আমাদের কাজ দেখুন',
       statsTitle: 'আমাদের কাজের পরিধি',
@@ -34,7 +34,7 @@ function Home() {
       activityTitle: 'ফেসবুকের পাতা থেকে',
       donationTitle: 'আপনার ছোট অনুদান বড় পরিবর্তন আনতে পারে।',
       donationBody:
-        'সামান্য সাহায্যও আমাদের শিক্ষাকেন্দ্রগুলি সচল রাখতে, স্বাস্থ্যের প্রয়োজন মেটাতে এবং মানুষের পাশে মর্যাদার সঙ্গে দাঁড়াতে সাহায্য করে।',
+        'অল্প সাহায্যেও আমাদের ক্লাস চালানো, স্বাস্থ্যকাজ সামলানো আর মানুষের পাশে থাকা সহজ হয়।',
     },
   }
 
@@ -54,29 +54,37 @@ function Home() {
             </Link>
           </div>
           <div className="trust-strip">
-            <span>Registered NGO</span>
-            <span>Est. 2024</span>
-            <span>Govt. of West Bengal</span>
+            <span>{resolve(language, text('Registered NGO', 'নিবন্ধিত সংস্থা'))}</span>
+            <span>{resolve(language, text('Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
+            <span>{resolve(language, text('Govt. of West Bengal', 'পশ্চিমবঙ্গ সরকার'))}</span>
           </div>
           <p className="hero-footnote">{copy[language].heroTagline}</p>
         </div>
 
         <aside className="hero-media editorial-hero">
           <figure className="hero-photo-frame">
-            <img src="/assets/pathsala.webp" alt="Children and volunteers at a community event" />
+            <img src="/assets/pathsala.webp" alt={resolve(language, text('Children and volunteers at a community event', 'শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে'))} />
             <figcaption>
               {resolve(
                 language,
                 text(
                   'Kishalaya Pathsala, Kankandighi | Community learning moment',
-                  'কিশলয় পাঠশালা, কঙ্কনদীঘি | শিক্ষার আনন্দময় মুহূর্ত',
+                  'কিশলয় পাঠশালা, কঙ্কনদীঘি | পড়াশোনার সুন্দর মুহূর্ত',
                 ),
               )}
             </figcaption>
           </figure>
           <div className="hero-cert">
-            <img src="/assets/reg_cert.webp" alt="Registration certificate preview" />
-            <p>{resolve(language, text('Registration proof available on About page', "নিবন্ধন সংক্রান্ত তথ্য 'আমাদের সম্পর্কে' পাতায় দেখুন"))}</p>
+            <img
+              src="/assets/reg_cert.webp"
+              alt={resolve(language, text('Registration certificate preview', 'নিবন্ধন সনদের ঝলক'))}
+            />
+            <p>
+              {resolve(
+                language,
+                text('Registration proof available on About page', 'নিবন্ধনের কাগজটা আমাদের "আমাদের কথা" পাতায় দেখুন'),
+              )}
+            </p>
           </div>
         </aside>
       </section>
@@ -146,7 +154,7 @@ function Home() {
 
       <section className="panel donation-cta" data-reveal>
         <div>
-          <p className="eyebrow">Donate</p>
+          <p className="eyebrow">{resolve(language, text('Donate', 'সাহায্য করুন'))}</p>
           <h2>{copy[language].donationTitle}</h2>
           <p>{copy[language].donationBody}</p>
         </div>

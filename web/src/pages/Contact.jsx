@@ -14,7 +14,7 @@ function Contact() {
     bn: {
       title: 'আমরা আপনার কথা শুনতে চাই।',
       intro:
-        'যেকোনো তথ্যের জন্য বা আমাদের কাজের অংশীদার হতে নির্দ্বিধায় যোগাযোগ করুন।',
+        'কিছু জানতে চাইলে বা আমাদের সঙ্গে কাজ করতে চাইলে সহজেই যোগাযোগ করুন।',
     },
   }
 
@@ -27,8 +27,8 @@ function Contact() {
           <p>{copy[language].intro}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, text('Response time', 'উত্তর দেওয়ার সময়'))}</p>
-          <p>{resolve(language, text('Usually within 2 business days', 'আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব'))}</p>
+          <p className="meta">{resolve(language, text('Response time', 'কত তাড়াতাড়ি উত্তর পাবেন'))}</p>
+          <p>{resolve(language, text('Usually within 2 business days', 'সাধারণত ২ কর্মদিবসের মধ্যে'))}</p>
         </div>
       </section>
 
@@ -56,7 +56,7 @@ function Contact() {
       <section className="panel split-panel" data-reveal>
         <div className="map-frame" data-reveal>
           <iframe
-            title="Heritage of Hope Foundation location"
+            title={resolve(language, text('Heritage of Hope Foundation location', 'Heritage of Hope Foundation-এর মানচিত্র'))}
             src="https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -68,7 +68,7 @@ function Contact() {
           <input type="hidden" name="_redirect" value="/thank-you" />
           <div className="section-head">
             <p>{resolve(language, text('Contact form', 'যোগাযোগের ফর্ম'))}</p>
-            <h2>{resolve(language, text('Send us a direct message', 'আমাদের সরাসরি লিখুন'))}</h2>
+            <h2>{resolve(language, text('Send us a direct message', 'সরাসরি একটা মেসেজ পাঠান'))}</h2>
           </div>
           <div className="field">
             <label htmlFor="name">{resolve(language, text('Name', 'নাম'))}</label>
@@ -77,7 +77,7 @@ function Contact() {
           <div className="form-grid two-col">
             <div className="field">
               <label htmlFor="email">{resolve(language, text('Email', 'ইমেল'))}</label>
-              <input id="email" name="email" type="email" required placeholder="you@example.com" />
+              <input id="email" name="email" type="email" required placeholder={resolve(language, text('you@example.com', 'আপনার ইমেল'))} />
             </div>
             <div className="field">
               <label htmlFor="subject">{resolve(language, text('Subject', 'বিষয়'))}</label>
@@ -90,7 +90,7 @@ function Contact() {
               id="message"
               name="message"
               rows="6"
-              placeholder={resolve(language, text('Tell us how you want to help', 'আপনার বার্তার বিস্তারিত এখানে লিখুন'))}
+              placeholder={resolve(language, text('Tell us how you want to help', 'আপনার কথা এখানে লিখুন'))}
             />
           </div>
           <button type="submit" className="btn btn-solid">
@@ -102,11 +102,11 @@ function Contact() {
       <section className="panel" data-reveal>
         <div className="section-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
           <div>
-            <p>{resolve(language, text('Featured from Facebook', 'ফেসবুকের বিশেষ মুহূর্ত'))}</p>
-            <h2>{resolve(language, text('Recent moments from the page', 'পেজের সাম্প্রতিক মুহূর্ত'))}</h2>
+            <p>{resolve(language, text('Featured from Facebook', 'ফেসবুকের কিছু ঝলক'))}</p>
+            <h2>{resolve(language, text('Recent moments from the page', 'পেজের সাম্প্রতিক কিছু ছবি'))}</h2>
           </div>
           <a href="https://www.facebook.com/profile.php?id=61559891799273" target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
-            {resolve(language, text('Visit Official Facebook Page', 'অফিসিয়াল ফেসবুক পেজ দেখুন'))} &rarr;
+            {resolve(language, text('Visit Official Facebook Page', 'অফিসিয়াল ফেসবুক পেজে যান'))} &rarr;
           </a>
         </div>
         <div className="story-layout contact-story-layout">

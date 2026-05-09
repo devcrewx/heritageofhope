@@ -41,18 +41,18 @@ function Gallery() {
     <main className="page-stack">
       <section className="panel split-panel">
         <div>
-          <p className="eyebrow">Gallery</p>
+          <p className="eyebrow">{resolve(language, text('Gallery', 'ছবিঘর'))}</p>
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
         <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, text('Explore', 'ঘুরে দেখুন'))}</p>
-          <p>{resolve(language, text('Filter photos by our core impact areas.', 'বিভাগ অনুযায়ী ছবিগুলো দেখুন।'))}</p>
+          <p>{resolve(language, text('Filter photos by our core impact areas.', 'কোন কাজের ছবি দেখতে চান, সেটা বেছে নিন।'))}</p>
         </div>
       </section>
 
       <section className="panel">
-        <div className="filter-row" role="tablist" aria-label="Gallery categories">
+        <div className="filter-row" role="tablist" aria-label={resolve(language, text('Gallery categories', 'ছবির বিভাগ'))}>
           {categories.map((category) => (
             <button
               key={category.id}

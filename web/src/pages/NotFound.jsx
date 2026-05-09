@@ -13,7 +13,7 @@ function NotFound() {
           <p>
             {resolve(
               language,
-              text('Return to the homepage to continue exploring.', 'আমাদের প্রধান পাতায় ফিরে যান।'),
+              text('Return to the homepage to continue exploring.', 'হোমপেজে ফিরে গিয়ে আবার ঘুরে দেখুন।'),
             )}
           </p>
         </div>

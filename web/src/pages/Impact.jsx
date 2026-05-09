@@ -12,9 +12,9 @@ function Impact() {
         'Explore the numbers and stories that showcase the direct results of our community-driven approach.',
     },
     bn: {
-      title: 'স্বচ্ছতা এবং পরিমাপযোগ্য পরিবর্তন।',
+      title: 'স্বচ্ছতা আর কাজের ফলাফল।',
       intro:
-        'আমাদের সমাজসেবামূলক কাজের বাস্তব ফলাফল ও মানুষের বদলে যাওয়ার গল্পগুলো দেখুন।',
+        'আমাদের কাজের ফল আর মানুষের বদলে যাওয়ার গল্পগুলো দেখুন।',
     },
   }
 
@@ -22,13 +22,13 @@ function Impact() {
     <main className="page-stack page-impact">
       <section className="panel split-panel" data-reveal>
         <div>
-          <p className="eyebrow">{resolve(language, text('Impact', 'প্রভাব'))}</p>
+          <p className="eyebrow">{resolve(language, text('Impact', 'ফলাফল'))}</p>
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, text('Our Promise', 'আমাদের প্রতিশ্রুতি'))}</p>
-          <p>{resolve(language, text('Accountability to our donors and community.', 'দাতাদের প্রতি স্বচ্ছতা ও মানুষের প্রতি আমাদের দায়িত্ববোধ।'))}</p>
+          <p className="meta">{resolve(language, text('Our Promise', 'আমাদের অঙ্গীকার'))}</p>
+          <p>{resolve(language, text('Accountability to our donors and community.', 'দাতাদের কাছে পরিষ্কার হিসাব আর মানুষের কাছে জবাবদিহিতা।'))}</p>
         </div>
       </section>
 
@@ -46,8 +46,8 @@ function Impact() {
       <section className="panel split-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Fund utilization', 'তহবিলের ব্যবহার'))}</p>
-            <h2>{resolve(language, text('How support is used', 'আপনাদের সাহায্য কীভাবে ব্যবহৃত হয়'))}</h2>
+            <p>{resolve(language, text('Fund utilization', 'টাকা কোথায় খরচ হয়'))}</p>
+            <h2>{resolve(language, text('How support is used', 'আপনাদের সাহায্য কীভাবে কাজে লাগে'))}</h2>
           </div>
           <div className="stack-list">
             {fundAllocation.map((item) => (
@@ -75,13 +75,13 @@ function Impact() {
             </p>
           </article>
           <article className="stack-card quote-card" data-reveal>
-            <p className="meta">{resolve(language, text('Annual report', 'বার্ষিক প্রতিবেদন'))}</p>
+            <p className="meta">{resolve(language, text('Annual report', 'বার্ষিক রিপোর্ট'))}</p>
             <p>
               {resolve(
                 language,
                 text(
                   'Our 2025-2026 Impact Report is currently being compiled and will be available for download soon.',
-                  '২০২৫-২৬ সালের কাজের বার্ষিক প্রতিবেদন তৈরির কাজ চলছে, শীঘ্রই এখানে দেখতে পাবেন।',
+                  '২০২৫-২৬ সালের কাজের রিপোর্ট এখন তৈরি হচ্ছে, শীঘ্রই ডাউনলোড করতে পারবেন।',
                 ),
               )}
             </p>

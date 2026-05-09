@@ -17,7 +17,7 @@ function ThankYou() {
               language,
               text(
                 'We will review your message and respond as soon as possible.',
-                'আমরা আপনার বার্তার গুরুত্ব বুঝে দ্রুতই আপনার সাথে যোগাযোগ করব।',
+                'আপনার বার্তাটা দেখে আমরা দ্রুতই যোগাযোগ করব।',
               ),
             )}
           </p>
