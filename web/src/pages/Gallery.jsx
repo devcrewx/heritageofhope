@@ -4,16 +4,24 @@ import { galleryItems, resolve, text } from '../content'
 
 function Gallery() {
   const { language } = useOutletContext()
-  const [activeCategory, setActiveCategory] = useState('All')
+  const [activeCategory, setActiveCategory] = useState('all')
 
-  const categories = ['All', 'Education', 'Healthcare', 'Welfare']
+  const categories = [
+    { id: 'all', label: text('All', 'সব') },
+    { id: 'education', label: text('Education', 'শিক্ষা') },
+    { id: 'healthcare', label: text('Healthcare', 'স্বাস্থ্য') },
+    { id: 'welfare', label: text('Welfare', 'কল্যাণ') },
+  ]
 
   const visibleItems = useMemo(() => {
-    if (activeCategory === 'All') {
+    if (activeCategory === 'all') {
       return galleryItems
     }
 
-    return galleryItems.filter((item) => resolve(language, item.category) === activeCategory)
+    return galleryItems.filter((item) => {
+      const itemCategory = resolve('en', item.category).toLowerCase()
+      return itemCategory === activeCategory
+    })
   }, [activeCategory, language])
 
   const copy = {
@@ -47,12 +55,12 @@ function Gallery() {
         <div className="filter-row" role="tablist" aria-label="Gallery categories">
           {categories.map((category) => (
             <button
-              key={category}
+              key={category.id}
               type="button"
-              className={category === activeCategory ? 'filter-chip active' : 'filter-chip'}
-              onClick={() => setActiveCategory(category)}
+              className={category.id === activeCategory ? 'filter-chip active' : 'filter-chip'}
+              onClick={() => setActiveCategory(category.id)}
             >
-              {category}
+              {resolve(language, category.label)}
             </button>
           ))}
         </div>
