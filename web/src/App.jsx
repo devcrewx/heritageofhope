@@ -22,7 +22,7 @@ function ScrollToTop() {
   return null
 }
 
-function RevealOnScroll() {
+function RevealOnScroll({ language }) {
   const location = useLocation()
 
   useEffect(() => {
@@ -65,7 +65,7 @@ function RevealOnScroll() {
     elements.forEach((element) => observer.observe(element))
 
     return () => observer.disconnect()
-  }, [location.pathname])
+  }, [location.pathname, language])
 
   return null
 }
@@ -76,7 +76,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <RevealOnScroll />
+      <RevealOnScroll language={language} />
       <Routes>
         <Route element={<Layout language={language} setLanguage={setLanguage} />}>
           <Route index element={<Home />} />
