@@ -26,7 +26,7 @@ function Contact() {
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
-        <div className="mini-panel">
+        <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, text('Response time', 'উত্তর দেওয়ার সময়'))}</p>
           <p>{resolve(language, text('Usually within 2 business days', 'আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব'))}</p>
         </div>

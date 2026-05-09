@@ -26,7 +26,7 @@ function Impact() {
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
-        <div className="mini-panel">
+        <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, text('Our Promise', 'আমাদের প্রতিশ্রুতি'))}</p>
           <p>{resolve(language, text('Accountability to our donors and community.', 'দাতাদের প্রতি স্বচ্ছতা ও মানুষের প্রতি আমাদের দায়িত্ববোধ।'))}</p>
         </div>

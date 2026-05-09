@@ -477,6 +477,69 @@
   min-height: 360px;
 }
 
+.donation-panel {
+  align-items: start;
+}
+
+.donation-ladder-list {
+  display: grid;
+  gap: 12px;
+}
+
+.donation-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+}
+
+.donation-option p {
+  margin: 0;
+  color: var(--ink-strong);
+}
+
+.donation-amount {
+  flex: 0 0 auto;
+  min-width: 84px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(245, 166, 35, 0.18), rgba(42, 157, 143, 0.16));
+  border: 1px solid rgba(26, 79, 138, 0.12);
+  color: var(--ink-strong);
+  font-weight: 800;
+  text-align: center;
+}
+
+.qr-panel {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.qr-frame {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px dashed rgba(26, 79, 138, 0.22);
+}
+
+.qr-frame img {
+  width: min(100%, 260px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.qr-note {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
 .mini-panel {
   display: grid;
   align-content: start;
@@ -504,6 +567,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  margin-top: 15px;
 }
 
 .gallery-card {
@@ -710,6 +774,28 @@
   background: #fff;
 }
 
+.partner-photo-frame {
+  margin: 14px auto 0;
+  max-width: 430px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--soft-shadow);
+}
+
+.partner-photo-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.partner-photo-frame figcaption {
+  padding: 10px 12px;
+  font-size: 0.86rem;
+  color: var(--ink-strong);
+}
+
 .hero-photo-frame img {
   aspect-ratio: 4 / 3;
 }
@@ -787,7 +873,8 @@
 
   .story-layout,
   .photo-mosaic,
-  .two-col {
+  .two-col,
+  .donation-panel {
     grid-template-columns: 1fr;
   }
 
@@ -837,8 +924,17 @@
 
   .story-layout,
   .photo-mosaic,
-  .two-col {
+  .two-col,
+  .donation-panel {
     grid-template-columns: 1fr;
+  }
+
+  .donation-option {
+    align-items: flex-start;
+  }
+
+  .donation-amount {
+    min-width: 76px;
   }
 
   .compact-row {
@@ -856,6 +952,10 @@
   .hero-cert img {
     width: 100%;
     height: 150px;
+  }
+
+  .partner-photo-frame {
+    max-width: 100%;
   }
 
   .page-title,

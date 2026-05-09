@@ -25,7 +25,7 @@ function OurWork() {
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
-        <div className="mini-panel">
+        <div className="mini-panel accent-panel">
           <p className="meta">Focus</p>
           <p>{resolve(language, text('Education | Healthcare | Welfare', 'শিক্ষা | স্বাস্থ্য | কল্যাণ'))}</p>
         </div>

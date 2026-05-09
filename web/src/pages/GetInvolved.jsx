@@ -1,6 +1,8 @@
 import { useOutletContext } from 'react-router-dom'
 import { donationSteps, resolve, volunteerRoles, text } from '../content'
 
+const demoUpiQr = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbuCgdtNT6LH1bCGXtIZGt76s4Qpd8ybiFQ&s'
+
 function GetInvolved() {
   const { language } = useOutletContext()
 
@@ -9,11 +11,17 @@ function GetInvolved() {
       title: 'Join us in making a difference.',
       intro:
         'Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.',
+      qrTitle: 'Scan to donate',
+      qrBody:
+        'Use this demo UPI QR code to make a quick contribution. You can also use the bank details above for direct transfers.',
     },
     bn: {
       title: 'পরিবর্তন আনতে আমাদের সাথে যোগ দিন।',
       intro:
         'অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—আপনার অংশগ্রহণ আমাদের লক্ষ্য পূরণে সহায়ক।',
+      qrTitle: 'স্ক্যান করে অনুদান দিন',
+      qrBody:
+        'ডেমো ইউপিআই কিউআর কোড স্ক্যান করে দ্রুত অনুদান দিতে পারেন। সরাসরি ট্রান্সফারের জন্য উপরের ব্যাংক তথ্যও ব্যবহার করতে পারেন।',
     },
   }
 
@@ -34,21 +42,35 @@ function GetInvolved() {
         </div>
       </section>
 
-      <section className="panel" data-reveal>
-        <div className="section-head">
-          <p>{resolve(language, text('Donation ladder', 'অনুদান ও তার প্রভাব'))}</p>
-          <h2>{resolve(language, text('What your support can do', 'আপনার সহায়তা কী করতে পারে'))}</h2>
-        </div>
-        <div className="card-grid four-up">
-          {donationSteps.map((step) => (
-            <article key={step.amount} className="card value-card donation-card-mini" data-reveal>
-              <div className="card-body">
-                <h3>{step.amount}</h3>
+      <section className="panel split-panel donation-panel" data-reveal>
+        <div>
+          <div className="section-head">
+            <p>{resolve(language, text('Donation ladder', 'অনুদান ও তার প্রভাব'))}</p>
+            <h2>{resolve(language, text('What your support can do', 'আপনার সহায়তা কী করতে পারে'))}</h2>
+          </div>
+          <div className="donation-ladder-list">
+            {donationSteps.map((step) => (
+              <article key={step.amount} className="donation-option card value-card" data-reveal>
+                <span className="donation-amount">{step.amount}</span>
                 <p>{resolve(language, step.title)}</p>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
+        <aside className="mini-panel accent-panel qr-panel">
+          <div className="section-head">
+            <p>{resolve(language, text('UPI payment', 'ইউপিআই পেমেন্ট'))}</p>
+            <h2>{copy[language].qrTitle}</h2>
+          </div>
+          <div className="qr-frame">
+            <img
+              src={demoUpiQr}
+              alt={resolve(language, text('Demo UPI QR code for donations', 'অনুদানের জন্য ডেমো ইউপিআই কিউআর কোড'))}
+              loading="lazy"
+            />
+          </div>
+          <p className="qr-note">{copy[language].qrBody}</p>
+        </aside>
       </section>
 
       <section className="panel split-panel" data-reveal>
@@ -145,6 +167,28 @@ function GetInvolved() {
               ),
             )}
           </p>
+          <figure className="partner-photo-frame" data-reveal>
+            <img
+              src="/assets/get_involved_partner.webp"
+              alt={resolve(
+                language,
+                text(
+                  'Partnership-led community outreach activity by Heritage of Hope Foundation',
+                  'হেরিটেজ অফ হোপ ফাউন্ডেশনের অংশীদারিত্বভিত্তিক কমিউনিটি আউটরিচ কার্যক্রম',
+                ),
+              )}
+              loading="lazy"
+            />
+            <figcaption>
+              {resolve(
+                language,
+                text(
+                  'Partnerships help us scale education, healthcare, and seasonal welfare with accountability.',
+                  'অংশীদারিত্বের মাধ্যমে আমরা জবাবদিহিতার সাথে শিক্ষা, স্বাস্থ্যসেবা ও মৌসুমি সহায়তা আরও বিস্তৃত করতে পারি।',
+                ),
+              )}
+            </figcaption>
+          </figure>
         </div>
         <form className="contact-form form-panel" name="partner-form" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="partner-form" />

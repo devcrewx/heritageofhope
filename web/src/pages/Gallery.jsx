@@ -37,7 +37,7 @@ function Gallery() {
           <h1 className="page-title">{copy[language].title}</h1>
           <p>{copy[language].intro}</p>
         </div>
-        <div className="mini-panel">
+        <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, text('Explore', 'ঘুরে দেখুন'))}</p>
           <p>{resolve(language, text('Filter photos by our core impact areas.', 'বিভাগ অনুযায়ী ছবিগুলো দেখুন।'))}</p>
         </div>
