@@ -91,6 +91,7 @@
   border: 0;
   border-radius: 999px;
   padding: 11px 16px;
+  min-height: 44px;
   text-decoration: none;
   font-weight: 700;
   cursor: pointer;
@@ -99,6 +100,13 @@
 
 .btn:hover {
   transform: translateY(-1px);
+}
+
+@media (pointer: coarse) {
+  .btn {
+    min-height: 48px;
+    padding: 12px 18px;
+  }
 }
 
 .btn-solid {
@@ -700,11 +708,18 @@
 .field select {
   width: 100%;
   padding: 14px 16px;
+  min-height: 44px;
   border-radius: 16px;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.92);
   color: var(--ink-strong);
   font: inherit;
+  font-size: 16px;
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
 }
 
 .field input:focus,
@@ -892,26 +907,127 @@
   }
 }
 
+@media (max-width: 960px) {
+  .site-shell {
+    padding: 16px;
+  }
+
+  .topbar {
+    padding: 12px 16px;
+    gap: 14px;
+  }
+
+  .brand img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-name {
+    font-size: 0.88rem;
+  }
+
+  .brand-sub {
+    font-size: 0.72rem;
+  }
+
+  .nav-links a {
+    font-size: 0.88rem;
+    padding: 6px 10px;
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-title,
+  .hero-content h1 {
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+  }
+
+  .hero-media {
+    min-height: 280px;
+  }
+}
+
 @media (max-width: 720px) {
   .site-shell {
-    padding: 14px;
+    padding: 12px;
   }
 
   .topbar {
     top: 8px;
-    padding: 12px;
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-radius: 18px;
+  }
+
+  .brand {
+    order: 1;
+    flex-basis: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .brand img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-name {
+    font-size: 0.84rem;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  .nav-links {
+    order: 2;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .nav-links a {
+    font-size: 0.86rem;
+    padding: 4px 8px;
+  }
+
+  .topbar-actions {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .btn-solid,
+  .btn-ghost,
+  .btn-outline {
+    flex: 1;
+    min-width: 120px;
   }
 
   .panel,
   .footer {
-    padding: 18px;
+    padding: 16px;
+    border-radius: 22px;
   }
 
   .page-about .panel,
   .page-involved .panel,
   .page-impact .panel,
   .page-contact .panel {
-    padding: 18px;
+    padding: 16px;
   }
 
   .metric-grid,
@@ -920,6 +1036,7 @@
   .four-up,
   .two-up {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .story-layout,
@@ -931,14 +1048,18 @@
 
   .donation-option {
     align-items: flex-start;
+    padding: 12px 14px;
   }
 
   .donation-amount {
-    min-width: 76px;
+    min-width: 72px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
   }
 
   .compact-row {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .compact-row .post-thumb {
@@ -947,11 +1068,13 @@
 
   .hero-cert {
     grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px;
   }
 
   .hero-cert img {
     width: 100%;
-    height: 150px;
+    height: 140px;
   }
 
   .partner-photo-frame {
@@ -961,15 +1084,358 @@
   .page-title,
   .hero-content h1 {
     max-width: none;
-    font-size: clamp(2rem, 9vw, 3.1rem);
+    font-size: clamp(1.6rem, 8vw, 2.8rem);
+  }
+
+  .section-head h2 {
+    font-size: clamp(1.2rem, 5vw, 2rem);
+  }
+
+  .hero-media {
+    min-height: 240px;
+  }
+
+  .card-body,
+  .stack-card,
+  .mini-panel {
+    padding: 14px;
+  }
+
+  .page-stack {
+    gap: 14px;
+    margin-top: 14px;
+  }
+
+  .form-grid {
+    gap: 12px;
+  }
+
+  .field {
+    gap: 6px;
+  }
+
+  .field label {
+    font-size: 0.94rem;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+
+  .hero-cta {
+    gap: 8px;
+  }
+
+  .hero-cta .btn {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .trust-strip {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .trust-strip span {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+  }
+
+  .inline-list {
+    padding-left: 1.2rem;
+    gap: 6px;
+  }
+
+  .inline-list li {
+    font-size: 0.96rem;
+  }
+
+  .gallery-grid {
+    gap: 10px;
+  }
+
+  .photo-mosaic {
+    gap: 10px;
+  }
+
+  .mosaic-tile img,
+  .compact-post img {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-shell {
+    padding: 10px;
+  }
+
+  .topbar {
+    top: 4px;
+    padding: 8px;
+    border-radius: 16px;
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-name {
+    font-size: 0.8rem;
   }
 
   .nav-links {
-    width: 100%;
+    gap: 6px;
+    order: 2;
+  }
+
+  .nav-links a {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+    border: none;
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    border-bottom-color: transparent;
+    color: var(--amber);
   }
 
   .topbar-actions {
+    gap: 6px;
+  }
+
+  .btn {
+    padding: 9px 12px;
+    font-size: 0.85rem;
+    border-radius: 18px;
+  }
+
+  .btn-solid,
+  .btn-ghost,
+  .btn-outline {
+    flex: 1;
+    min-width: 110px;
+  }
+
+  .panel,
+  .footer {
+    padding: 14px;
+    border-radius: 18px;
+    gap: 12px;
+  }
+
+  .page-about .panel,
+  .page-involved .panel,
+  .page-impact .panel,
+  .page-contact .panel {
+    padding: 14px;
+  }
+
+  .page-title,
+  .hero-content h1 {
+    font-size: clamp(1.4rem, 7vw, 2.4rem);
+  }
+
+  .section-head h2 {
+    font-size: clamp(1rem, 4.5vw, 1.8rem);
+  }
+
+  .section-head p {
+    font-size: 0.72rem;
+  }
+
+  .eyebrow {
+    font-size: 0.72rem;
+  }
+
+  .hero-media {
+    min-height: 200px;
+  }
+
+  .hero-content > p,
+  .panel p,
+  .card p,
+  .stack-card p {
+    font-size: 0.94rem;
+  }
+
+  .metric-card {
+    padding: 14px;
+  }
+
+  .metric-card h3 {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    margin-bottom: 4px;
+  }
+
+  .metric-card p {
+    font-size: 0.88rem;
+  }
+
+  .card-body,
+  .stack-card,
+  .mini-panel {
+    padding: 12px;
+  }
+
+  .card h3 {
+    font-size: 1.1rem;
+    margin: 6px 0 6px;
+  }
+
+  .page-stack {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .form-grid {
+    gap: 10px;
+  }
+
+  .field label {
+    font-size: 0.92rem;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    padding: 11px 12px;
+    font-size: 16px;
+    border-radius: 14px;
+  }
+
+  .field textarea {
+    min-height: 100px;
+  }
+
+  .hero-cta {
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .hero-cta .btn {
     width: 100%;
-    justify-content: center;
+  }
+
+  .trust-strip {
+    gap: 6px;
+  }
+
+  .trust-strip span {
+    padding: 5px 8px;
+    font-size: 0.7rem;
+  }
+
+  .pill {
+    padding: 6px 10px;
+    font-size: 0.74rem;
+  }
+
+  .filter-chip {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .inline-list {
+    padding-left: 1.1rem;
+    gap: 5px;
+  }
+
+  .inline-list li {
+    font-size: 0.94rem;
+  }
+
+  .gallery-grid {
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+
+  .photo-mosaic {
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+
+  .mosaic-tile img,
+  .compact-post img {
+    height: 140px;
+  }
+
+  .hero-cert {
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .hero-cert img {
+    height: 120px;
+  }
+
+  .hero-cert p {
+    font-size: 0.8rem;
+  }
+
+  .donation-option {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  .donation-amount {
+    min-width: 64px;
+    padding: 7px 10px;
+    font-size: 0.85rem;
+  }
+
+  .map-frame iframe {
+    min-height: 280px;
+  }
+
+  .footer p {
+    font-size: 0.94rem;
+    margin-bottom: 4px;
+  }
+
+  .footer-title {
+    font-size: 1rem;
+  }
+
+  .compact-row {
+    gap: 10px;
+  }
+
+  .compact-row h3 {
+    font-size: 1rem;
+    margin: 4px 0;
+  }
+
+  .compact-row .card-body {
+    padding: 10px 12px;
+  }
+
+  .hero-photo-frame figcaption {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .partner-photo-frame figcaption {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .mosaic-tile figcaption {
+    padding: 10px;
+    font-size: 0.84rem;
+  }
+
+  .sticky {
+    position: static;
+    top: auto;
   }
 }
