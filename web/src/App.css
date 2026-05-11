@@ -1153,6 +1153,21 @@ img[loading="lazy"] {
     border-radius: 22px;
   }
 
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .footer > div {
+    width: 100%;
+  }
+
+  .footer .btn.btn-ghost {
+    width: 100%;
+    justify-content: center;
+  }
+
   .page-about .panel,
   .page-involved .panel,
   .page-impact .panel,
@@ -1371,6 +1386,18 @@ img[loading="lazy"] {
     gap: 12px;
   }
 
+  .footer {
+    gap: 10px;
+  }
+
+  .footer .btn.btn-ghost {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .footer p {
+    line-height: 1.55;
+  }
+
   .page-about .panel,
   .page-involved .panel,
   .page-impact .panel,
@@ -1536,12 +1563,12 @@ img[loading="lazy"] {
   }
 
   .footer p {
-    font-size: 0.94rem;
+    font-size: 0.92rem;
     margin-bottom: 4px;
   }
 
   .footer-title {
-    font-size: 1rem;
+    font-size: 0.98rem;
   }
 
   .compact-row {
