@@ -92,7 +92,7 @@ function Layout({ language, setLanguage }) {
         <button
           ref={toggleRef}
           type="button"
-          className="nav-toggle"
+          className={`nav-toggle ${navOpen ? 'open' : ''}`}
           aria-controls="primary-nav"
           aria-expanded={navOpen}
           aria-label={resolve(language, text('Open navigation', 'মেনু খুলুন'))}

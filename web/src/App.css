@@ -91,6 +91,8 @@
   padding: 8px;
   border-radius: 8px;
   cursor: pointer;
+  position: relative;
+  z-index: 40;
 }
 
 .nav-toggle .hamburger {
@@ -114,6 +116,20 @@
 }
 .nav-toggle .hamburger::after {
   top: 7px;
+}
+
+.nav-toggle.open .hamburger {
+  background: transparent;
+}
+
+.nav-toggle.open .hamburger::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.nav-toggle.open .hamburger::after {
+  top: 0;
+  transform: rotate(-45deg);
 }
 
 .btn {
@@ -1027,6 +1043,7 @@ img[loading="lazy"] {
     gap: 8px;
     flex-wrap: wrap;
     border-radius: 18px;
+    z-index: 70;
   }
 
   .brand {
@@ -1058,13 +1075,14 @@ img[loading="lazy"] {
     left: 12px;
     right: 12px;
     top: calc(100% + 10px);
-    background: rgba(255,255,255,0.96);
+    background: rgba(255, 255, 255, 0.98);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 12px;
+    border-radius: 18px;
+    padding: 14px;
     box-shadow: var(--soft-shadow);
     flex-direction: column;
-    z-index: 60;
+    z-index: 80;
+    backdrop-filter: blur(18px);
   }
 
   .nav-toggle {
@@ -1078,9 +1096,17 @@ img[loading="lazy"] {
   }
 
   .nav-links a {
-    padding: 10px 8px;
+    padding: 10px 12px;
     border-bottom: none;
     display: block;
+    border-radius: 12px;
+    background: rgba(26, 79, 138, 0.04);
+  }
+
+  .nav-links a.active,
+  .nav-links a:hover {
+    border-bottom-color: transparent;
+    background: rgba(245, 166, 35, 0.14);
   }
 
   .nav-overlay {
@@ -1092,12 +1118,11 @@ img[loading="lazy"] {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.36);
-    z-index: 50;
+    z-index: 55;
   }
 
   .nav-links a {
-    font-size: 0.86rem;
-    padding: 4px 8px;
+    font-size: 0.95rem;
   }
 
   .topbar-actions {
@@ -1279,6 +1304,7 @@ img[loading="lazy"] {
     padding: 8px;
     border-radius: 16px;
     gap: 6px;
+    z-index: 70;
   }
 
   .brand {
@@ -1300,15 +1326,14 @@ img[loading="lazy"] {
   }
 
   .nav-links a {
-    font-size: 0.8rem;
-    padding: 3px 6px;
-    border: none;
+    font-size: 0.9rem;
+    padding: 8px 10px;
   }
 
   .nav-links a.active,
   .nav-links a:hover {
     border-bottom-color: transparent;
-    color: var(--amber);
+    color: var(--ink-strong);
   }
 
   .topbar-actions {
