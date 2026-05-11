@@ -14,19 +14,19 @@ function Layout({ language, setLanguage }) {
 
   const [navOpen, setNavOpen] = useState(false)
   const navRef = useRef(null)
-  const toggleRef = useRef(null)
 
   useEffect(() => {
     if (!navOpen) return
 
     const container = navRef.current
-    const focusableSelectors = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    const focusableSelectors =
+      'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
     const focusable = container ? Array.from(container.querySelectorAll(focusableSelectors)) : []
     const first = focusable[0]
     const last = focusable[focusable.length - 1]
     const previouslyFocused = document.activeElement
 
-    first?.focus()
+    if (first) first.focus()
 
     function onKey(e) {
       if (e.key === 'Escape') {
@@ -39,6 +39,7 @@ function Layout({ language, setLanguage }) {
           e.preventDefault()
           return
         }
+
         if (e.shiftKey) {
           if (document.activeElement === first) {
             e.preventDefault()
@@ -74,13 +75,15 @@ function Layout({ language, setLanguage }) {
   return (
     <div className={`site-shell ${language === 'bn' ? 'lang-bn' : 'lang-en'}`}>
       <header className="topbar" data-reveal>
-        <Link className="brand" to="/" aria-label={resolve(language, text('Heritage of Hope Foundation home', 'Heritage of Hope Foundation-এর হোমপেজ'))}>
+        <Link
+          className="brand"
+          to="/"
+          aria-label={resolve(language, text('Heritage of Hope Foundation home', 'Heritage of Hope Foundation-এর হোমপেজ'))}
+        >
           <img src="/assets/profile_pic.webp" alt={resolve(language, text('Heritage of Hope Foundation logo', 'Heritage of Hope Foundation লোগো'))} />
           <div>
             <p className="brand-name">Heritage of Hope Foundation</p>
-            <p className="brand-sub">
-              {resolve(language, text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}
-            </p>
+            <p className="brand-sub">{resolve(language, text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
           </div>
         </Link>
 
@@ -107,12 +110,7 @@ function Layout({ language, setLanguage }) {
           ))}
         </nav>
 
-        <div
-          role="presentation"
-          className={`nav-overlay ${navOpen ? 'active' : ''}`}
-          aria-hidden={!navOpen}
-          onClick={() => setNavOpen(false)}
-        />
+        <div role="presentation" className={`nav-overlay ${navOpen ? 'active' : ''}`} aria-hidden={!navOpen} onClick={() => setNavOpen(false)} />
 
         <div className="topbar-actions">
           <button
@@ -133,33 +131,31 @@ function Layout({ language, setLanguage }) {
         <Outlet context={{ language, setLanguage }} />
 
         <footer className="footer">
-        <div>
-          <p className="footer-title">Heritage of Hope Foundation</p>
-          <p>
-            {resolve(
-              language,
-              text(
-                'Children, women and communities in South 24 Parganas, West Bengal.',
-                'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
-              ),
-            )}
-          </p>
-          <div style={{ marginTop: '1.5rem' }}>
-            <a href="https://www.facebook.com/profile.php?id=61559891799273" target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: '0.5rem 0', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-              </svg>
-              {resolve(language, text('Follow us on Facebook', 'ফেসবুকে আমাদের সঙ্গে থাকুন'))}
-            </a>
+          <div>
+            <p className="footer-title">Heritage of Hope Foundation</p>
+            <p>
+              {resolve(
+                language,
+                text('Children, women and communities in South 24 Parganas, West Bengal.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।'),
+              )}
+            </p>
+            <div style={{ marginTop: '1.5rem' }}>
+              <a href="https://www.facebook.com/profile.php?id=61559891799273" target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: '0.5rem 0', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                </svg>
+                {resolve(language, text('Follow us on Facebook', 'ফেসবুকে আমাদের সঙ্গে থাকুন'))}
+              </a>
+            </div>
           </div>
-        </div>
-        <div>
-          <p>{contactDetails.phone}</p>
-          <p>{contactDetails.email}</p>
-          <p>{contactDetails.address}</p>
-        </div>
+          <div>
+            <p>{contactDetails.phone}</p>
+            <p>{contactDetails.email}</p>
+            <p>{contactDetails.address}</p>
+          </div>
         </footer>
       </div>
+    </div>
   )
 }
 
