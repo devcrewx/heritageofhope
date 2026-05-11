@@ -1089,6 +1089,9 @@ img[loading="lazy"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
   }
 
   .nav-links.open {
@@ -1134,14 +1137,14 @@ img[loading="lazy"] {
 
   .btn {
     padding: 10px 14px;
-    font-size: 0.9rem;
+    font-size: 0.86rem;
   }
 
   .btn-solid,
   .btn-ghost,
   .btn-outline {
     flex: 1;
-    min-width: 120px;
+    min-width: 112px;
   }
 
   .panel,
@@ -1312,22 +1315,30 @@ img[loading="lazy"] {
   }
 
   .brand img {
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
   }
 
   .brand-name {
-    font-size: 0.8rem;
+    font-size: 0.76rem;
+  }
+
+  .brand-sub {
+    font-size: 0.68rem;
   }
 
   .nav-links {
     gap: 6px;
     order: 2;
+    left: 8px;
+    right: 8px;
+    top: calc(100% + 8px);
+    padding: 10px;
   }
 
   .nav-links a {
-    font-size: 0.9rem;
-    padding: 8px 10px;
+    font-size: 0.84rem;
+    padding: 7px 9px;
   }
 
   .nav-links a.active,
@@ -1342,7 +1353,7 @@ img[loading="lazy"] {
 
   .btn {
     padding: 9px 12px;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     border-radius: 18px;
   }
 
@@ -1350,7 +1361,7 @@ img[loading="lazy"] {
   .btn-ghost,
   .btn-outline {
     flex: 1;
-    min-width: 110px;
+    min-width: 104px;
   }
 
   .panel,
