@@ -14,6 +14,7 @@ function Layout({ language, setLanguage }) {
 
   const [navOpen, setNavOpen] = useState(false)
   const navRef = useRef(null)
+  const toggleRef = useRef(null)
 
   useEffect(() => {
     if (!navOpen) return
@@ -56,6 +57,7 @@ function Layout({ language, setLanguage }) {
 
     function onClickOutside(e) {
       if (!container) return
+      if (toggleRef.current && toggleRef.current.contains(e.target)) return
       if (!container.contains(e.target)) setNavOpen(false)
     }
 
@@ -88,6 +90,8 @@ function Layout({ language, setLanguage }) {
         </Link>
 
         <button
+          ref={toggleRef}
+          type="button"
           className="nav-toggle"
           aria-controls="primary-nav"
           aria-expanded={navOpen}
