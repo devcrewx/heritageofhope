@@ -1083,6 +1083,18 @@ img[loading="lazy"] {
     display: block;
   }
 
+  .nav-overlay {
+    display: none;
+  }
+
+  .nav-overlay.active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.36);
+    z-index: 50;
+  }
+
   .nav-links a {
     font-size: 0.86rem;
     padding: 4px 8px;

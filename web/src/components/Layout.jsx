@@ -14,21 +14,62 @@ function Layout({ language, setLanguage }) {
 
   const [navOpen, setNavOpen] = useState(false)
   const navRef = useRef(null)
+  const toggleRef = useRef(null)
 
   useEffect(() => {
-    if (navOpen && navRef.current) {
-      const first = navRef.current.querySelector('a, button')
-      first?.focus()
+    if (!navOpen) return
+
+    const container = navRef.current
+    const focusableSelectors = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    const focusable = container ? Array.from(container.querySelectorAll(focusableSelectors)) : []
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    const previouslyFocused = document.activeElement
+
+    first?.focus()
+
+    function onKey(e) {
+      if (e.key === 'Escape') {
+        setNavOpen(false)
+        return
+      }
+
+      if (e.key === 'Tab') {
+        if (!focusable.length) {
+          e.preventDefault()
+          return
+        }
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault()
+            first.focus()
+          }
+        }
+      }
+    }
+
+    function onClickOutside(e) {
+      if (!container) return
+      if (!container.contains(e.target)) setNavOpen(false)
+    }
+
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('click', onClickOutside)
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.removeEventListener('click', onClickOutside)
+      document.body.style.overflow = prevOverflow
+      if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus()
     }
   }, [navOpen])
-
-  useEffect(() => {
-    function onKey(e) {
-      if (e.key === 'Escape') setNavOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
 
   return (
     <div className={`site-shell ${language === 'bn' ? 'lang-bn' : 'lang-en'}`}>
@@ -66,6 +107,13 @@ function Layout({ language, setLanguage }) {
           ))}
         </nav>
 
+        <div
+          role="presentation"
+          className={`nav-overlay ${navOpen ? 'active' : ''}`}
+          aria-hidden={!navOpen}
+          onClick={() => setNavOpen(false)}
+        />
+
         <div className="topbar-actions">
           <button
             type="button"
@@ -81,9 +129,10 @@ function Layout({ language, setLanguage }) {
         </div>
       </header>
 
-      <Outlet context={{ language, setLanguage }} />
+      <div id="main-content" aria-hidden={navOpen}>
+        <Outlet context={{ language, setLanguage }} />
 
-      <footer className="footer">
+        <footer className="footer">
         <div>
           <p className="footer-title">Heritage of Hope Foundation</p>
           <p>
@@ -109,8 +158,8 @@ function Layout({ language, setLanguage }) {
           <p>{contactDetails.email}</p>
           <p>{contactDetails.address}</p>
         </div>
-      </footer>
-    </div>
+        </footer>
+      </div>
   )
 }
 
