@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { navItems, contactDetails, resolve, text } from '../content'
 
 function Layout({ language, setLanguage }) {
@@ -11,6 +11,24 @@ function Layout({ language, setLanguage }) {
   useEffect(() => {
     document.documentElement.lang = language === 'bn' ? 'bn' : 'en'
   }, [language])
+
+  const [navOpen, setNavOpen] = useState(false)
+  const navRef = useRef(null)
+
+  useEffect(() => {
+    if (navOpen && navRef.current) {
+      const first = navRef.current.querySelector('a, button')
+      first?.focus()
+    }
+  }, [navOpen])
+
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') setNavOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <div className={`site-shell ${language === 'bn' ? 'lang-bn' : 'lang-en'}`}>
@@ -25,7 +43,22 @@ function Layout({ language, setLanguage }) {
           </div>
         </Link>
 
-        <nav className="nav-links" aria-label={resolve(language, text('Primary navigation', 'প্রধান মেনু'))}>
+        <button
+          className="nav-toggle"
+          aria-controls="primary-nav"
+          aria-expanded={navOpen}
+          aria-label={resolve(language, text('Open navigation', 'মেনু খুলুন'))}
+          onClick={() => setNavOpen((s) => !s)}
+        >
+          <span className="hamburger" aria-hidden />
+        </button>
+
+        <nav
+          id="primary-nav"
+          ref={navRef}
+          className={`nav-links ${navOpen ? 'open' : ''}`}
+          aria-label={resolve(language, text('Primary navigation', 'প্রধান মেনু'))}
+        >
           {navItems.map((item) => (
             <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
               {resolve(language, item.label)}
