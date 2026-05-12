@@ -870,33 +870,43 @@ img[loading="lazy"] {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 20px;
-  color: #0f172a;
-  transition: all 120ms ease-out;
+  color: white;
+  transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 2001;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 .doc-modal-nav:hover {
-  background: white;
-  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.15);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+.doc-modal-nav:active {
+  transform: translateY(-50%) scale(0.95);
 }
 .doc-modal-nav:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: 2px solid white;
+  outline-offset: 3px;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3), 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+.doc-modal-nav svg {
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 .doc-modal-prev {
-  left: 12px;
+  left: 16px;
 }
 .doc-modal-next {
-  right: 12px;
+  right: 16px;
 }
 .doc-modal-body { padding: 18px; display: flex; flex-direction: column; gap: 12px }
 .doc-modal-title { margin: 0; font-size: 1.1rem }
@@ -925,6 +935,15 @@ img[loading="lazy"] {
   .doc-modal-overlay,
   .doc-modal {
     animation: none;
+  }
+  .doc-modal-nav {
+    transition: none;
+  }
+  .doc-modal-nav:hover {
+    transform: translateY(-50%);
+  }
+  .doc-modal-nav:active {
+    transform: translateY(-50%);
   }
 }
 

@@ -33,10 +33,18 @@ export default function DocumentModal({ open, onClose, title, src, type = 'pdf',
       <div className="doc-modal" ref={contentRef} tabIndex={-1}>
         <button className="doc-modal-close" aria-label="Close document" onClick={onClose}>&times;</button>
         {hasPrev && onPrev && (
-          <button className="doc-modal-nav doc-modal-prev" aria-label="Previous document" onClick={onPrev} title="Previous (←)">&larr;</button>
+          <button className="doc-modal-nav doc-modal-prev" aria-label="Previous document" onClick={onPrev} title="Previous (←)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
         )}
         {hasNext && onNext && (
-          <button className="doc-modal-nav doc-modal-next" aria-label="Next document" onClick={onNext} title="Next (→)">&rarr;</button>
+          <button className="doc-modal-nav doc-modal-next" aria-label="Next document" onClick={onNext} title="Next (→)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         )}
         <div className="doc-modal-body">
           <h3 className="doc-modal-title">{title}</h3>
