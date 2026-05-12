@@ -330,6 +330,9 @@ Scope: `web/src` (all places where English + Bengali options are explicitly defi
 - Whether through donations, volunteering, or partnerships, your involvement drives our mission forward. | অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—আপনার অংশগ্রহণ আমাদের লক্ষ্য পূরণে সহায়ক।
 - Scan to donate | স্ক্যান করে অনুদান দিন
 - Use this demo UPI QR code to make a quick contribution. You can also use the bank details above for direct transfers. | ডেমো ইউপিআই কিউআর কোড স্ক্যান করে দ্রুত অনুদান দিতে পারেন। সরাসরি ট্রান্সফারের জন্য উপরের ব্যাংক তথ্যও ব্যবহার করতে পারেন।
+ - Pay via UPI app | UPI অ্যাপ দিয়ে পেমেন্ট করুন
+ - On mobile, this opens your installed UPI app directly. | মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।
+ - If no UPI app opens on this device, please use the QR code above to complete payment. | এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন।
 
 ### Donation + volunteer + partner strings
 - Donation ladder | অনুদান ও তার প্রভাব

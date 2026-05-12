@@ -99,6 +99,9 @@ Get Involved,Donate,upi_label,UPI payment,ইউপিআই পেমেন্�
 Get Involved,Donate,qr_title,Scan to donate,স্ক্যান করে অনুদান দিন,"web/src/pages/GetInvolved.jsx"
 Get Involved,Donate,qr_alt,Demo UPI QR code for donations,অনুদানের জন্য ডেমো ইউপিআই কিউআর কোড,"web/src/pages/GetInvolved.jsx"
 Get Involved,Donate,qr_body,"Use this demo UPI QR code to make a quick contribution. You can also use the bank details above for direct transfers.","ডেমো ইউপিআই কিউআর কোড স্ক্যান করে দ্রুত অনুদান দিতে পারেন। সরাসরি ট্রান্সফারের জন্য উপরের ব্যাংক তথ্যও ব্যবহার করতে পারেন।","web/src/pages/GetInvolved.jsx"
+Get Involved,Donate,upi_cta,Pay via UPI app,UPI অ্যাপ দিয়ে পেমেন্ট করুন,web/src/pages/GetInvolved.jsx
+Get Involved,Donate,upi_hint,On mobile, this opens your installed UPI app directly.,মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে。,web/src/pages/GetInvolved.jsx
+Get Involved,Donate,upi_fallback,If no UPI app opens on this device, please use the QR code above to complete payment.,এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন。,web/src/pages/GetInvolved.jsx
 Get Involved,Volunteer,volunteer_label,Volunteer,স্বেচ্ছাসেবা,"web/src/pages/GetInvolved.jsx"
 Get Involved,Volunteer,volunteer_title,People matter more than perfection,মানুষ নিখুঁততার চেয়ে বেশি গুরুত্বপূর্ণ,"web/src/pages/GetInvolved.jsx"
 Get Involved,Volunteer,volunteer_desc,"Support field execution coordination and regular follow-up.",মাঠের কাজ সমন্বয় ও নিয়মিত ফলো-আপে সহায়তা করুন।,"web/src/pages/GetInvolved.jsx"
