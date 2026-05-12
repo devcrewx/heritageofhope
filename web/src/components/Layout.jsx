@@ -82,10 +82,10 @@ function Layout({ language, setLanguage }) {
           to="/"
           aria-label="Heritage of Hope Foundation"
         >
-          <img src="/assets/profile_pic.webp" alt={resolve(language, text('Heritage of Hope Foundation logo', 'Heritage of Hope Foundation লোগো'))} />
+          <img src="/assets/profile_pic.webp" alt="" />
           <div>
             <p className="brand-name">Heritage of Hope Foundation</p>
-            <p className="brand-sub">{resolve(language, text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
+            <p className="brand-sub" aria-hidden="true">{resolve(language, text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
           </div>
         </Link>
 
