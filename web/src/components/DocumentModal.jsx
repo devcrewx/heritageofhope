@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 export default function DocumentModal({ open, onClose, title, src, type = 'pdf', onNext, onPrev, hasNext, hasPrev }) {
   const overlayRef = useRef(null)
@@ -28,7 +29,7 @@ export default function DocumentModal({ open, onClose, title, src, type = 'pdf',
     if (overlayRef.current && e.target === overlayRef.current) onClose()
   }
 
-  return (
+  const modalContent = (
     <div className="doc-modal-overlay" ref={overlayRef} onMouseDown={onOutside} role="dialog" aria-modal="true" aria-label={title}>
       <div className="doc-modal" ref={contentRef} tabIndex={-1}>
         <button className="doc-modal-close" aria-label="Close document" onClick={onClose}>&times;</button>
@@ -63,4 +64,6 @@ export default function DocumentModal({ open, onClose, title, src, type = 'pdf',
       </div>
     </div>
   )
+
+  return createPortal(modalContent, document.body)
 }
