@@ -108,7 +108,12 @@ function Layout({ language, setLanguage }) {
           aria-label={resolve(language, text('Primary navigation', 'প্রধান মেনু'))}
         >
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} className={({ isActive }) => (isActive ? 'active' : '')}>
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              onClick={() => setNavOpen(false)}
+            >
               {resolve(language, item.label)}
             </NavLink>
           ))}
