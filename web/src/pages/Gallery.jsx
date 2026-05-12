@@ -68,7 +68,7 @@ function Gallery() {
         <div className="gallery-grid">
           {visibleItems.map((item) => (
             <article key={resolve(language, item.title)} className="gallery-card">
-              <img src={item.image} alt={resolve(language, item.title)} />
+              <img loading="lazy" src={item.image} alt={resolve(language, item.title)} />
               <div>
                 <span className="pill">{resolve(language, item.category)}</span>
                 <h3>{resolve(language, item.title)}</h3>

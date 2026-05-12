@@ -63,7 +63,7 @@ function Home() {
 
         <aside className="hero-media editorial-hero">
           <figure className="hero-photo-frame">
-            <img src="/assets/pathsala.webp" alt={resolve(language, text('Children and volunteers at a community event', 'শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে'))} />
+            <img loading="lazy" src="/assets/pathsala.webp" alt={resolve(language, text('Children and volunteers at a community event', 'শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে'))} />
             <figcaption>
               {resolve(
                 language,
@@ -76,6 +76,7 @@ function Home() {
           </figure>
           <div className="hero-cert">
             <img
+              loading="lazy"
               src="/assets/reg_cert.webp"
               alt={resolve(language, text('Registration certificate preview', 'নিবন্ধন সনদের ঝলক'))}
             />
@@ -112,7 +113,7 @@ function Home() {
         <div className="card-grid">
           {featuredPrograms.slice(0, 3).map((program) => (
               <article key={program.slug} className="card program-card" data-reveal>
-              <img src={program.image} alt={resolve(language, program.title)} />
+              <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
               <div className="card-body">
                 <span className="pill">{resolve(language, program.category)}</span>
                 <h3>{resolve(language, program.title)}</h3>
@@ -132,7 +133,7 @@ function Home() {
           <div className="post-list">
             {facebookPosts.slice(0, 4).map((post) => (
               <article key={post.date} className="post-card compact-row" data-reveal>
-                <img className="post-thumb" src={post.image} alt={resolve(language, post.title)} />
+                <img loading="lazy" className="post-thumb" src={post.image} alt={resolve(language, post.title)} />
                 <div className="card-body">
                   <p className="meta">{post.date}</p>
                   <h3>{resolve(language, post.title)}</h3>
@@ -144,7 +145,7 @@ function Home() {
           <div className="photo-mosaic">
             {showcaseImages.map((photo) => (
               <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
-                <img src={photo.image} alt={resolve(language, photo.label)} />
+                <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
                 <figcaption>{resolve(language, photo.label)}</figcaption>
               </figure>
             ))}

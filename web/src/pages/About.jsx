@@ -47,7 +47,7 @@ function About() {
           <p>{copy[language].intro}</p>
         </div>
         <div className="image-frame framed">
-          <img src="/assets/foundation.webp" alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
+          <img loading="lazy" src="/assets/foundation.webp" alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
         </div>
       </section>
 
@@ -159,7 +159,7 @@ function About() {
         <div className="card-grid">
           {teamMembers.map((member) => (
             <article key={resolve(language, member.name)} className="card person-card" data-reveal>
-              <img src={member.image} alt={resolve(language, member.name)} />
+              <img loading="lazy" src={member.image} alt={resolve(language, member.name)} />
               <div className="card-body">
                 <h3>{resolve(language, member.name)}</h3>
                 <p>{resolve(language, member.role)}</p>

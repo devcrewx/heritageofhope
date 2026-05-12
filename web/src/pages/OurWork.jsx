@@ -35,7 +35,7 @@ function OurWork() {
         <div className="card-grid program-grid">
           {featuredPrograms.map((program) => (
             <article key={program.slug} className="card program-card">
-              <img src={program.image} alt={resolve(language, program.title)} />
+              <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
               <div className="card-body">
                 <span className="pill">{resolve(language, program.category)}</span>
                 <h3>{resolve(language, program.title)}</h3>

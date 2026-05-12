@@ -80,7 +80,7 @@ function Layout({ language, setLanguage }) {
         <Link
           className="brand"
           to="/"
-          aria-label={resolve(language, text('Heritage of Hope Foundation home', 'Heritage of Hope Foundation-এর হোমপেজ'))}
+          aria-label="Heritage of Hope Foundation"
         >
           <img src="/assets/profile_pic.webp" alt={resolve(language, text('Heritage of Hope Foundation logo', 'Heritage of Hope Foundation লোগো'))} />
           <div>
@@ -121,7 +121,7 @@ function Layout({ language, setLanguage }) {
             type="button"
             className="btn btn-ghost"
             onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-            aria-label={resolve(language, text('Toggle language', 'ভাষা বদলান'))}
+            aria-label={navCopy[language].switchTo}
           >
             {navCopy[language].switchTo}
           </button>

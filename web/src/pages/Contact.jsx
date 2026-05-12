@@ -113,7 +113,7 @@ function Contact() {
           <div className="stack-list">
             {facebookPosts.slice(3, 6).map((post) => (
               <article key={post.date} className="post-card compact-post" data-reveal>
-                <img src={post.image} alt={resolve(language, post.title)} />
+                <img loading="lazy" src={post.image} alt={resolve(language, post.title)} />
                 <div className="card-body">
                   <p className="meta">{post.date}</p>
                   <h3>{resolve(language, post.title)}</h3>
@@ -125,7 +125,7 @@ function Contact() {
           <div className="photo-mosaic">
             {showcaseImages.map((photo) => (
               <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
-                <img src={photo.image} alt={resolve(language, photo.label)} />
+                <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
                 <figcaption>{resolve(language, photo.label)}</figcaption>
               </figure>
             ))}
