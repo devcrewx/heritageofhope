@@ -50,14 +50,31 @@ function About() {
   ]
 
   const [modalOpen, setModalOpen] = useState(false)
-  const [modalDoc, setModalDoc] = useState(null)
+  const [modalDocIndex, setModalDocIndex] = useState(null)
+
+  const modalDoc = modalDocIndex !== null ? documents[modalDocIndex] : null
+
   const openDoc = (d) => {
-    setModalDoc(d)
+    const index = documents.findIndex((doc) => doc.href === d.href)
+    setModalDocIndex(index)
     setModalOpen(true)
   }
+
   const closeDoc = () => {
     setModalOpen(false)
-    setModalDoc(null)
+    setModalDocIndex(null)
+  }
+
+  const nextDoc = () => {
+    if (modalDocIndex !== null && modalDocIndex < documents.length - 1) {
+      setModalDocIndex(modalDocIndex + 1)
+    }
+  }
+
+  const prevDoc = () => {
+    if (modalDocIndex !== null && modalDocIndex > 0) {
+      setModalDocIndex(modalDocIndex - 1)
+    }
   }
 
   return (
@@ -78,7 +95,17 @@ function About() {
           <p>{resolve(language, text('Documents', 'দলিল'))}</p>
           <h2>{resolve(language, text('Official documents & donation details', 'আধিকারিক দলিল এবং অনুদানের বিবরণ'))}</h2>
         </div>
-        <DocumentModal open={modalOpen} onClose={closeDoc} title={modalDoc?.title || ''} src={modalDoc?.href || ''} type={modalDoc && modalDoc.href.match(/\.pdf$/i) ? 'pdf' : 'image'} />
+        <DocumentModal 
+          open={modalOpen} 
+          onClose={closeDoc} 
+          title={modalDoc?.title || ''} 
+          src={modalDoc?.href || ''} 
+          type={modalDoc && modalDoc.href.match(/\.pdf$/i) ? 'pdf' : 'image'}
+          onNext={nextDoc}
+          onPrev={prevDoc}
+          hasNext={modalDocIndex !== null && modalDocIndex < documents.length - 1}
+          hasPrev={modalDocIndex !== null && modalDocIndex > 0}
+        />
         <div className="card-grid docs-grid">
           {documents.map((doc) => (
             <article

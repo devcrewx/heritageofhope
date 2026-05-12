@@ -866,6 +866,38 @@ img[loading="lazy"] {
   line-height: 1;
   cursor: pointer;
 }
+.doc-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  color: #0f172a;
+  transition: all 120ms ease-out;
+  z-index: 2001;
+}
+.doc-modal-nav:hover {
+  background: white;
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.15);
+}
+.doc-modal-nav:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+.doc-modal-prev {
+  left: 12px;
+}
+.doc-modal-next {
+  right: 12px;
+}
 .doc-modal-body { padding: 18px; display: flex; flex-direction: column; gap: 12px }
 .doc-modal-title { margin: 0; font-size: 1.1rem }
 .doc-modal-inner { background: #f7fafc; border-radius: 8px; overflow: hidden; min-height: 320px; display: flex; align-items: center; justify-content: center }
