@@ -104,7 +104,7 @@ function GetInvolved() {
         <div>
           <div className="section-head">
             <p>{resolve(language, text('Volunteer', 'স্বেচ্ছাসেবা'))}</p>
-            <h2>{resolve(language, text('People matter more than perfection', 'মানুষ আগে, পারফেকশন পরে'))}</h2>
+            <h2>{resolve(language, text('People matter more than perfection', 'মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়'))}</h2>
           </div>
           <div className="card-grid two-up">
             {volunteerRoles.map((role) => (
@@ -160,7 +160,7 @@ function GetInvolved() {
               </select>
             </div>
             <div className="field">
-              <label htmlFor="volunteer-availability">{resolve(language, text('Availability', 'সময় দেওয়ার সুযোগ'))}</label>
+              <label htmlFor="volunteer-availability">{resolve(language, text('Availability', 'কখন সময় দিতে পারবেন'))}</label>
               <select id="volunteer-availability" name="availability" required>
                 <option value="">{resolve(language, text('Choose one', 'একটি বেছে নিন'))}</option>
                 <option value="weekends">{resolve(language, text('Weekends', 'ছুটির দিনে'))}</option>
@@ -201,7 +201,7 @@ function GetInvolved() {
                 language,
                 text(
                   'Partnership-led community outreach activity by Heritage of Hope Foundation',
-                  'হেরিটেজ অফ হোপ ফাউন্ডেশনের অংশীদারদের সাথে করা কাজ',
+                  'হেরিটেজ অফ হোপ ফাউন্ডেশনের সামাজিক কার্যক্রম',
                 ),
               )}
               loading="lazy"

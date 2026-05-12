@@ -39,7 +39,7 @@ export const featuredPrograms = [
       'Basic checkups, consultations, and referral help for families and children.',
       'পরিবার আর বাচ্চাদের জন্য বেসিক চেকআপ, পরামর্শ আর দরকার হলে অন্য জায়গায় পাঠানোর ব্যবস্থা।',
     ),
-    highlight: text('Community first aid', 'কমিউনিটি ফার্স্ট এইড'),
+    highlight: text('Community first aid', 'প্রাথমিক স্বাস্থ্যসেবা'),
   },
   {
     slug: 'blood-donation',
@@ -59,7 +59,7 @@ export const featuredPrograms = [
     title: text('Winter Programme', 'শীতকালীন কর্মসূচি'),
     description: text(
       'Winter clothing, sweaters, and school bags for children in need.',
-      'যাদের দরকার, তাদের জন্য শীতের জামা, সোয়েটার আর স্কুল ব্যাগ।',
+      'যেসব শিশুদের প্রয়োজন, তাদের জন্য শীতের পোশাক, সোয়েটার ও স্কুলব্যাগ।',
     ),
     highlight: text('Seasonal support', 'মৌসুমি সহায়তা'),
   },
@@ -175,7 +175,7 @@ export const facebookPosts = [
 ]
 
 export const impactMetrics = [
-  { value: '200+', label: text('children supported', 'শিশুর কাছে পৌঁছেছি আমরা') },
+  { value: '200+', label: text('children supported', 'শিশুর কাছে পৌঁছানো হয়েছে') },
   { value: '15+', label: text('health & education drives', 'স্বাস্থ্য ও শিক্ষা উদ্যোগ') },
   { value: '3+', label: text('active partner organizations', 'সক্রিয় সহযোগী সংস্থা') },
   { value: '5+', label: text('communities served', 'উপকৃত গ্রাম/এলাকা') },
@@ -184,7 +184,7 @@ export const impactMetrics = [
 export const fundAllocation = [
   { label: text('Education', 'শিক্ষা'), value: 45 },
   { label: text('Healthcare', 'স্বাস্থ্য'), value: 25 },
-  { label: text('Relief drives', 'মৌসুমি ত্রাণ সহায়তা'), value: 20 },
+  { label: text('Relief drives', 'মৌসুমি কল্যাণ সহায়তা'), value: 20 },
   { label: text('Operations', 'পরিচালনা ব্যয়'), value: 10 },
 ]
 

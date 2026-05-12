@@ -55,7 +55,7 @@ function OurWork() {
           </div>
           <ol className="timeline">
             <li>{resolve(language, text('Identify community needs', 'পাড়ার দরকারটা আগে বুঝে নিই'))}</li>
-            <li>{resolve(language, text('Collaborate with local partners', 'স্থানীয় মানুষদের সাথে হাত মিলাই'))}</li>
+            <li>{resolve(language, text('Collaborate with local partners', 'স্থানীয় অংশীদারদের সাথে যৌথ উদ্যোগ'))}</li>
             <li>{resolve(language, text('Execute program and track impact', 'কাজটা করি আর কী হলো দেখি'))}</li>
             <li>{resolve(language, text('Provide ongoing support and review', 'চলতে থাকা সহায়তা আর খোঁজখবর রাখি'))}</li>
           </ol>

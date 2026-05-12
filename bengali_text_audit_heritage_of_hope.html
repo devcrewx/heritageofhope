@@ -1,0 +1,348 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem}
+.filter-btn{font-size:12px;padding:4px 12px;border-radius:999px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.filter-btn.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
+.s-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.s-card .num{font-size:22px;font-weight:500;margin-bottom:2px}
+.s-card .lbl{font-size:12px;color:var(--color-text-secondary)}
+.s-card.red .num{color:var(--color-text-danger)}
+.s-card.amber .num{color:var(--color-text-warning)}
+.s-card.green .num{color:var(--color-text-success)}
+.entry{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:.75rem;background:var(--color-background-primary)}
+.entry-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:.5rem}
+.entry-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.badge{font-size:11px;padding:3px 9px;border-radius:999px;font-weight:500}
+.badge.change{background:var(--color-background-danger);color:var(--color-text-danger)}
+.badge.ok{background:var(--color-background-success);color:var(--color-text-success)}
+.badge.minor{background:var(--color-background-warning);color:var(--color-text-warning)}
+.page-tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.label{font-size:12px;color:var(--color-text-secondary);margin-bottom:3px;margin-top:.6rem}
+.en-text{font-size:13px;color:var(--color-text-secondary);font-style:italic}
+.bn-text{font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.suggested{font-size:14px;color:var(--color-text-success);line-height:1.6}
+.reason{font-size:12px;color:var(--color-text-secondary);margin-top:.4rem;line-height:1.5}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:.6rem 0}
+.hidden{display:none}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">Bengali text audit for Heritage of Hope Foundation website</h2>
+
+<div class="summary-row">
+  <div class="s-card red"><div class="num" id="cnt-change">0</div><div class="lbl">Change recommended</div></div>
+  <div class="s-card amber"><div class="num" id="cnt-minor">0</div><div class="lbl">Minor suggestion</div></div>
+  <div class="s-card green"><div class="num" id="cnt-ok">0</div><div class="lbl">Sounds natural</div></div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all')">All</button>
+  <button class="filter-btn" onclick="filter('change')">Change recommended</button>
+  <button class="filter-btn" onclick="filter('minor')">Minor suggestion</button>
+  <button class="filter-btn" onclick="filter('ok')">Sounds natural</button>
+</div>
+
+<div id="list"></div>
+</div>
+
+<script>
+const entries = [
+  {
+    status:"ok",
+    page:"Layout / Nav",
+    en:"Donate Now",
+    bn:"সহযোগিতার হাত বাড়িয়ে দিন",
+    reason:"Beautiful idiomatic choice — 'extend a hand of cooperation' is warm and human. Keep as is.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Home — Hero",
+    en:"Lighting lives, one step at a time",
+    bn:"সেবার আলোয় প্রতিটি পদক্ষেপে নতুন প্রাণের ছোঁয়া",
+    reason:"Not a literal translation — it's a creative Bengali rendering that captures the spirit well. Reads naturally.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Home — Hero",
+    en:"Education, healthcare and dignity for underserved communities.",
+    bn:"প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।",
+    reason:"Concise, accurate, and idiomatic. 'প্রান্তিক মানুষ' is the right term in Bengali NGO discourse.",
+    suggested:null
+  },
+  {
+    status:"change",
+    page:"Home — Hero",
+    en:"Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.",
+    bn:"Heritage of Hope Foundation দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি ত্রাণের মাধ্যমে কাজ করে।",
+    reason:"The English org name mid-Bengali sentence is jarring. Bengali readers expect either full transliteration or a natural break. Also 'মৌসুমি ত্রাণ' (seasonal relief) is correct but 'ত্রাণ' alone connotes disaster relief — slightly heavy for seasonal clothing drives.",
+    suggested:"হেরিটেজ অফ হোপ ফাউন্ডেশন দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি সহায়তার মাধ্যমে কাজ করে।"
+  },
+  {
+    status:"change",
+    page:"About — Vision label",
+    en:"Vision",
+    bn:"ভবিষ্যত পরিকল্পনা",
+    reason:"'ভবিষ্যত পরিকল্পনা' means 'future plan' — that's a mistranslation. Vision (দূরদর্শন/দৃষ্টিভঙ্গি) is an aspirational concept, not a plan. It sounds like a business roadmap section.",
+    suggested:"আমাদের দৃষ্টিভঙ্গি"
+  },
+  {
+    status:"change",
+    page:"About — Values",
+    en:"Community",
+    bn:"জনসেবা",
+    reason:"'জনসেবা' means 'public service', which is a function — not a value. 'Community' as a value means togetherness and belonging.",
+    suggested:"সম্প্রদায়"
+  },
+  {
+    status:"change",
+    page:"About — Values",
+    en:"Empowerment",
+    bn:"ক্ষমতায়ন",
+    reason:"'ক্ষমতায়ন' is technically correct but feels bureaucratic/political in Bengali (used heavily in govt. jargon). For an NGO values card it reads stiff.",
+    suggested:"স্বনির্ভরতা"
+  },
+  {
+    status:"minor",
+    page:"About — Intro",
+    en:"We work directly with the people we serve, ensuring every initiative brings lasting, positive change.",
+    bn:"আমরা যাদের সেবা করি তাদের সাথে সরাসরি কাজ করি, নিশ্চিত করে যে প্রতিটি উদ্যোগ স্থায়ী ও ইতিবাচক পরিবর্তন নিয়ে আসে।",
+    reason:"'নিশ্চিত করে যে' is a literal calque of 'ensuring that' and reads like translated English. Bengali would restructure this as a simple declarative.",
+    suggested:"আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।"
+  },
+  {
+    status:"change",
+    page:"About — How we work",
+    en:"Collaborate with local partners",
+    bn:"স্থানীয় মানুষদের সাথে যৌথ উদ্যোগ",
+    reason:"'স্থানীয় মানুষদের সাথে' means 'with local people', not 'with local partners'. The English says partners (সংস্থা/অংশীদার), not people — this changes the meaning.",
+    suggested:"স্থানীয় অংশীদারদের সাথে যৌথ উদ্যোগ"
+  },
+  {
+    status:"ok",
+    page:"About — Mission",
+    en:"Improve lives through education, healthcare, and basic support.",
+    bn:"শিক্ষা, স্বাস্থ্যসেবা ও জরুরি সহায়তার মাধ্যমে মানুষের জীবনযাত্রার মান উন্নত করা।",
+    reason:"Natural and complete. 'জীবনযাত্রার মান উন্নত করা' is the standard Bengali phrasing for this concept.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"About — Vision statement",
+    en:"A Bengal where every child can learn and live with dignity.",
+    bn:"এমন এক বাংলা, যেখানে প্রতিটি শিশু শিক্ষা ও মর্যাদার সঙ্গে বেড়ে উঠবে।",
+    reason:"Excellent — 'বেড়ে উঠবে' (will grow up) adds warmth that the English 'live' doesn't have. A genuine improvement.",
+    suggested:null
+  },
+  {
+    status:"minor",
+    page:"Impact — Section label",
+    en:"Impact",
+    bn:"প্রভাব",
+    reason:"'প্রভাব' technically means influence/effect but in Bengali NGO context it sounds slightly academic. 'আমাদের অবদান' or 'কাজের ফলাফল' would feel more grounded. Not wrong, just cold.",
+    suggested:"আমাদের অবদান"
+  },
+  {
+    status:"change",
+    page:"Impact — Metrics",
+    en:"children supported",
+    bn:"শিশুর কাছে পৌঁছেছি আমরা",
+    reason:"The first-person 'আমরা' at the end of a metric label is grammatically awkward — metric labels are normally noun phrases, not sentences. It also won't read well next to a large number like '150+'.",
+    suggested:"শিশুর কাছে পৌঁছানো হয়েছে"
+  },
+  {
+    status:"ok",
+    page:"Impact — Metrics",
+    en:"health & education drives",
+    bn:"স্বাস্থ্য ও শিক্ষা উদ্যোগ",
+    reason:"Clean and correct.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Impact — Metrics",
+    en:"communities served",
+    bn:"উপকৃত গ্রাম/এলাকা",
+    reason:"The 'গ্রাম/এলাকা' specificity is a nice touch for a West Bengal NGO. Reads naturally.",
+    suggested:null
+  },
+  {
+    status:"minor",
+    page:"Impact — Fund section",
+    en:"Fund utilization",
+    bn:"তহবিলের ব্যবহার",
+    reason:"Correct but slightly dry. 'তহবিল' is the right word; the phrasing is fine for a formal context but 'অনুদান কীভাবে ব্যবহৃত হয়' (already used in the sub-label) is warmer. Since the sub-label already handles it, this heading is fine to keep.",
+    suggested:null
+  },
+  {
+    status:"change",
+    page:"Impact — Fund allocation",
+    en:"Relief drives",
+    bn:"মৌসুমি ত্রাণ সহায়তা",
+    reason:"Same 'ত্রাণ' issue as the hero — this fund category covers winter clothes, raincoats etc. 'ত্রাণ' in Bengali implies disaster/flood relief. Misleading for donors reading the fund chart.",
+    suggested:"মৌসুমি কল্যাণ সহায়তা"
+  },
+  {
+    status:"change",
+    page:"Get Involved — Volunteer",
+    en:"People matter more than perfection",
+    bn:"মানুষ নিখুঁততার চেয়ে বেশি গুরুত্বপূর্ণ",
+    reason:"Direct word-for-word translation. 'নিখুঁততা' is rarely used in Bengali speech — this reads like it was machine translated. The sentiment is great; the phrasing is awkward.",
+    suggested:"মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়"
+  },
+  {
+    status:"minor",
+    page:"Get Involved — Form",
+    en:"Availability",
+    bn:"সময় দেওয়ার সুযোগ",
+    reason:"'সময় দেওয়ার সুযোগ' is a mouthful for a form label. 'উপলব্ধতা' is too formal, but a simpler phrase works better.",
+    suggested:"কখন সময় দিতে পারবেন"
+  },
+  {
+    status:"ok",
+    page:"Get Involved — Donate",
+    en:"Donation ladder / What your support can do",
+    bn:"অনুদান ও তার প্রভাব / আপনার সহায়তা কী করতে পারে",
+    reason:"'আপনার সহায়তা কী করতে পারে' is a lovely, direct Bengali sub-heading. Reads well.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Get Involved — Donation steps",
+    en:"sponsor a learning journey",
+    bn:"একজনের শিক্ষার দায়িত্ব নিন",
+    reason:"'দায়িত্ব নিন' (take responsibility) is culturally resonant in Bengali — much stronger than 'sponsor'. Great adaptation.",
+    suggested:null
+  },
+  {
+    status:"change",
+    page:"Get Involved — Partner section",
+    en:"Partnership-led community outreach activity by Heritage of Hope Foundation",
+    bn:"হেরিটেজ অফ হোপ ফাউন্ডেশনের অংশীদারিত্বভিত্তিক কমিউনিটি আউটরিচ কার্যক্রম",
+    reason:"This is an image alt text / caption. 'অংশীদারিত্বভিত্তিক কমিউনিটি আউটরিচ কার্যক্রম' is a chain of 4 Bangla-English compound nouns — nearly unreadable aloud. These are jargon strings that no Bengali speaker would naturally say.",
+    suggested:"হেরিটেজ অফ হোপ ফাউন্ডেশনের সামাজিক কার্যক্রম"
+  },
+  {
+    status:"ok",
+    page:"Get Involved — Partner CTA",
+    en:"Start a collaboration / Partner with us",
+    bn:"সহযোগিতার হাত বাড়িয়ে দিন",
+    reason:"Same beautiful idiom as the donate button — consistent and warm.",
+    suggested:null
+  },
+  {
+    status:"minor",
+    page:"Contact — Subject field placeholder",
+    en:"Tell us how you want to help",
+    bn:"আপনার বার্তার বিস্তারিত এখানে লিখুন",
+    reason:"The English is for the Message field specifically (warm, inviting). The Bengali translates as 'write the details of your message here' — it's a generic instruction, not a warm prompt. They're not equivalent.",
+    suggested:"কীভাবে সাহায্য করতে চান জানান"
+  },
+  {
+    status:"ok",
+    page:"Contact — Facebook section",
+    en:"Featured from Facebook / Recent moments from the page",
+    bn:"ফেসবুকের বিশেষ মুহূর্ত / পেজের সাম্প্রতিক মুহূর্ত",
+    reason:"Natural and conversational. Works well.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Home — Showcase caption",
+    en:"Community registration and outreach",
+    bn:"মানুষের পাশে, মানুষের সাথে",
+    reason:"This is a beautiful creative deviation — 'beside people, with people' is evocative and human. Better than the English original.",
+    suggested:null
+  },
+  {
+    status:"change",
+    page:"Programs — Free Health Camps",
+    en:"Community first aid",
+    bn:"কমিউনিটি ফার্স্ট এইড",
+    reason:"'কমিউনিটি ফার্স্ট এইড' is pure English transliteration. If the Bengali mode is on, this defeats the purpose — it'll read as English in Bengali script.",
+    suggested:"প্রাথমিক স্বাস্থ্যসেবা"
+  },
+  {
+    status:"ok",
+    page:"Programs — Monsoon Relief",
+    en:"Education without interruption",
+    bn:"বিঘ্নহীন শিক্ষা",
+    reason:"Concise and correct. 'বিঘ্নহীন' is a good formal Bengali word here.",
+    suggested:null
+  },
+  {
+    status:"minor",
+    page:"Programs — Winter Programme",
+    en:"Winter clothing, sweaters, and school bags for children in need.",
+    bn:"প্রয়োজনীয় শিশুদের জন্য শীতের জামা, সোয়েটার ও স্কুল ব্যাগ।",
+    reason:"'প্রয়োজনীয় শিশুদের' means 'necessary children' — a word order error. Should be 'যেসব শিশুদের প্রয়োজন' or restructured.",
+    suggested:"যেসব শিশুদের প্রয়োজন, তাদের জন্য শীতের পোশাক, সোয়েটার ও স্কুলব্যাগ।"
+  },
+  {
+    status:"ok",
+    page:"Not Found page",
+    en:"Return to the homepage to continue exploring.",
+    bn:"আমাদের প্রধান পাতায় ফিরে যান।",
+    reason:"Simple, correct, no issues.",
+    suggested:null
+  },
+  {
+    status:"ok",
+    page:"Thank You page",
+    en:"We will review your message and respond as soon as possible.",
+    bn:"আমরা আপনার বার্তার গুরুত্ব বুঝে দ্রুতই আপনার সাথে যোগাযোগ করব।",
+    reason:"'আপনার বার্তার গুরুত্ব বুঝে' (understanding the importance of your message) adds a warmth the English lacks. A nice touch.",
+    suggested:null
+  }
+];
+
+function filter(type){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.entry').forEach(e=>{
+    if(type==='all'||e.dataset.status===type) e.classList.remove('hidden');
+    else e.classList.add('hidden');
+  });
+}
+
+const list=document.getElementById('list');
+let cChange=0,cMinor=0,cOk=0;
+
+entries.forEach(e=>{
+  if(e.status==='change')cChange++;
+  else if(e.status==='minor')cMinor++;
+  else cOk++;
+
+  const div=document.createElement('div');
+  div.className='entry';
+  div.dataset.status=e.status;
+
+  const badgeClass=e.status==='change'?'change':e.status==='minor'?'minor':'ok';
+  const badgeText=e.status==='change'?'Change recommended':e.status==='minor'?'Minor suggestion':'Sounds natural';
+
+  div.innerHTML=`
+    <div class="entry-header">
+      <div class="entry-meta">
+        <span class="badge ${badgeClass}">${badgeText}</span>
+        <span class="page-tag">${e.page}</span>
+      </div>
+    </div>
+    <div class="label">English</div>
+    <div class="en-text">${e.en}</div>
+    <div class="label">Current Bengali</div>
+    <div class="bn-text">${e.bn}</div>
+    ${e.suggested?`<div class="divider"></div><div class="label">Suggested Bengali</div><div class="suggested">${e.suggested}</div>`:''}
+    <div class="reason">${e.reason}</div>
+  `;
+  list.appendChild(div);
+});
+
+document.getElementById('cnt-change').textContent=cChange;
+document.getElementById('cnt-minor').textContent=cMinor;
+document.getElementById('cnt-ok').textContent=cOk;
+</script>
