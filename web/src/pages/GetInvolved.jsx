@@ -26,7 +26,7 @@ function GetInvolved() {
         'অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়।',
       qrTitle: 'স্ক্যান করে অনুদান দিন',
       qrBody:
-        'এই ডেমো ইউপিআই কিউআর কোড স্ক্যান করে সহজে অনুদান দিতে পারেন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন।',
+        'আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।',
     },
   }
 
@@ -45,14 +45,14 @@ function GetInvolved() {
           <p>{resolve(language, text('A/C No: 43107075580', 'হিসাব নম্বর: 43107075580'))}</p>
           <p>{resolve(language, text('IFSC: SBIN0008438', 'আইএফএসসি: SBIN0008438'))}</p>
           <div style={{ marginTop: '0.75rem' }}>
-            <button className="btn btn-ghost" onClick={() => { setModalDoc({ src: '/docs/empty-cheque.jpeg', title: resolve(language, text('Specimen cheque', 'উদাহরণ চেক')) }); setModalOpen(true) }}>
+            <button type="button" className="btn btn-ghost" onClick={() => { setModalDoc({ src: '/docs/empty-cheque.jpeg', title: resolve(language, text('Specimen cheque', 'উদাহরণ চেক')) }); setModalOpen(true) }}>
               {resolve(language, text('View specimen cheque', 'চেক দেখুন'))}
             </button>
           </div>
         </div>
       </section>
 
-      <DocumentModal open={modalOpen} onClose={() => setModalOpen(false)} title={modalDoc?.title || ''} src={modalDoc?.src || ''} type={modalDoc && modalDoc.src ? 'image' : 'image'} />
+      <DocumentModal open={modalOpen} onClose={() => setModalOpen(false)} title={modalDoc?.title || ''} src={modalDoc?.src || ''} type="image" />
 
       <section className="panel split-panel donation-panel" data-reveal>
         <div>

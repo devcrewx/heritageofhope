@@ -41,12 +41,11 @@ function About() {
   ]
 
   const documents = [
-    { href: '/docs/trust-registration-certificate.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: resolve(language, text('Trust Registration Certificate', 'ট্রাস্ট নিবন্ধন সার্টিফিকেট')), meta: 'May 18, 2024', caption: resolve(language, text('Official trust registration deed (Deed No. IV-190200986/2024)', 'ট্রাস্ট নিবন্ধন দলিল (ডিড নং IV-190200986/2024)')) },
-    { href: '/docs/ngo-darpan-niti-ayog.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: 'NGO DARPAN (NITI AAYOG)', meta: 'WB/2024/0426882', caption: 'NGO Darpan listing (NITI Aayog) — primary registration entry' },
-    { href: '/docs/hhp-12a.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: '12A (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 12A registration (income tax exemption)' },
-    { href: '/docs/hhp-80g.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: '80G (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 80G — donor tax deduction eligibility' },
-    { href: '/docs/csr-1-hhf.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: 'MCA CSR Registration (CSR-1)', meta: 'CSR00100906', caption: 'MCA confirmation for CSR-funded activities' },
-    { href: '/docs/empty-cheque.jpeg', thumb: '/docs/thumbs/empty-cheque.jpeg', title: resolve(language, text('Bank details (specimen cheque)', 'ব্যাংক বিবরণী (চেক)')), meta: '', caption: resolve(language, text('State Bank of India — Ruby Park branch (account details shown)', 'স্টেট ব্যাঙ্ক অফ ইন্ডিয়া — রুবি পার্ক শাখা (অ্যাকাউন্ট বিবরণ)')) },
+    { href: '/docs/trust-registration-certificate.pdf', thumb: '/docs/thumbs/trust-registration-certificate.png', title: resolve(language, text('Trust Registration Certificate', 'ট্রাস্ট নিবন্ধন সার্টিফিকেট')), meta: 'May 18, 2024', caption: resolve(language, text('Official trust registration deed (Deed No. IV-190200986/2024)', 'ট্রাস্ট নিবন্ধন দলিল (ডিড নং IV-190200986/2024)')) },
+    { href: '/docs/ngo-darpan-niti-ayog.pdf', thumb: '/docs/thumbs/ngo-darpan-niti-ayog.png', title: 'NGO DARPAN (NITI AAYOG)', meta: 'WB/2024/0426882', caption: 'NGO Darpan listing (NITI Aayog) — primary registration entry' },
+    { href: '/docs/hhp-12a.pdf', thumb: '/docs/thumbs/hhp-12a.png', title: '12A (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 12A registration (income tax exemption)' },
+    { href: '/docs/hhp-80g.pdf', thumb: '/docs/thumbs/hhp-80g.png', title: '80G (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 80G — donor tax deduction eligibility' },
+    { href: '/docs/csr-1-hhf.pdf', thumb: '/docs/thumbs/csr-1-hhf.png', title: 'MCA CSR Registration (CSR-1)', meta: 'CSR00100906', caption: 'MCA confirmation for CSR-funded activities' },
     { href: '/docs/gratitude-certificate.jpeg', thumb: '/docs/thumbs/gratitude-certificate.jpeg', title: resolve(language, text('Certificates & awards', 'শংসাপত্র ও পুরস্কার')), meta: 'Jul 28, 2024', caption: resolve(language, text('Recognition certificate from Thalassemic Guardians Association', 'থ্যালাসেমিক গার্ডিয়ান্স এসোসিয়েশন থেকে সম্মাননাপত্র')) },
   ]
 
@@ -101,7 +100,7 @@ function About() {
                 {doc.meta ? <p className="muted">{doc.meta}</p> : null}
                 {doc.caption ? <p className="muted small">{doc.caption}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
-                  <button className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
+                  <button type="button" className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
                     {resolve(language, text('View', 'দেখুন'))}
                   </button>
                   {doc.href.endsWith('.pdf') ? (
