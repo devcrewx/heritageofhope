@@ -4,6 +4,8 @@ import { donationSteps, resolve, volunteerRoles, text } from '../content'
 import DocumentModal from '../components/DocumentModal'
 
 const demoUpiQr = '/docs/upi-qr.jpeg'
+const upiIntentUrl =
+  'upi://pay?pa=8420119790%40okbizaxis&pn=Heritage%20of%20Hope%20Foundation&cu=INR'
 
 function GetInvolved() {
   const { language } = useOutletContext()
@@ -19,6 +21,8 @@ function GetInvolved() {
       qrTitle: 'Scan to donate',
       qrBody:
         'Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.',
+      upiCta: 'Pay via UPI app',
+      upiHint: 'On mobile, this opens your installed UPI app directly.',
     },
     bn: {
       title: 'পরিবর্তন আনতে পাশে থাকুন।',
@@ -27,6 +31,8 @@ function GetInvolved() {
       qrTitle: 'স্ক্যান করে অনুদান দিন',
       qrBody:
         'আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।',
+      upiCta: 'UPI অ্যাপ দিয়ে পেমেন্ট করুন',
+      upiHint: 'মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।',
     },
   }
 
@@ -81,6 +87,12 @@ function GetInvolved() {
               loading="lazy"
             />
           </div>
+          <div style={{ marginTop: '0.75rem' }}>
+            <a className="btn btn-solid" href={upiIntentUrl}>
+              {copy[language].upiCta}
+            </a>
+          </div>
+          <p className="qr-note" style={{ marginTop: '0.45rem' }}>{copy[language].upiHint}</p>
           <p className="qr-note">{copy[language].qrBody}</p>
         </aside>
       </section>
