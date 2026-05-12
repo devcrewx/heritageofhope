@@ -1,10 +1,15 @@
 import { useOutletContext } from 'react-router-dom'
+import { useState } from 'react'
 import { donationSteps, resolve, volunteerRoles, text } from '../content'
+import DocumentModal from '../components/DocumentModal'
 
 const demoUpiQr = '/docs/upi-qr.jpeg'
 
 function GetInvolved() {
   const { language } = useOutletContext()
+
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalDoc, setModalDoc] = useState(null)
 
   const copy = {
     en: {
@@ -39,8 +44,15 @@ function GetInvolved() {
           <p>{resolve(language, text('State Bank of India, Ruby Park Branch', 'স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক ব্রাঞ্চ'))}</p>
           <p>{resolve(language, text('A/C No: 43107075580', 'হিসাব নম্বর: 43107075580'))}</p>
           <p>{resolve(language, text('IFSC: SBIN0008438', 'আইএফএসসি: SBIN0008438'))}</p>
+          <div style={{ marginTop: '0.75rem' }}>
+            <button className="btn btn-ghost" onClick={() => { setModalDoc({ src: '/docs/empty-cheque.jpeg', title: resolve(language, text('Specimen cheque', 'উদাহরণ চেক')) }); setModalOpen(true) }}>
+              {resolve(language, text('View specimen cheque', 'চেক দেখুন'))}
+            </button>
+          </div>
         </div>
       </section>
+
+      <DocumentModal open={modalOpen} onClose={() => setModalOpen(false)} title={modalDoc?.title || ''} src={modalDoc?.src || ''} type={modalDoc && modalDoc.src ? 'image' : 'image'} />
 
       <section className="panel split-panel donation-panel" data-reveal>
         <div>

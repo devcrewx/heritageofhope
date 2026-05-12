@@ -1,5 +1,7 @@
 import { useOutletContext } from 'react-router-dom'
+import { useState } from 'react'
 import { partners, resolve, teamMembers, text } from '../content'
+import DocumentModal from '../components/DocumentModal'
 
 function About() {
   const { language } = useOutletContext()
@@ -48,6 +50,17 @@ function About() {
     { href: '/docs/gratitude-certificate.jpeg', thumb: '/docs/thumbs/gratitude-certificate.jpeg', title: resolve(language, text('Certificates & awards', 'শংসাপত্র ও পুরস্কার')), meta: 'Jul 28, 2024', caption: resolve(language, text('Recognition certificate from Thalassemic Guardians Association', 'থ্যালাসেমিক গার্ডিয়ান্স এসোসিয়েশন থেকে সম্মাননাপত্র')) },
   ]
 
+  const [modalOpen, setModalOpen] = useState(false)
+  const [modalDoc, setModalDoc] = useState(null)
+  const openDoc = (d) => {
+    setModalDoc(d)
+    setModalOpen(true)
+  }
+  const closeDoc = () => {
+    setModalOpen(false)
+    setModalDoc(null)
+  }
+
   return (
     <main className="page-stack page-about">
       <section className="panel split-panel" data-reveal>
@@ -66,9 +79,20 @@ function About() {
           <p>{resolve(language, text('Documents', 'দলিল'))}</p>
           <h2>{resolve(language, text('Official documents & donation details', 'আধিকারিক দলিল এবং অনুদানের বিবরণ'))}</h2>
         </div>
+        <DocumentModal open={modalOpen} onClose={closeDoc} title={modalDoc?.title || ''} src={modalDoc?.href || ''} type={modalDoc && modalDoc.href.match(/\.pdf$/i) ? 'pdf' : 'image'} />
         <div className="card-grid docs-grid">
           {documents.map((doc) => (
-            <article key={doc.href} className="card doc-card" data-reveal>
+            <article
+              key={doc.href}
+              className="card doc-card"
+              data-reveal
+              role="button"
+              tabIndex={0}
+              onClick={() => openDoc(doc)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') openDoc(doc)
+              }}
+            >
               <div className="doc-thumb-wrap">
                 <img className="doc-thumb" src={doc.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={doc.title} />
               </div>
@@ -77,11 +101,11 @@ function About() {
                 {doc.meta ? <p className="muted">{doc.meta}</p> : null}
                 {doc.caption ? <p className="muted small">{doc.caption}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
-                  <a className="btn btn-ghost" href={doc.href} target="_blank" rel="noopener noreferrer">
+                  <button className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
                     {resolve(language, text('View', 'দেখুন'))}
-                  </a>
+                  </button>
                   {doc.href.endsWith('.pdf') ? (
-                    <a className="btn" style={{ marginLeft: '0.5rem' }} href={doc.href} download>
+                    <a className="btn" style={{ marginLeft: '0.5rem' }} href={doc.href} download onClick={(e) => e.stopPropagation()}>
                       {resolve(language, text('Download', 'ডাউনলোড'))}
                     </a>
                   ) : null}
