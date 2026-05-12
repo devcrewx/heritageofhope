@@ -23,6 +23,7 @@ function GetInvolved() {
         'Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.',
       upiCta: 'Pay via UPI app',
       upiHint: 'On mobile, this opens your installed UPI app directly.',
+      upiFallback: 'If no UPI app opens on this device, please use the QR code above to complete payment.',
     },
     bn: {
       title: 'পরিবর্তন আনতে পাশে থাকুন।',
@@ -33,6 +34,7 @@ function GetInvolved() {
         'আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।',
       upiCta: 'UPI অ্যাপ দিয়ে পেমেন্ট করুন',
       upiHint: 'মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।',
+      upiFallback: 'এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন।',
     },
   }
 
@@ -93,6 +95,7 @@ function GetInvolved() {
             </a>
           </div>
           <p className="qr-note" style={{ marginTop: '0.45rem' }}>{copy[language].upiHint}</p>
+          <p className="qr-note">{copy[language].upiFallback}</p>
           <p className="qr-note">{copy[language].qrBody}</p>
         </aside>
       </section>
