@@ -38,6 +38,17 @@ function About() {
     text('Empowerment', 'ক্ষমতায়ন'),
   ]
 
+  const documents = [
+    { href: '/docs/trust-registration-certificate.pdf', title: resolve(language, text('Trust Registration Certificate', 'ট্রাস্ট নিবন্ধন সার্টিফিকেট')), meta: 'May 18, 2024' },
+    { href: '/docs/ngo-darpan-niti-ayog.pdf', title: 'NGO DARPAN (NITI AAYOG)', meta: 'WB/2024/0426882' },
+    { href: '/docs/hhp-12a.pdf', title: '12A (provisional)', meta: 'AY 2026–2029' },
+    { href: '/docs/hhp-80g.pdf', title: '80G (provisional)', meta: 'AY 2026–2029' },
+    { href: '/docs/csr-1-hhf.pdf', title: 'MCA CSR Registration (CSR-1)', meta: 'CSR00100906' },
+    { href: '/docs/upi-qr.jpeg', title: resolve(language, text('UPI QR (donate)', 'UPI কিউআর (দান)')), meta: '' },
+    { href: '/docs/empty-cheque.jpeg', title: resolve(language, text('Bank details (specimen cheque)', 'ব্যাংক বিবরণী (চেক)')), meta: '' },
+    { href: '/docs/gratitude-certificate.jpeg', title: resolve(language, text('Certificates & awards', 'শংসাপত্র ও পুরস্কার')), meta: 'Jul 28, 2024' },
+  ]
+
   return (
     <main className="page-stack page-about">
       <section className="panel split-panel" data-reveal>
@@ -48,6 +59,33 @@ function About() {
         </div>
         <div className="image-frame framed">
           <img loading="lazy" src="/assets/foundation.webp" alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
+        </div>
+      </section>
+
+      <section className="panel" data-reveal>
+        <div className="section-head">
+          <p>{resolve(language, text('Documents', 'দলিল'))}</p>
+          <h2>{resolve(language, text('Official documents & donation details', 'আধিকারিক দলিল এবং অনুদানের বিবরণ'))}</h2>
+        </div>
+        <div className="card-grid docs-grid">
+          {documents.map((doc) => (
+            <article key={doc.href} className="card doc-card" data-reveal>
+              <div className="card-body">
+                <h3>{doc.title}</h3>
+                {doc.meta ? <p className="muted">{doc.meta}</p> : null}
+                <div style={{ marginTop: '0.75rem' }}>
+                  <a className="btn btn-ghost" href={doc.href} target="_blank" rel="noopener noreferrer">
+                    {resolve(language, text('View', 'দেখুন'))}
+                  </a>
+                  {doc.href.endsWith('.pdf') ? (
+                    <a className="btn" style={{ marginLeft: '0.5rem' }} href={doc.href} download>
+                      {resolve(language, text('Download', 'ডাউনলোড'))}
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
