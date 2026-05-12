@@ -44,7 +44,6 @@ function About() {
     { href: '/docs/hhp-12a.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: '12A (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 12A registration (income tax exemption)' },
     { href: '/docs/hhp-80g.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: '80G (provisional)', meta: 'AY 2026–2029', caption: 'Provisional 80G — donor tax deduction eligibility' },
     { href: '/docs/csr-1-hhf.pdf', thumb: '/docs/thumbs/pdf-thumb.svg', title: 'MCA CSR Registration (CSR-1)', meta: 'CSR00100906', caption: 'MCA confirmation for CSR-funded activities' },
-    { href: '/docs/upi-qr.jpeg', thumb: '/docs/thumbs/upi-qr.jpeg', title: resolve(language, text('UPI QR (donate)', 'UPI কিউআর (দান)')), meta: '', caption: resolve(language, text('Scan to donate via UPI', 'UPI দিয়ে দান করতে স্ক্যান করুন')) },
     { href: '/docs/empty-cheque.jpeg', thumb: '/docs/thumbs/empty-cheque.jpeg', title: resolve(language, text('Bank details (specimen cheque)', 'ব্যাংক বিবরণী (চেক)')), meta: '', caption: resolve(language, text('State Bank of India — Ruby Park branch (account details shown)', 'স্টেট ব্যাঙ্ক অফ ইন্ডিয়া — রুবি পার্ক শাখা (অ্যাকাউন্ট বিবরণ)')) },
     { href: '/docs/gratitude-certificate.jpeg', thumb: '/docs/thumbs/gratitude-certificate.jpeg', title: resolve(language, text('Certificates & awards', 'শংসাপত্র ও পুরস্কার')), meta: 'Jul 28, 2024', caption: resolve(language, text('Recognition certificate from Thalassemic Guardians Association', 'থ্যালাসেমিক গার্ডিয়ান্স এসোসিয়েশন থেকে সম্মাননাপত্র')) },
   ]

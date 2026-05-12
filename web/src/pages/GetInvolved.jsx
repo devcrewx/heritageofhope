@@ -1,7 +1,7 @@
 import { useOutletContext } from 'react-router-dom'
 import { donationSteps, resolve, volunteerRoles, text } from '../content'
 
-const demoUpiQr = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNbuCgdtNT6LH1bCGXtIZGt76s4Qpd8ybiFQ&s'
+const demoUpiQr = '/docs/upi-qr.jpeg'
 
 function GetInvolved() {
   const { language } = useOutletContext()
@@ -13,7 +13,7 @@ function GetInvolved() {
         'Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.',
       qrTitle: 'Scan to donate',
       qrBody:
-        'Use this demo UPI QR code to make a quick contribution. You can also use the bank details above for direct transfers.',
+        'Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.',
     },
     bn: {
       title: 'পরিবর্তন আনতে পাশে থাকুন।',
@@ -65,7 +65,7 @@ function GetInvolved() {
           <div className="qr-frame">
             <img
               src={demoUpiQr}
-              alt={resolve(language, text('Demo UPI QR code for donations', 'দানের জন্য ডেমো ইউপিআই কিউআর কোড'))}
+              alt={resolve(language, text('Official UPI QR code for donations', 'দানের জন্য আনুষ্ঠানিক ইউপিআই কিউআর কোড'))}
               loading="lazy"
             />
           </div>
