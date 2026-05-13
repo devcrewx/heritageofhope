@@ -28,7 +28,7 @@ export const featuredPrograms = [
       'Community learning classes and study support for children in Kankandighi.',
       'কঙ্কনদীঘির বাচ্চাদের জন্য পাড়ার পড়াশোনার ক্লাস আর সাহায্য।',
     ),
-    highlight: text('Foundational learning', 'ভিত্তিমূলক শিক্ষা'),
+    highlight: text('Foundational learning', 'শুরু থেকে শেখা'),
   },
   {
     slug: 'health-camps',
@@ -50,7 +50,7 @@ export const featuredPrograms = [
       'Volunteer blood donation for thalassemia support and emergency care.',
       'থ্যালাসেমিয়ার বাচ্চা আর জরুরি চিকিৎসার কাজে স্বেচ্ছায় রক্তদান।',
     ),
-    highlight: text('Life-saving action', 'জীবনরক্ষাকারী উদ্যোগ'),
+    highlight: text('Life-saving action', 'জীবন বাঁচানোর উদ্যোগ'),
   },
   {
     slug: 'winter-programme',
@@ -83,7 +83,7 @@ export const featuredPrograms = [
       'Early literacy sessions for children who need extra learning support.',
       'যাদের একটু বেশি সাহায্য লাগে, তাদের জন্য পড়া-লেখা শেখার ক্লাস।',
     ),
-    highlight: text('Reading support', 'পড়ার সহায়তা'),
+    highlight: text('Reading support', 'পড়তে সাহায্য করা'),
   },
 ]
 
@@ -113,7 +113,7 @@ export const activityPosts = [
       'Raincoats and umbrellas helped families reach the learning space through the rainy season.',
       'রেনকোট ও ছাতা বর্ষাকালেও পরিবারগুলিকে শিক্ষাকেন্দ্রে পৌঁছাতে সাহায্য করেছে।',
     ),
-    location: text('Kishalaya community', 'কিশলয় কমিউনিটি'),
+    location: text('Kishalaya community', 'কিশলয়ের মানুষজন'),
   },
 ]
 
@@ -201,7 +201,7 @@ export const galleryItems = [
   },
   {
     category: text('Welfare', 'কল্যাণ'),
-    title: text('Winter distribution', 'শীতকালীন বিতরণ'),
+    title: text('Winter distribution', 'শীতবস্ত্র পৌঁছে দেওয়া'),
     image: '/assets/gallery_winter.webp',
   },
   {
@@ -221,7 +221,7 @@ export const galleryItems = [
   },
   {
     category: text('Welfare', 'কল্যাণ'),
-    title: text('Community feast by the river', 'নদীর ধারে সামাজিক ভোজ'),
+    title: text('Community feast by the river', 'নদীর ধারে একসাথে খাওয়া'),
     image: '/assets/gallery_feast.webp',
   },
   {
@@ -241,7 +241,7 @@ export const galleryItems = [
   },
   {
     category: text('Healthcare', 'স্বাস্থ্য'),
-    title: text('Pre-donation health checkup', 'রক্তদানপূর্ব স্বাস্থ্য পরীক্ষা'),
+    title: text('Pre-donation health checkup', 'রক্ত দেওয়ার আগে স্বাস্থ্য পরীক্ষা'),
     image: '/assets/gallery_checkup.webp',
   },
   {
@@ -291,9 +291,9 @@ export const donationSteps = [
 
 export const volunteerRoles = [
   text('Teaching support', 'শিক্ষাদানে সহায়তা'),
-  text('Event coordination', 'আয়োজন সমন্বয়'),
+  text('Event coordination', 'অনুষ্ঠান গোছানো'),
   text('Photography', 'ফটোগ্রাফি'),
-  text('Social media', 'সোশ্যাল মিডিয়া'),
+  text('Social media', 'সামাজিক মাধ্যম'),
   text('Healthcare assistance', 'স্বাস্থ্যসেবায় সহায়তা'),
 ]
 
@@ -310,7 +310,7 @@ export const teamMembers = [
     image: '/assets/team_member.webp',
   },
   {
-    name: text('Program Support', 'প্রোগ্রাম সাপোর্ট'),
+    name: text('Program Support', 'কর্মসূচি সহায়তা'),
     role: text('Planning, logistics and volunteer support', 'পরিকল্পনা ও স্বেচ্ছাসেবক ব্যবস্থাপনা'),
     image: '/assets/team_member_2.webp',
   },

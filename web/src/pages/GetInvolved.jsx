@@ -183,7 +183,7 @@ function GetInvolved() {
         <div>
           <div className="section-head">
             <p>{resolve(language, text('Partner with us', 'আমাদের সাথে কাজ করুন'))}</p>
-            <h2>{resolve(language, text('For CSR, hospitals and institutions', 'CSR, হাসপাতাল আর অন্য প্রতিষ্ঠানগুলোর জন্য'))}</h2>
+            <h2>{resolve(language, text('For CSR, hospitals and institutions', 'কর্পোরেট, হাসপাতাল ও অন্যান্য প্রতিষ্ঠানের জন্য'))}</h2>
           </div>
           <p>
             {resolve(
@@ -230,7 +230,7 @@ function GetInvolved() {
             <input id="org-name" name="organization_name" type="text" required />
           </div>
           <div className="field">
-            <label htmlFor="contact-person">{resolve(language, text('Contact person', 'যার সাথে কথা বলব তার নাম'))}</label>
+            <label htmlFor="contact-person">{resolve(language, text('Contact person', 'যোগাযোগের ব্যক্তি'))}</label>
             <input id="contact-person" name="contact_person" type="text" required />
           </div>
           <div className="form-grid two-col">

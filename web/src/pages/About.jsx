@@ -20,7 +20,7 @@ function About() {
         'The foundation began from direct work with children and women in underserved areas.',
     },
     bn: {
-      title: 'কমিউনিটিই আমাদের শক্তি। মানুষের পাশে থাকাই আমাদের কাজ।',
+      title: 'মানুষের মধ্যেই আমাদের শিকড়। কাজের ফলই আমাদের পথ দেখায়।',
       intro:
         'আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।',
       mission: 'আমাদের লক্ষ্য',
@@ -93,7 +93,7 @@ function About() {
       <section className="panel" data-reveal>
         <div className="section-head">
           <p>{resolve(language, text('Documents', 'দলিল'))}</p>
-          <h2>{resolve(language, text('Official documents & donation details', 'আধিকারিক দলিল এবং অনুদানের বিবরণ'))}</h2>
+          <h2>{resolve(language, text('Official documents', 'সরকারি কাগজপত্র'))}</h2>
         </div>
         <DocumentModal 
           open={modalOpen} 
@@ -146,7 +146,7 @@ function About() {
         <div>
           <div className="section-head">
             <p>{copy[language].storyTitle}</p>
-            <h2>{resolve(language, text('Grounded in field realities', 'মাঠের কাজের গল্প'))}</h2>
+            <h2>{resolve(language, text('Grounded in field realities', 'মানুষের মাঝ থেকে'))}</h2>
           </div>
           <p>{copy[language].storyBody}</p>
         </div>
@@ -245,7 +245,7 @@ function About() {
       <section className="panel" data-reveal>
         <div className="section-head">
           <p>{copy[language].values}</p>
-          <h2>{resolve(language, text('Team snapshot', 'টিমের এক ঝলক'))}</h2>
+          <h2>{resolve(language, text('Team snapshot', 'আমাদের দলের এক ঝলক'))}</h2>
         </div>
         <div className="card-grid">
           {teamMembers.map((member) => (

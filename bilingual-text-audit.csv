@@ -1,220 +1,235 @@
 Page,Section,Key,English,Bengali,SourceFile
-Global,Language Setup,lang_state_default,en,bn,"web/src/App.jsx"
-Global,Language Helper,text_function,text(en,bn),text(en,bn),"web/src/content.js"
-Global,Language Helper,resolve_function,resolve(language,value),resolve(language,value),"web/src/content.js"
-Layout,Header,nav_switch_to_en,বাংলা,EN,"web/src/components/Layout.jsx"
-Layout,Header,nav_switch_to_bn,EN,বাংলা,"web/src/components/Layout.jsx"
-Layout,Header,donate_cta,Donate Now,সহযোগিতার হাত বাড়িয়ে দিন,"web/src/components/Layout.jsx"
-Layout,Header,registered_tagline,Registered NGO | West Bengal,নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ,"web/src/components/Layout.jsx"
-Layout,Footer,foundation_scope,"Children, women and communities in South 24 Parganas, West Bengal.","দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।","web/src/components/Layout.jsx"
-Layout,Footer,facebook_cta,Follow us on Facebook,ফেসবুকে আমাদের সাথে যুক্ত থাকুন,"web/src/components/Layout.jsx"
-Navigation,Primary,home,Home,হোম,"web/src/content.js"
-Navigation,Primary,about,About,আমাদের সম্পর্কে,"web/src/content.js"
-Navigation,Primary,our_work,Our Work,কাজের ক্ষেত্র,"web/src/content.js"
-Navigation,Primary,impact,Impact,প্রভাব,"web/src/content.js"
-Navigation,Primary,gallery,Gallery,গ্যালারি,"web/src/content.js"
-Navigation,Primary,get_involved,Get Involved,যুক্ত হোন,"web/src/content.js"
-Navigation,Primary,contact,Contact,যোগাযোগ,"web/src/content.js"
-Home,Hero,eyebrow,Lighting lives one step at a time,সেবার আলোয় প্রতিটি পদক্ষেপে নতুন প্রাণের ছোঁয়া,"web/src/pages/Home.jsx"
-Home,Hero,title,"Education, healthcare and dignity for underserved communities.",প্রান্তিক মানুষের জন্য শিক্ষা স্বাস্থ্য ও মর্যাদা।,"web/src/pages/Home.jsx"
-Home,Hero,intro,"Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.","Heritage of Hope Foundation দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র স্বাস্থ্যসেবা ও মৌসুমি ত্রাণের মাধ্যমে কাজ করে।","web/src/pages/Home.jsx"
-Home,Hero,hero_tagline,Empowering Communities | Registered NGO,মানুষের ক্ষমতায়ন | নিবন্ধিত সংস্থা,"web/src/pages/Home.jsx"
-Home,Hero,primary_cta,Support a Program,আমাদের কর্মসূচিতে সাহায্য করুন,"web/src/pages/Home.jsx"
-Home,Hero,secondary_cta,Explore Our Work,আমাদের কাজ দেখুন,"web/src/pages/Home.jsx"
-Home,Hero,trust_registered,Registered NGO,নিবন্ধিত সংস্থা,"web/src/pages/Home.jsx"
-Home,Hero,trust_established,Est. 2024,প্রতিষ্ঠিত ২০২৪,"web/src/pages/Home.jsx"
-Home,Hero,trust_govt,Govt. of West Bengal,পশ্চিমবঙ্গ সরকার,"web/src/pages/Home.jsx"
-Home,Hero,hero_figcaption,"Kishalaya Pathsala, Kankandighi | Community learning moment",কিশলয় পাঠশালা কঙ্কনদীঘি | শিক্ষার আনন্দময় মুহূর্ত,"web/src/pages/Home.jsx"
-Home,Hero,registration_proof,Registration proof available on About page,নিবন্ধন সংক্রান্ত প্রমাণ 'আমাদের সম্পর্কে' পাতায় দেখুন,"web/src/pages/Home.jsx"
-Home,Stats,stats_title,Our footprint so far,আমাদের কাজের পরিধি,"web/src/pages/Home.jsx"
-Home,Stats,impact_snapshot,Impact snapshot,এক নজরে আমাদের প্রভাব,"web/src/pages/Home.jsx"
-Home,Pillars,pillar_title,Mission pillars,মূল লক্ষ্য,"web/src/pages/Home.jsx"
-Home,Pillars,what_we_do,What we do on the ground,মাঠপর্যায়ে আমাদের কার্যক্রম,"web/src/pages/Home.jsx"
-Home,Activity,activity_title,From the Facebook timeline,ফেসবুকের পাতা থেকে,"web/src/pages/Home.jsx"
-Home,Activity,stories_updates,Stories updates and event photos,সাফল্যের গল্প সংবাদ ও অনুষ্ঠানের ছবি,"web/src/pages/Home.jsx"
-Home,Donation,donation_title,Your small gift creates big change.,আপনার ছোট অনুদান বড় পরিবর্তন আনতে পারে।,"web/src/pages/Home.jsx"
-Home,Donation,donation_body,"Even small support helps us keep classes running, respond to health needs and serve families with dignity.","সামান্য সাহায্যও আমাদের শিক্ষাকেন্দ্রগুলি সচল রাখতে স্বাস্থ্যের প্রয়োজন মেটাতে এবং মানুষের পাশে মর্যাদার সঙ্গে দাঁড়াতে সাহায্য করে।","web/src/pages/Home.jsx"
-Home,Donation,donate_now,Donate now,আজই সাহায্যের হাত বাড়িয়ে দিন,"web/src/pages/Home.jsx"
-Home,Donation,donate_label,Donate,অনুদান,"web/src/pages/Home.jsx"
-About,Intro,title,Rooted in community. Driven by impact.,কমিউনিটিই আমাদের ভিত্তি। সেবার মাধ্যমেই আমাদের পথচলা।,"web/src/pages/About.jsx"
-About,Intro,eyebrow,About,আমাদের সম্পর্কে,"web/src/pages/About.jsx"
-About,Intro,intro,"We work directly with the people we serve, ensuring every initiative brings lasting positive change.","আমরা যাদের সেবা করি তাদের সাথে সরাসরি কাজ করি নিশ্চিত করে যে প্রতিটি উদ্যোগ স্থায়ী ও ইতিবাচক পরিবর্তন নিয়ে আসে।","web/src/pages/About.jsx"
-About,Story,story_title,Our story,আমাদের গল্প,"web/src/pages/About.jsx"
-About,Story,grounded_title,Grounded in field realities,বাস্তব অভিজ্ঞতার ভিত্তিতে পথচলা,"web/src/pages/About.jsx"
-About,Story,story_body,"The foundation began from direct work with children and women in underserved areas.",শিশু ও নারীদের সঙ্গে সরাসরি কাজের অভিজ্ঞতা থেকেই ফাউন্ডেশনের শুরু।,"web/src/pages/About.jsx"
-About,MissionVision,mission_label,Mission,আমাদের লক্ষ্য,"web/src/pages/About.jsx"
-About,MissionVision,vision_label,Vision,ভবিষ্যত পরিকল্পনা,"web/src/pages/About.jsx"
-About,MissionVision,mission_text,"Improve lives through education healthcare and basic support.","শিক্ষা স্বাস্থ্যসেবা ও জরুরি সহায়তার মাধ্যমে মানুষের জীবনযাত্রার মান উন্নত করা।","web/src/pages/About.jsx"
-About,MissionVision,vision_text,"A Bengal where every child can learn and live with dignity.","এমন এক বাংলা, যেখানে প্রতিটি শিশু শিক্ষা ও মর্যাদার সঙ্গে বেড়ে উঠবে।","web/src/pages/About.jsx"
-About,Values,values_label,Core values,আমাদের আদর্শ,"web/src/pages/About.jsx"
-About,Values,how_we_work,How we work,আমরা কীভাবে কাজ করি,"web/src/pages/About.jsx"
-About,Values,value_compassion,Compassion,সহানুভূতি,"web/src/pages/About.jsx"
-About,Values,value_transparency,Transparency,স্বচ্ছতা,"web/src/pages/About.jsx"
-About,Values,value_community,Community,জনসেবা,"web/src/pages/About.jsx"
-About,Values,value_empowerment,Empowerment,ক্ষমতায়ন,"web/src/pages/About.jsx"
-About,Values,value_desc,"Each program is built on local trust and measurable impact.","আমাদের প্রতিটি উদ্যোগ স্থানীয় মানুষের আস্থা ও কাজের স্বচ্ছতার ওপর ভিত্তি করে পরিচালিত হয়।","web/src/pages/About.jsx"
-About,Legal,legal_label,Legally registered and transparent,আইনগতভাবে নিবন্ধিত ও স্বচ্ছ,"web/src/pages/About.jsx"
-About,Legal,reg_title,Registration and accountability,নিবন্ধন ও জবাবদিহিতা,"web/src/pages/About.jsx"
-About,Legal,reg_desc,"Heritage of Hope Foundation is a registered NGO committed to transparency and dedicated service in West Bengal.","হেরিটেজ অফ হোপ ফাউন্ডেশন একটি নিবন্ধিত এনজিও যা পশ্চিমবঙ্গে স্বচ্ছতা ও নিবেদিত সেবার মাধ্যমে কাজ করছে।","web/src/pages/About.jsx"
-About,Legal,reg_meta,Registration certificate,নিবন্ধন সনদ,"web/src/pages/About.jsx"
-About,Legal,partners_meta,Partners,সহযোগী প্রতিষ্ঠান,"web/src/pages/About.jsx"
-About,Team,team_snapshot,Team snapshot,আমাদের টিমের এক ঝলক,"web/src/pages/About.jsx"
-Our Work,Intro,title,Initiatives designed for real world impact.,আমাদের প্রতিটি উদ্যোগ বাস্তব পরিবর্তনের লক্ষ্যে পরিকল্পিত।,"web/src/pages/OurWork.jsx"
-Our Work,Intro,intro,"Our active programs focus on education healthcare and community welfare to bring comprehensive support.","শিক্ষা স্বাস্থ্যসেবা ও সমাজকল্যাণ এই তিন ক্ষেত্রকেই আমরা গুরুত্ব দিই যাতে প্রান্তিক মানুষের কাছে আমরা প্রকৃত সাহায্য পৌঁছে দিতে পারি।","web/src/pages/OurWork.jsx"
-Our Work,Focus,focus_areas,Education | Healthcare | Welfare,শিক্ষা | স্বাস্থ্য | কল্যাণ,"web/src/pages/OurWork.jsx"
-Our Work,Approach,approach_label,Our Approach,আমাদের দৃষ্টিভঙ্গি,"web/src/pages/OurWork.jsx"
-Our Work,Approach,approach_title,How we execute programs,কীভাবে আমরা কর্মসূচি বাস্তবায়ন করি,"web/src/pages/OurWork.jsx"
-Our Work,Approach,step_1,Identify community needs,স্থানীয় চাহিদা যাচাই,"web/src/pages/OurWork.jsx"
-Our Work,Approach,step_2,Collaborate with local partners,স্থানীয় মানুষদের সাথে যৌথ উদ্যোগ,"web/src/pages/OurWork.jsx"
-Our Work,Approach,step_3,Execute program and track impact,কাজের বাস্তবায়ন ও অগ্রগতি পর্যবেক্ষণ,"web/src/pages/OurWork.jsx"
-Our Work,Approach,step_4,Provide ongoing support and review,ধারাবাহিক সেবা ও মূল্যায়ন,"web/src/pages/OurWork.jsx"
-Our Work,CTA,join_mission,Join the mission,আমাদের উদ্যোগে সামিল হোন,"web/src/pages/OurWork.jsx"
-Our Work,CTA,join_desc,"By partnering with us or volunteering you help us bring these programs to life.",আমাদের সাথে যুক্ত হয়ে আপনিও প্রান্তিক মানুষের কাছে এই সেবাগুলো পৌঁছে দিতে পারেন।,"web/src/pages/OurWork.jsx"
-Our Work,CTA,support_work,Support this work,আমাদের এই প্রচেষ্টায় সাহায্য করুন,"web/src/pages/OurWork.jsx"
-Impact,Intro,title,Transparency and measurable change.,স্বচ্ছতা এবং পরিমাপযোগ্য পরিবর্তন।,"web/src/pages/Impact.jsx"
-Impact,Intro,intro,"Explore the numbers and stories that showcase the direct results of our community driven approach.",আমাদের সমাজসেবামূলক কাজের বাস্তব ফলাফল ও মানুষের বদলে যাওয়ার গল্পগুলো দেখুন।,"web/src/pages/Impact.jsx"
-Impact,Hero,eyebrow,Impact,প্রভাব,"web/src/pages/Impact.jsx"
-Impact,Hero,promise_label,Our Promise,আমাদের প্রতিশ্রুতি,"web/src/pages/Impact.jsx"
-Impact,Hero,promise_text,Accountability to our donors and community.,দাতাদের প্রতি স্বচ্ছতা ও মানুষের প্রতি আমাদের দায়িত্ববোধ।,"web/src/pages/Impact.jsx"
-Impact,Fund,utilization_label,Fund utilization,তহবিলের ব্যবহার,"web/src/pages/Impact.jsx"
-Impact,Fund,utilization_title,How support is used,আপনাদের সাহায্য কীভাবে ব্যবহৃত হয়,"web/src/pages/Impact.jsx"
-Impact,Feedback,feedback_label,Community Feedback,কমিউনিটির মতামত,"web/src/pages/Impact.jsx"
-Impact,Feedback,feedback_quote,"Thanks to Kishalaya Pathsala and the Foundation our children receive dedicated guidance and winter support that keeps them learning year round.","কিশলয় পাঠশালা ও ফাউন্ডেশনের কারণে আমাদের ছেলেমেয়েরা যত্নশীল শিক্ষা ও শীতের সহায়তা পাচ্ছে যা তাদের সারা বছর পড়াশোনায় যুক্ত রাখে।","web/src/pages/Impact.jsx"
-Impact,Report,report_label,Annual report,বার্ষিক প্রতিবেদন,"web/src/pages/Impact.jsx"
-Impact,Report,report_text,"Our 2025-2026 Impact Report is currently being compiled and will be available for download soon.",২০২৫-২৬ সালের কাজের বার্ষিক প্রতিবেদন তৈরির কাজ চলছে শীঘ্রই এখানে দেখতে পাবেন।,"web/src/pages/Impact.jsx"
-Gallery,Intro,title,Moments of hope and action.,আমাদের সমাজসেবামূলক কাজের কিছু বিশেষ মুহূর্ত।,"web/src/pages/Gallery.jsx"
-Gallery,Intro,intro,"A visual journey through our health camps learning centers and community outreach events.",আমাদের স্বাস্থ্য শিবির শিক্ষাকেন্দ্র এবং বিভিন্ন সামাজিক অনুষ্ঠানের কিছু খণ্ডচিত্র।,"web/src/pages/Gallery.jsx"
-Gallery,Filter,all,All,সব,"web/src/pages/Gallery.jsx"
-Gallery,Filter,education,Education,শিক্ষা,"web/src/pages/Gallery.jsx"
-Gallery,Filter,healthcare,Healthcare,স্বাস্থ্য,"web/src/pages/Gallery.jsx"
-Gallery,Filter,welfare,Welfare,কল্যাণ,"web/src/pages/Gallery.jsx"
-Gallery,Helper,explore,Explore,ঘুরে দেখুন,"web/src/pages/Gallery.jsx"
-Gallery,Helper,filter_hint,Filter photos by our core impact areas.,বিভাগ অনুযায়ী ছবিগুলো দেখুন।,"web/src/pages/Gallery.jsx"
-Get Involved,Intro,title,Join us in making a difference.,পরিবর্তন আনতে আমাদের সাথে যোগ দিন।,"web/src/pages/GetInvolved.jsx"
-Get Involved,Intro,eyebrow,Get Involved,যুক্ত হোন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Intro,intro,"Whether through donations volunteering or partnerships your involvement drives our mission forward.",অনুদান স্বেচ্ছাসেবা বা অংশীদারিত্ব আপনার অংশগ্রহণ আমাদের লক্ষ্য পূরণে সহায়ক।,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,donation_ladder,Donation ladder,অনুদান ও তার প্রভাব,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,support_title,What your support can do,আপনার সহায়তা কী করতে পারে,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,upi_label,UPI payment,ইউপিআই পেমেন্ট,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,qr_title,Scan to donate,স্ক্যান করে অনুদান দিন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,qr_alt,Demo UPI QR code for donations,অনুদানের জন্য ডেমো ইউপিআই কিউআর কোড,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,qr_body,"Use this demo UPI QR code to make a quick contribution. You can also use the bank details above for direct transfers.","ডেমো ইউপিআই কিউআর কোড স্ক্যান করে দ্রুত অনুদান দিতে পারেন। সরাসরি ট্রান্সফারের জন্য উপরের ব্যাংক তথ্যও ব্যবহার করতে পারেন।","web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,upi_cta,Pay via UPI app,UPI অ্যাপ দিয়ে পেমেন্ট করুন,web/src/pages/GetInvolved.jsx
-Get Involved,Donate,upi_hint,On mobile, this opens your installed UPI app directly.,মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে。,web/src/pages/GetInvolved.jsx
-Get Involved,Donate,upi_fallback,If no UPI app opens on this device, please use the QR code above to complete payment.,এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন。,web/src/pages/GetInvolved.jsx
-Get Involved,Volunteer,volunteer_label,Volunteer,স্বেচ্ছাসেবা,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,volunteer_title,People matter more than perfection,মানুষ নিখুঁততার চেয়ে বেশি গুরুত্বপূর্ণ,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,volunteer_desc,"Support field execution coordination and regular follow-up.",মাঠের কাজ সমন্বয় ও নিয়মিত ফলো-আপে সহায়তা করুন।,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,form_label,Volunteer form,স্বেচ্ছাসেবক হিসেবে যোগদানের ফর্ম,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,form_title,Join the team,টিমে যোগ দিন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,name,Name,নাম,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,email,Email,ইমেল,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,phone,Phone,ফোন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,area,Area of interest,আগ্রহের ক্ষেত্র,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,choose_one,Choose one,একটি বেছে নিন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,availability,Availability,সময় দেওয়ার সুযোগ,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,weekends,Weekends,ছুটির দিনে,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,weekdays,Weekdays,কাজের দিনে,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,occasionally,Occasionally,মাঝে মাঝে,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,message,Message,বার্তা,"web/src/pages/GetInvolved.jsx"
-Get Involved,Volunteer,submit,Submit volunteer interest,স্বেচ্ছাসেবক হিসেবে আবেদন করুন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,partner_label,Partner with us,আমাদের উদ্যোগের সঙ্গী হোন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,partner_title,"For CSR hospitals and institutions","CSR, হাসপাতাল ও অন্যান্য প্রতিষ্ঠানের জন্য","web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,partner_desc,"Partnerships help scale learning spaces health camps and seasonal support.",যৌথ উদ্যোগে আমরা আরও বেশি মানুষের কাছে শিক্ষা ও স্বাস্থ্যসেবা পৌঁছে দিতে পারি।,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,photo_alt,Partnership-led community outreach activity by Heritage of Hope Foundation,হেরিটেজ অফ হোপ ফাউন্ডেশনের অংশীদারিত্বভিত্তিক কমিউনিটি আউটরিচ কার্যক্রম,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,photo_caption,"Partnerships help us scale education healthcare and seasonal welfare with accountability.",অংশীদারিত্বের মাধ্যমে আমরা জবাবদিহিতার সাথে শিক্ষা স্বাস্থ্যসেবা ও মৌসুমি সহায়তা আরও বিস্তৃত করতে পারি।,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,inquiry_label,Partner inquiry,অংশীদারিত্বের জন্য যোগাযোগ,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,inquiry_title,Start a collaboration,সহযোগিতার হাত বাড়িয়ে দিন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,org_name,Organization name,সংস্থার নাম,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,contact_person,Contact person,যোগাযোগের জন্য ব্যক্তির নাম,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,phone_label,Phone,ফোন নম্বর,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,partnership_type,Type of partnership,অংশীদারিত্বের ধরন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,message,Message,বার্তা,"web/src/pages/GetInvolved.jsx"
-Get Involved,Partner,submit,Submit partner inquiry,অংশীদার হিসেবে যোগাযোগ করুন,"web/src/pages/GetInvolved.jsx"
-Get Involved,Donate,bank_label,Bank details,ব্যাংক তথ্য,"web/src/pages/GetInvolved.jsx"
-Contact,Intro,title,We’d love to hear from you.,আমরা আপনার কথা শুনতে চাই।,"web/src/pages/Contact.jsx"
-Contact,Intro,intro,"Reach out to us for inquiries partnerships or just to say hello.",যেকোনো তথ্যের জন্য বা আমাদের কাজের অংশীদার হতে নির্দ্বিধায় যোগাযোগ করুন।,"web/src/pages/Contact.jsx"
-Contact,Hero,eyebrow,Contact,যোগাযোগ,"web/src/pages/Contact.jsx"
-Contact,Hero,response_time,Response time,উত্তর দেওয়ার সময়,"web/src/pages/Contact.jsx"
-Contact,Hero,response_text,Usually within 2 business days,সাধারণত ২ কর্মদিবসের মধ্যে,"web/src/pages/Contact.jsx"
-Contact,Info,phone,Phone,ফোন নম্বর,"web/src/pages/Contact.jsx"
-Contact,Info,email,Email,ইমেল,"web/src/pages/Contact.jsx"
-Contact,Info,address,Address,ঠিকানা,"web/src/pages/Contact.jsx"
-Contact,Form,form_label,Contact form,যোগাযোগের ফর্ম,"web/src/pages/Contact.jsx"
-Contact,Form,form_title,Send us a direct message,আমাদের সরাসরি লিখুন,"web/src/pages/Contact.jsx"
-Contact,Form,name,Name,নাম,"web/src/pages/Contact.jsx"
-Contact,Form,name_placeholder,Your name,আপনার নাম,"web/src/pages/Contact.jsx"
-Contact,Form,subject,Subject,বিষয়,"web/src/pages/Contact.jsx"
-Contact,Form,message,Message,বার্তা,"web/src/pages/Contact.jsx"
-Contact,Form,message_placeholder,Tell us how you want to help,আপনার বার্তার বিস্তারিত এখানে লিখুন,"web/src/pages/Contact.jsx"
-Contact,Form,submit,Send message,বার্তা পাঠান,"web/src/pages/Contact.jsx"
-Contact,Facebook,featured_label,Featured from Facebook,ফেসবুকের বিশেষ মুহূর্ত,"web/src/pages/Contact.jsx"
-Contact,Facebook,featured_title,Recent moments from the page,পেজের সাম্প্রতিক মুহূর্ত,"web/src/pages/Contact.jsx"
-Contact,Facebook,visit_page,Visit Official Facebook Page,অফিসিয়াল ফেসবুক পেজ দেখুন,"web/src/pages/Contact.jsx"
-Not Found,Main,title,Page not found,পেজ পাওয়া যায়নি,"web/src/pages/NotFound.jsx"
-Not Found,Main,body,Return to the homepage to continue exploring.,আমাদের প্রধান পাতায় ফিরে যান।,"web/src/pages/NotFound.jsx"
-Not Found,Main,cta,Go home,মূল পাতায় ফিরে যান,"web/src/pages/NotFound.jsx"
-Thank You,Main,eyebrow,Submission received,আপনার বার্তাটি আমরা পেয়েছি,"web/src/pages/ThankYou.jsx"
-Thank You,Main,title,Thank you for reaching out.,যোগাযোগ করার জন্য ধন্যবাদ।,"web/src/pages/ThankYou.jsx"
-Thank You,Main,body,We will review your message and respond as soon as possible.,আমরা আপনার বার্তার গুরুত্ব বুঝে দ্রুতই আপনার সাথে যোগাযোগ করব।,"web/src/pages/ThankYou.jsx"
-Thank You,Main,cta,Return home,মূল পাতায় ফিরে যান,"web/src/pages/ThankYou.jsx"
-Shared Dataset,featuredPrograms,category_education,Education,শিক্ষা,"web/src/content.js"
-Shared Dataset,featuredPrograms,category_healthcare,Healthcare,স্বাস্থ্য,"web/src/content.js"
-Shared Dataset,featuredPrograms,category_welfare,Welfare,কল্যাণ,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_kishalaya,Kishalaya Pathsala,কিশলয় পাঠশালা,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_health_camp,Free Health Camps,বিনামূল্যের স্বাস্থ্য শিবির,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_blood,Blood Donation Drives,রক্তদান উদ্যোগ,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_winter,Winter Programme,শীতকালীন কর্মসূচি,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_monsoon,Monsoon Relief,বর্ষাকালীন সহায়তা,"web/src/content.js"
-Shared Dataset,featuredPrograms,title_bornporichoy,Bornporichoy,বর্ণপরিচয়,"web/src/content.js"
-Shared Dataset,impactMetrics,children_supported,children supported,শিশুর কাছে পৌঁছেছি আমরা,"web/src/content.js"
-Shared Dataset,impactMetrics,drives,health & education drives,স্বাস্থ্য ও শিক্ষা উদ্যোগ,"web/src/content.js"
-Shared Dataset,impactMetrics,partners,active partner organizations,সক্রিয় সহযোগী সংস্থা,"web/src/content.js"
-Shared Dataset,impactMetrics,communities,communities served,উপকৃত গ্রাম/এলাকা,"web/src/content.js"
-Shared Dataset,fundAllocation,education,Education,শিক্ষা,"web/src/content.js"
-Shared Dataset,fundAllocation,healthcare,Healthcare,স্বাস্থ্য,"web/src/content.js"
-Shared Dataset,fundAllocation,relief,Relief drives,মৌসুমি ত্রাণ সহায়তা,"web/src/content.js"
-Shared Dataset,fundAllocation,operations,Operations,পরিচালনা ব্যয়,"web/src/content.js"
-Shared Dataset,donationSteps,step_199,one child gets warm clothing,এক শিশুর জন্য শীতবস্ত্র,"web/src/content.js"
-Shared Dataset,donationSteps,step_500,learning materials for a month,এক মাসের শিক্ষা উপকরণ,"web/src/content.js"
-Shared Dataset,donationSteps,step_1000,health outreach support,স্বাস্থ্যসেবা কার্যক্রমে সহায়তা,"web/src/content.js"
-Shared Dataset,donationSteps,step_5000,sponsor a learning journey,একজনের শিক্ষার দায়িত্ব নিন,"web/src/content.js"
-Shared Dataset,volunteerRoles,teaching,Teaching support,শিক্ষাদানে সহায়তা,"web/src/content.js"
-Shared Dataset,volunteerRoles,event_coordination,Event coordination,আয়োজন সমন্বয়,"web/src/content.js"
-Shared Dataset,volunteerRoles,photography,Photography,ফটোগ্রাফি,"web/src/content.js"
-Shared Dataset,volunteerRoles,social_media,Social media,সোশ্যাল মিডিয়া,"web/src/content.js"
-Shared Dataset,volunteerRoles,healthcare_assist,Healthcare assistance,স্বাস্থ্যসেবায় সহায়তা,"web/src/content.js"
-Shared Dataset,partners,ocwe,OCWE,OCWE,"web/src/content.js"
-Shared Dataset,partners,bp_poddar,B.P. Poddar Hospital,B.P. Poddar Hospital,"web/src/content.js"
-Shared Dataset,partners,thalassaemic,Thalassaemic Guardians Association,Thalassaemic Guardians Association,"web/src/content.js"
-Shared Dataset,teamMembers,founder_name,Founder Team,প্রতিষ্ঠাতা সদস্য,"web/src/content.js"
-Shared Dataset,teamMembers,founder_role,Community coordination and field programs,জনসংযোগ ও মাঠপর্যায়ের কাজ,"web/src/content.js"
-Shared Dataset,teamMembers,support_name,Program Support,প্রোগ্রাম সাপোর্ট,"web/src/content.js"
-Shared Dataset,teamMembers,support_role,Planning logistics and volunteer support,পরিকল্পনা ও স্বেচ্ছাসেবক ব্যবস্থাপনা,"web/src/content.js"
-Shared Dataset,teamMembers,field_name,Field Volunteers,মাঠপর্যায়ের স্বেচ্ছাসেবক,"web/src/content.js"
-Shared Dataset,teamMembers,field_role,Direct service delivery and follow-up,সরাসরি সেবা প্রদান ও তদারকি,"web/src/content.js"
-Shared Dataset,galleryItems,title_learning,Learning in Kishalaya,কিশলয়ে পাঠদান,"web/src/content.js"
-Shared Dataset,galleryItems,title_health,Free health camp,বিনামূল্যের স্বাস্থ্য শিবির,"web/src/content.js"
-Shared Dataset,galleryItems,title_winter,Winter distribution,শীতকালীন বিতরণ,"web/src/content.js"
-Shared Dataset,galleryItems,title_notebook,Notebook distribution day,খাতা বিতরণের দিন,"web/src/content.js"
-Shared Dataset,galleryItems,title_blood,Blood donation drive,রক্তদান কর্মসূচি,"web/src/content.js"
-Shared Dataset,galleryItems,title_monsoon,Monsoon relief,বর্ষাকালীন সহায়তা,"web/src/content.js"
-Shared Dataset,galleryItems,title_feast,Community feast by the river,নদীর ধারে সামাজিক ভোজ,"web/src/content.js"
-Shared Dataset,galleryItems,title_students,Students reading at Kishalaya,কিশলয়ে শিক্ষার্থীদের পঠনপাঠন,"web/src/content.js"
-Shared Dataset,galleryItems,title_sarees,Sarees for mothers — Durga Puja,মায়েদের জন্য শাড়ি — দুর্গাপূজা,"web/src/content.js"
-Shared Dataset,galleryItems,title_puja_children,Durga Puja clothes for children,শিশুদের জন্য পূজার নতুন জামা,"web/src/content.js"
-Shared Dataset,galleryItems,title_checkup,Pre-donation health checkup,রক্তদানপূর্ব স্বাস্থ্য পরীক্ষা,"web/src/content.js"
-Shared Dataset,galleryItems,title_joy,Children celebrating together,শিশুদের আনন্দ উদযাপন,"web/src/content.js"
-Shared Dataset,showcaseImages,label_winter,Children receiving winter support,শিশুদের শীতবস্ত্র প্রদান,"web/src/content.js"
-Shared Dataset,showcaseImages,label_health,Health camp participation,স্বাস্থ্য শিবিরে অংশগ্রহণ,"web/src/content.js"
-Shared Dataset,showcaseImages,label_comm,Community registration and outreach,মানুষের পাশে মানুষের সাথে,"web/src/content.js"
-Shared Dataset,showcaseImages,label_reg,Registration certificate,নিবন্ধন সনদ,"web/src/content.js"
-Shared Dataset,facebookPosts,title_winter,Winter Program 2026,শীতকালীন কর্মসূচি ২০২৬,"web/src/content.js"
-Shared Dataset,facebookPosts,title_durga,Durga Puja Gift Drive,দুর্গাপূজা উপহার উদ্যোগ,"web/src/content.js"
-Shared Dataset,facebookPosts,title_monsoon,Monsoon Relief Support,বর্ষার সহায়তা,"web/src/content.js"
-Shared Dataset,facebookPosts,title_health,Free Health Camp,বিনামূল্যের স্বাস্থ্য শিবির,"web/src/content.js"
-Shared Dataset,facebookPosts,title_winter_dist,Winter Clothing Distribution,শীতবস্ত্র বিতরণ,"web/src/content.js"
-Shared Dataset,facebookPosts,title_pathsala_launch,Kishalaya Pathsala Launch,কিশলয় পাঠশালার সূচনা,"web/src/content.js"
-Shared Dataset,activityPosts,title_winter,Winter Program 2026,শীতকালীন কর্মসূচি ২০২৬,"web/src/content.js"
-Shared Dataset,activityPosts,title_dignity,Durga Puja Dignity Drive,দুর্গাপূজা উপহার উদ্যোগ,"web/src/content.js"
-Shared Dataset,activityPosts,title_protection,Monsoon Protection Initiative,বর্ষা সুরক্ষা উদ্যোগ,"web/src/content.js"
+About,Pages,text() pair,About,আমাদের কথা,web/src/pages/About.jsx
+About,Pages,text() pair,Certificates & awards,শংসাপত্র ও পুরস্কার,web/src/pages/About.jsx
+About,Pages,text() pair,Community,সম্প্রদায়,web/src/pages/About.jsx
+About,Pages,text() pair,Compassion,সহানুভূতি,web/src/pages/About.jsx
+About,Pages,values,Core values,আমাদের আদর্শ,web/src/pages/About.jsx
+About,Pages,text() pair,Documents,দলিল,web/src/pages/About.jsx
+About,Pages,text() pair,Download,ডাউনলোড,web/src/pages/About.jsx
+About,Pages,text() pair,Empowerment,স্বনির্ভরতা,web/src/pages/About.jsx
+About,Pages,text() pair,Grounded in field realities,মাঠের কাজের গল্প,web/src/pages/About.jsx
+About,Pages,text() pair,Heritage of Hope Foundation,Heritage of Hope Foundation,web/src/pages/About.jsx
+About,Pages,text() pair,How we work,আমাদের কাজের ধরন,web/src/pages/About.jsx
+About,Pages,legal,Legally registered and transparent,আইনগতভাবে নিবন্ধিত আর খোলামেলা,web/src/pages/About.jsx
+About,Pages,mission,Mission,আমাদের লক্ষ্য,web/src/pages/About.jsx
+About,Pages,text() pair,Official documents,আধিকারিক দলিল,web/src/pages/About.jsx
+About,Pages,text() pair,Official trust registration deed (Deed No. IV-190200986/2024),ট্রাস্ট নিবন্ধন দলিল (ডিড নং IV-190200986/2024),web/src/pages/About.jsx
+About,Pages,storyTitle,Our story,আমাদের গল্প,web/src/pages/About.jsx
+About,Pages,text() pair,Partners,সহযোগীরা,web/src/pages/About.jsx
+About,Pages,text() pair,Recognition certificate from Thalassemic Guardians Association,থ্যালাসেমিক গার্ডিয়ান্স এসোসিয়েশন থেকে সম্মাননাপত্র,web/src/pages/About.jsx
+About,Pages,text() pair,Registration and accountability,নিবন্ধন ও স্বচ্ছতা,web/src/pages/About.jsx
+About,Pages,text() pair,Registration certificate,নিবন্ধনের কাগজ,web/src/pages/About.jsx
+About,Pages,title,Rooted in community. Driven by impact.,কমিউনিটিই আমাদের শক্তি। মানুষের পাশে থাকাই আমাদের কাজ।,web/src/pages/About.jsx
+About,Pages,text() pair,Team snapshot,টিমের এক ঝলক,web/src/pages/About.jsx
+About,Pages,storyBody,The foundation began from direct work with children and women in underserved areas.,শিশু আর নারীদের সঙ্গে কাজ করতে করতেই ফাউন্ডেশনের শুরু।,web/src/pages/About.jsx
+About,Pages,text() pair,Transparency,স্বচ্ছতা,web/src/pages/About.jsx
+About,Pages,text() pair,Trust Registration Certificate,ট্রাস্ট নিবন্ধন সার্টিফিকেট,web/src/pages/About.jsx
+About,Pages,text() pair,View,দেখুন,web/src/pages/About.jsx
+About,Pages,vision,Vision,আমাদের দৃষ্টিভঙ্গি,web/src/pages/About.jsx
+About,Pages,intro,"We work directly with the people we serve, ensuring every initiative brings lasting, positive change.",আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।,web/src/pages/About.jsx
+Contact,Pages,text() pair,Address,ঠিকানা,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Contact,যোগাযোগ,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Contact form,যোগাযোগের ফর্ম,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Email,ইমেল,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Featured from Facebook,ফেসবুকের কিছু ঝলক,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Heritage of Hope Foundation location,Heritage of Hope Foundation-এর মানচিত্র,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Message,বার্তা,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Name,নাম,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Phone,ফোন নম্বর,web/src/pages/Contact.jsx
+Contact,Pages,intro,"Reach out to us for inquiries, partnerships, or just to say hello.",কিছু জানতে চাইলে বা আমাদের সঙ্গে কাজ করতে চাইলে সহজেই যোগাযোগ করুন।,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Recent moments from the page,পেজের সাম্প্রতিক কিছু ছবি,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Response time,কত তাড়াতাড়ি উত্তর পাবেন,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Send message,বার্তা পাঠান,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Send us a direct message,সরাসরি একটা মেসেজ পাঠান,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Subject,বিষয়,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Tell us how you want to help,আপনার কথা এখানে লিখুন,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Usually within 2 business days,সাধারণত ২ কর্মদিবসের মধ্যে,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Visit Official Facebook Page,অফিসিয়াল ফেসবুক পেজে যান,web/src/pages/Contact.jsx
+Contact,Pages,title,We’d love to hear from you.,আমরা আপনার কথা শুনতে চাই।,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,you@example.com,আপনার ইমেল,web/src/pages/Contact.jsx
+Contact,Pages,text() pair,Your name,আপনার নাম,web/src/pages/Contact.jsx
+content,Shared Content,text() pair,About,আমাদের কথা,web/src/content.js
+content,Shared Content,text() pair,active partner organizations,সক্রিয় সহযোগী সংস্থা,web/src/content.js
+content,Shared Content,text() pair,B.P. Poddar Hospital,B.P. Poddar Hospital,web/src/content.js
+content,Shared Content,text() pair,Blood donation drive,রক্তদান কর্মসূচি,web/src/content.js
+content,Shared Content,text() pair,Blood Donation Drives,রক্তদান উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Bornporichoy,বর্ণপরিচয়,web/src/content.js
+content,Shared Content,text() pair,Children celebrating together,শিশুদের আনন্দ উদযাপন,web/src/content.js
+content,Shared Content,text() pair,Children receiving winter support,শিশুদের শীতবস্ত্র প্রদান,web/src/content.js
+content,Shared Content,text() pair,children supported,শিশুর কাছে পৌঁছানো হয়েছে,web/src/content.js
+content,Shared Content,text() pair,communities served,উপকৃত গ্রাম/এলাকা,web/src/content.js
+content,Shared Content,text() pair,Community coordination and field programs,জনসংযোগ ও মাঠপর্যায়ের কাজ,web/src/content.js
+content,Shared Content,text() pair,Community feast by the river,নদীর ধারে সামাজিক ভোজ,web/src/content.js
+content,Shared Content,text() pair,Community first aid,প্রাথমিক স্বাস্থ্যসেবা,web/src/content.js
+content,Shared Content,text() pair,Community registration and outreach,"মানুষের পাশে, মানুষের সাথে",web/src/content.js
+content,Shared Content,text() pair,Contact,যোগাযোগ,web/src/content.js
+content,Shared Content,text() pair,Direct service delivery and follow-up,সরাসরি সেবা প্রদান ও তদারকি,web/src/content.js
+content,Shared Content,text() pair,Durga Puja clothes for children,শিশুদের জন্য পূজার নতুন জামা,web/src/content.js
+content,Shared Content,text() pair,Durga Puja Dignity Drive,দুর্গাপূজা উপহার উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Durga Puja Gift Drive,দুর্গাপূজা উপহার উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Education,শিক্ষা,web/src/content.js
+content,Shared Content,text() pair,Education without interruption,বিঘ্নহীন শিক্ষা,web/src/content.js
+content,Shared Content,text() pair,Event coordination,আয়োজন সমন্বয়,web/src/content.js
+content,Shared Content,text() pair,Field Volunteers,মাঠপর্যায়ের স্বেচ্ছাসেবক,web/src/content.js
+content,Shared Content,text() pair,Foundational learning,ভিত্তিমূলক শিক্ষা,web/src/content.js
+content,Shared Content,text() pair,Founder Team,প্রতিষ্ঠাতা সদস্য,web/src/content.js
+content,Shared Content,text() pair,Free health camp,বিনামূল্যের স্বাস্থ্য শিবির,web/src/content.js
+content,Shared Content,text() pair,Free Health Camp,বিনামূল্যের স্বাস্থ্য শিবির,web/src/content.js
+content,Shared Content,text() pair,Free Health Camps,বিনামূল্যের স্বাস্থ্য শিবির,web/src/content.js
+content,Shared Content,text() pair,Gallery,ছবিঘর,web/src/content.js
+content,Shared Content,text() pair,Get Involved,সাথে থাকুন,web/src/content.js
+content,Shared Content,text() pair,health & education drives,স্বাস্থ্য ও শিক্ষা উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Health camp participation,স্বাস্থ্য শিবিরে অংশগ্রহণ,web/src/content.js
+content,Shared Content,text() pair,health outreach support,স্বাস্থ্যসেবা কার্যক্রমে সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Healthcare,স্বাস্থ্য,web/src/content.js
+content,Shared Content,text() pair,Healthcare assistance,স্বাস্থ্যসেবায় সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Home,হোম,web/src/content.js
+content,Shared Content,text() pair,Impact,ফলাফল,web/src/content.js
+content,Shared Content,text() pair,"Kankandighi, Raidighi","কঙ্কনদীঘি, রাইদীঘি",web/src/content.js
+content,Shared Content,text() pair,Kishalaya community,কিশলয় কমিউনিটি,web/src/content.js
+content,Shared Content,text() pair,Kishalaya Pathsala,কিশলয় পাঠশালা,web/src/content.js
+content,Shared Content,text() pair,Kishalaya Pathsala Launch,কিশলয় পাঠশালার সূচনা,web/src/content.js
+content,Shared Content,text() pair,Learning in Kishalaya,কিশলয়ে পাঠদান,web/src/content.js
+content,Shared Content,text() pair,learning materials for a month,এক মাসের শিক্ষা উপকরণ,web/src/content.js
+content,Shared Content,text() pair,Life-saving action,জীবনরক্ষাকারী উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Monsoon Protection Initiative,বর্ষা সুরক্ষা উদ্যোগ,web/src/content.js
+content,Shared Content,text() pair,Monsoon relief,বর্ষাকালীন সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Monsoon Relief,বর্ষাকালীন সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Monsoon Relief Support,বর্ষার সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Notebook distribution day,খাতা বিতরণের দিন,web/src/content.js
+content,Shared Content,text() pair,OCWE,OCWE,web/src/content.js
+content,Shared Content,text() pair,one child gets warm clothing,এক শিশুর জন্য শীতবস্ত্র,web/src/content.js
+content,Shared Content,text() pair,Operations,পরিচালনা ব্যয়,web/src/content.js
+content,Shared Content,text() pair,Our Work,আমাদের কাজ,web/src/content.js
+content,Shared Content,text() pair,Photography,ফটোগ্রাফি,web/src/content.js
+content,Shared Content,text() pair,"Planning, logistics and volunteer support",পরিকল্পনা ও স্বেচ্ছাসেবক ব্যবস্থাপনা,web/src/content.js
+content,Shared Content,text() pair,Pre-donation health checkup,রক্তদানপূর্ব স্বাস্থ্য পরীক্ষা,web/src/content.js
+content,Shared Content,text() pair,Program Support,প্রোগ্রাম সাপোর্ট,web/src/content.js
+content,Shared Content,text() pair,Reading support,পড়ার সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Registration certificate,নিবন্ধন সনদ,web/src/content.js
+content,Shared Content,text() pair,Relief drives,মৌসুমি কল্যাণ সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Sarees for mothers — Durga Puja,মায়েদের জন্য শাড়ি — দুর্গাপূজা,web/src/content.js
+content,Shared Content,text() pair,Seasonal support,মৌসুমি সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Social media,সোশ্যাল মিডিয়া,web/src/content.js
+content,Shared Content,text() pair,sponsor a learning journey,একজনের শিক্ষার দায়িত্ব নিন,web/src/content.js
+content,Shared Content,text() pair,Students reading at Kishalaya,কিশলয়ে শিক্ষার্থীদের পঠনপাঠন,web/src/content.js
+content,Shared Content,text() pair,Teaching support,শিক্ষাদানে সহায়তা,web/src/content.js
+content,Shared Content,text() pair,Thalassaemic Guardians Association,Thalassaemic Guardians Association,web/src/content.js
+content,Shared Content,text() pair,Welfare,কল্যাণ,web/src/content.js
+content,Shared Content,text() pair,Winter Clothing Distribution,শীতবস্ত্র বিতরণ,web/src/content.js
+content,Shared Content,text() pair,Winter distribution,শীতকালীন বিতরণ,web/src/content.js
+content,Shared Content,text() pair,Winter Program 2026,শীতকালীন কর্মসূচি ২০২৬,web/src/content.js
+content,Shared Content,text() pair,Winter Programme,শীতকালীন কর্মসূচি,web/src/content.js
+Gallery,Pages,intro,"A visual journey through our health camps, learning centers, and community outreach events.","আমাদের স্বাস্থ্য শিবির, শিক্ষাকেন্দ্র এবং বিভিন্ন সামাজিক অনুষ্ঠানের কিছু খণ্ডচিত্র।",web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,All,সব,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Education,শিক্ষা,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Explore,ঘুরে দেখুন,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Filter photos by our core impact areas.,"কোন কাজের ছবি দেখতে চান, সেটা বেছে নিন।",web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Gallery,ছবিঘর,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Gallery categories,ছবির বিভাগ,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Healthcare,স্বাস্থ্য,web/src/pages/Gallery.jsx
+Gallery,Pages,title,Moments of hope and action.,আমাদের সমাজসেবামূলক কাজের কিছু বিশেষ মুহূর্ত।,web/src/pages/Gallery.jsx
+Gallery,Pages,text() pair,Welfare,কল্যাণ,web/src/pages/Gallery.jsx
+GetInvolved,Pages,text() pair,A/C No: 43107075580,হিসাব নম্বর: 43107075580,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Area of interest,আগ্রহের ক্ষেত্র,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Availability,কখন সময় দিতে পারবেন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Bank details,ব্যাংক তথ্য,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Choose one,একটি বেছে নিন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Contact person,যার সাথে কথা বলব তার নাম,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Donation ladder,দানে কী হয়,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Email,ইমেল,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,"For CSR, hospitals and institutions","CSR, হাসপাতাল আর অন্য প্রতিষ্ঠানগুলোর জন্য",web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Get Involved,সাথে থাকুন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Hospital / Medical,হাসপাতাল / চিকিৎসা,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,upiFallback,"If no UPI app opens on this device, please use the QR code above to complete payment.","এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন।",web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,IFSC: SBIN0008438,আইএফএসসি: SBIN0008438,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Institution / School,প্রতিষ্ঠান / স্কুল,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Join the team,দলে যোগ দিন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,title,Join us in making a difference.,পরিবর্তন আনতে পাশে থাকুন।,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Message,বার্তা,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Name,নাম,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Occasionally,মাঝে মাঝে,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Official UPI QR code for donations,দানের জন্য আনুষ্ঠানিক ইউপিআই কিউআর কোড,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,upiHint,"On mobile, this opens your installed UPI app directly.",মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Organization name,সংস্থার নাম,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Other,অন্যান্য,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Partner inquiry,পার্টনারশিপের কথা,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Partner with us,আমাদের সাথে কাজ করুন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,upiCta,Pay via UPI app,UPI অ্যাপ দিয়ে পেমেন্ট করুন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,People matter more than perfection,"মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়",web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Phone,ফোন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Phone,ফোন নম্বর,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Please enter a valid phone number,একটি সঠিক ফোন নম্বর দিন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,qrBody,"Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.",আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,qrTitle,Scan to donate,স্ক্যান করে অনুদান দিন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Specimen cheque,উদাহরণ চেক,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Start a collaboration,চলুন একসাথে কাজ করি,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,"State Bank of India, Ruby Park Branch","স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক ব্রাঞ্চ",web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Submit partner inquiry,পার্টনারশিপের কথা পাঠান,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Submit volunteer interest,স্বেচ্ছাসেবক হিসেবে আবেদন করুন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Type of partnership,কী ধরনের কাজ,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,UPI payment,ইউপিআই পেমেন্ট,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,View specimen cheque,চেক দেখুন,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Volunteer,স্বেচ্ছাসেবা,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Volunteer form,স্বেচ্ছাসেবক ফর্ম,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Weekdays,কাজের দিনে,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,Weekends,ছুটির দিনে,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,text() pair,What your support can do,আপনার সাহায্যে কী করা যায়,web/src/pages/GetInvolved.jsx
+GetInvolved,Pages,intro,"Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.","অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়।",web/src/pages/GetInvolved.jsx
+Home,Pages,text() pair,Children and volunteers at a community event,শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে,web/src/pages/Home.jsx
+Home,Pages,text() pair,Donate,সাহায্য করুন,web/src/pages/Home.jsx
+Home,Pages,text() pair,Donate now,আজই সাহায্যের হাত বাড়িয়ে দিন,web/src/pages/Home.jsx
+Home,Pages,title,"Education, healthcare and dignity for underserved communities.","প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।",web/src/pages/Home.jsx
+Home,Pages,heroTagline,Empowering Communities | Registered NGO,মানুষের পাশে | নিবন্ধিত সংস্থা,web/src/pages/Home.jsx
+Home,Pages,text() pair,Est. 2024,প্রতিষ্ঠিত ২০২৪,web/src/pages/Home.jsx
+Home,Pages,donationBody,"Even small support helps us keep classes running, respond to health needs and serve families with dignity.","অল্প সাহায্যেও আমাদের ক্লাস চালানো, স্বাস্থ্যকাজ সামলানো আর মানুষের পাশে থাকা সহজ হয়।",web/src/pages/Home.jsx
+Home,Pages,secondary,Explore Our Work,আমাদের কাজ দেখুন,web/src/pages/Home.jsx
+Home,Pages,activityTitle,From the Facebook timeline,ফেসবুকের পাতা থেকে,web/src/pages/Home.jsx
+Home,Pages,text() pair,Govt. of West Bengal,পশ্চিমবঙ্গ সরকার,web/src/pages/Home.jsx
+Home,Pages,intro,"Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.","হেরিটেজ অফ হোপ ফাউন্ডেশন দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি সহায়তার মাধ্যমে কাজ করে.",web/src/pages/Home.jsx
+Home,Pages,text() pair,Impact snapshot,এক নজরে আমাদের প্রভাব,web/src/pages/Home.jsx
+Home,Pages,eyebrow,"Lighting lives, one step at a time","ছোট ছোট কাজ, বড় ভরসা",web/src/pages/Home.jsx
+Home,Pages,pillarTitle,Mission pillars,মূল লক্ষ্য,web/src/pages/Home.jsx
+Home,Pages,statsTitle,Our footprint so far,আমাদের কাজের পরিধি,web/src/pages/Home.jsx
+Home,Pages,text() pair,Registered NGO,নিবন্ধিত সংস্থা,web/src/pages/Home.jsx
+Home,Pages,text() pair,Registration certificate preview,নিবন্ধন সনদের ঝলক,web/src/pages/Home.jsx
+Home,Pages,text() pair,Registration proof available on About page,"নিবন্ধনের কাগজটা আমাদের ""আমাদের কথা"" পাতায় দেখুন",web/src/pages/Home.jsx
+Home,Pages,text() pair,"Stories, updates and event photos","সাফল্যের গল্প, সংবাদ ও অনুষ্ঠানের ছবি",web/src/pages/Home.jsx
+Home,Pages,primary,Support a Program,আমাদের কর্মসূচিতে সাহায্য করুন,web/src/pages/Home.jsx
+Home,Pages,text() pair,What we do on the ground,মাঠপর্যায়ে আমাদের কার্যক্রম,web/src/pages/Home.jsx
+Home,Pages,donationTitle,Your small gift creates big change.,আপনার ছোট অনুদান বড় পরিবর্তন আনতে পারে।,web/src/pages/Home.jsx
+Impact,Pages,text() pair,Accountability to our donors and community.,দাতাদের কাছে পরিষ্কার হিসাব আর মানুষের কাছে জবাবদিহিতা।,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,Annual report,বার্ষিক রিপোর্ট,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,Community Feedback,মানুষের কথা,web/src/pages/Impact.jsx
+Impact,Pages,intro,Explore the numbers and stories that showcase the direct results of our community-driven approach.,আমাদের কাজের ফল আর মানুষের বদলে যাওয়ার গল্পগুলো দেখুন।,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,Fund utilization,টাকা কোথায় খরচ হয়,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,How support is used,আপনাদের সাহায্য কীভাবে কাজে লাগে,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,Impact,ফলাফল,web/src/pages/Impact.jsx
+Impact,Pages,text() pair,Our Promise,আমাদের অঙ্গীকার,web/src/pages/Impact.jsx
+Impact,Pages,title,Transparency and measurable change.,স্বচ্ছতা আর কাজের ফলাফল।,web/src/pages/Impact.jsx
+Layout,Components,text() pair,"Children, women and communities in South 24 Parganas, West Bengal.","দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।",web/src/components/Layout.jsx
+Layout,Components,donate,Donate Now,সহযোগিতার হাত বাড়িয়ে দিন,web/src/components/Layout.jsx
+Layout,Components,text() pair,Follow us on Facebook,ফেসবুকে আমাদের সঙ্গে থাকুন,web/src/components/Layout.jsx
+Layout,Components,text() pair,Open navigation,মেনু খুলুন,web/src/components/Layout.jsx
+Layout,Components,text() pair,Primary navigation,প্রধান মেনু,web/src/components/Layout.jsx
+Layout,Components,text() pair,Registered NGO | West Bengal,নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ,web/src/components/Layout.jsx
+Layout,Components,switchTo,বাংলা,EN,web/src/components/Layout.jsx
+NotFound,Pages,text() pair,Go home,মূল পাতায় ফিরে যান,web/src/pages/NotFound.jsx
+NotFound,Pages,text() pair,Page not found,পেজ পাওয়া যায়নি,web/src/pages/NotFound.jsx
+NotFound,Pages,text() pair,Return to the homepage to continue exploring.,হোমপেজে ফিরে গিয়ে আবার ঘুরে দেখুন।,web/src/pages/NotFound.jsx
+OurWork,Pages,text() pair,Collaborate with local partners,স্থানীয় অংশীদারদের সাথে যৌথ উদ্যোগ,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Education | Healthcare | Welfare,শিক্ষা | স্বাস্থ্য | কল্যাণ,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Execute program and track impact,কাজটা করি আর কী হলো দেখি,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Focus,যেখানে আমরা কাজ করি,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,How we execute programs,কীভাবে আমরা কাজগুলো করি,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Identify community needs,পাড়ার দরকারটা আগে বুঝে নিই,web/src/pages/OurWork.jsx
+OurWork,Pages,title,Initiatives designed for real-world impact.,আমাদের কাজগুলো আসল দরকার মাথায় রেখেই করা হয়।,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Join the mission,আমাদের সাথে থাকুন,web/src/pages/OurWork.jsx
+OurWork,Pages,intro,"Our active programs focus on education, healthcare, and community welfare to bring comprehensive support to those who need it most.","শিক্ষা, স্বাস্থ্য আর সমাজকল্যাণ—এই তিন দিকেই আমরা কাজ করি, যাতে মানুষের কাছে ঠিক সময়ে সাহায্য পৌঁছে যায়।",web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Our Approach,আমাদের কাজের ধরন,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Our Work,আমাদের কাজ,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Provide ongoing support and review,চলতে থাকা সহায়তা আর খোঁজখবর রাখি,web/src/pages/OurWork.jsx
+OurWork,Pages,text() pair,Support this work,এই কাজটায় পাশে থাকুন,web/src/pages/OurWork.jsx
+ThankYou,Pages,text() pair,Return home,মূল পাতায় ফিরে যান,web/src/pages/ThankYou.jsx
+ThankYou,Pages,text() pair,Submission received,আপনার বার্তাটি আমরা পেয়েছি,web/src/pages/ThankYou.jsx
+ThankYou,Pages,text() pair,Thank you for reaching out.,যোগাযোগ করার জন্য ধন্যবাদ।,web/src/pages/ThankYou.jsx

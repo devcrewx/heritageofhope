@@ -93,7 +93,7 @@ function Home() {
       <section className="panel" data-reveal>
         <div className="section-head">
           <p>{copy[language].statsTitle}</p>
-          <h2>{resolve(language, text('Impact snapshot', 'এক নজরে আমাদের প্রভাব'))}</h2>
+          <h2>{resolve(language, text('Impact snapshot', 'এক নজরে আমাদের কাজ'))}</h2>
         </div>
         <div className="metric-grid">
           {impactMetrics.map((metric) => (
