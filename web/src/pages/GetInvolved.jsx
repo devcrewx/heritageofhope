@@ -65,7 +65,7 @@ function GetInvolved() {
       <section className="panel split-panel donation-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Donation ladder', 'দানে কী হয়'))}</p>
+            <p>{resolve(language, text('Donation ladder', 'অনুদানে কী বদলায়'))}</p>
             <h2>{resolve(language, text('What your support can do', 'আপনার সাহায্যে কী করা যায়'))}</h2>
           </div>
           <div className="donation-ladder-list">

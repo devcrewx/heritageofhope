@@ -113,7 +113,7 @@ export const activityPosts = [
       'Raincoats and umbrellas helped families reach the learning space through the rainy season.',
       'রেনকোট ও ছাতা বর্ষাকালেও পরিবারগুলিকে শিক্ষাকেন্দ্রে পৌঁছাতে সাহায্য করেছে।',
     ),
-    location: text('Kishalaya community', 'কিশলয়ের মানুষজন'),
+    location: text('Kishalaya community', 'কিশলয় পরিবার'),
   },
 ]
 
@@ -254,7 +254,7 @@ export const galleryItems = [
 export const showcaseImages = [
   {
     image: '/assets/showcase_winter.webp',
-    label: text('Children receiving winter support', 'শিশুদের শীতবস্ত্র প্রদান'),
+    label: text('Children receiving winter support', 'শিশুদের হাতে শীতের পোশাক'),
   },
   {
     image: '/assets/showcase_health.webp',
@@ -281,7 +281,7 @@ export const donationSteps = [
   },
   {
     amount: '₹1000',
-    title: text('health outreach support', 'স্বাস্থ্যসেবা কার্যক্রমে সহায়তা'),
+    title: text('health outreach support', 'স্বাস্থ্যসেবায় পাশে থাকা'),
   },
   {
     amount: '₹5000',
@@ -306,17 +306,17 @@ export const partners = [
 export const teamMembers = [
   {
     name: text('Founder Team', 'প্রতিষ্ঠাতা সদস্য'),
-    role: text('Community coordination and field programs', 'জনসংযোগ ও মাঠপর্যায়ের কাজ'),
+    role: text('Community coordination and field programs', 'জনসংযোগ ও মানুষের কাছে গিয়ে কাজ'),
     image: '/assets/team_member.webp',
   },
   {
     name: text('Program Support', 'কর্মসূচি সহায়তা'),
-    role: text('Planning, logistics and volunteer support', 'পরিকল্পনা ও স্বেচ্ছাসেবক ব্যবস্থাপনা'),
+    role: text('Planning, logistics and volunteer support', 'পরিকল্পনা ও স্বেচ্ছাসেবকদের সামলানো'),
     image: '/assets/team_member_2.webp',
   },
   {
-    name: text('Field Volunteers', 'মাঠপর্যায়ের স্বেচ্ছাসেবক'),
-    role: text('Direct service delivery and follow-up', 'সরাসরি সেবা প্রদান ও তদারকি'),
+    name: text('Field Volunteers', 'সরাসরি সেবার স্বেচ্ছাসেবক'),
+    role: text('Direct service delivery and follow-up', 'সরাসরি সেবা পৌঁছে দেওয়া ও খোঁজখবর রাখা'),
     image: '/assets/team_member_3.webp',
   },
 ]

@@ -108,7 +108,7 @@ function Home() {
       <section className="panel" data-reveal>
         <div className="section-head">
           <p>{copy[language].pillarTitle}</p>
-          <h2>{resolve(language, text('What we do on the ground', 'মাঠপর্যায়ে আমাদের কার্যক্রম'))}</h2>
+          <h2>{resolve(language, text('What we do on the ground', 'মানুষের দোরগোড়ায় আমাদের কাজ'))}</h2>
         </div>
         <div className="card-grid">
           {featuredPrograms.slice(0, 3).map((program) => (
