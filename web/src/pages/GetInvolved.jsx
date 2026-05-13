@@ -2,6 +2,7 @@ import { useOutletContext } from 'react-router-dom'
 import { useState } from 'react'
 import { donationSteps, resolve, volunteerRoles, text } from '../content'
 import DocumentModal from '../components/DocumentModal'
+import { submitFormWeb3 } from '../utils/web3forms'
 
 const demoUpiQr = '/docs/upi-qr.jpeg'
 const upiIntentUrl =
@@ -12,6 +13,10 @@ function GetInvolved() {
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalDoc, setModalDoc] = useState(null)
+  const [volunteerSubmitting, setVolunteerSubmitting] = useState(false)
+  const [volunteerStatus, setVolunteerStatus] = useState(null)
+  const [partnerSubmitting, setPartnerSubmitting] = useState(false)
+  const [partnerStatus, setPartnerStatus] = useState(null)
 
   const copy = {
     en: {
@@ -125,10 +130,34 @@ function GetInvolved() {
             ))}
           </div>
         </div>
-        <form className="contact-form form-panel" name="volunteer-form" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="volunteer-form" />
-          <input type="hidden" name="bot-field" />
-          <input type="hidden" name="_redirect" value="/thank-you" />
+        <form
+          className="contact-form form-panel"
+          onSubmit={async (e) => {
+            e.preventDefault()
+            setVolunteerSubmitting(true)
+            setVolunteerStatus(null)
+            try {
+              const formData = new FormData(e.target)
+              const result = await submitFormWeb3(formData, 'volunteer')
+              if (result.success) {
+                setVolunteerStatus({ type: 'success', message: result.message })
+                e.target.reset()
+                window.location.href = '/thank-you'
+              } else {
+                setVolunteerStatus({ type: 'error', message: result.message })
+              }
+            } catch (error) {
+              setVolunteerStatus({ type: 'error', message: 'Failed to submit form. Please try again.' })
+            } finally {
+              setVolunteerSubmitting(false)
+            }
+          }}
+        >
+          {volunteerStatus && (
+            <div style={{ padding: '1rem', marginBottom: '1rem', borderRadius: '0.5rem', backgroundColor: volunteerStatus.type === 'success' ? '#d4edda' : '#f8d7da', color: volunteerStatus.type === 'success' ? '#155724' : '#721c24', border: `1px solid ${volunteerStatus.type === 'success' ? '#c3e6cb' : '#f5c6cb'}` }}>
+              {volunteerStatus.message}
+            </div>
+          )}
           <div className="section-head">
             <p>{resolve(language, text('Volunteer form', 'স্বেচ্ছাসেবক ফর্ম'))}</p>
             <h2>{resolve(language, text('Join the team', 'দলে যোগ দিন'))}</h2>
@@ -173,8 +202,8 @@ function GetInvolved() {
             <label htmlFor="volunteer-message">{resolve(language, text('Message', 'বার্তা'))}</label>
             <textarea id="volunteer-message" name="message" rows="5" required minLength="10" />
           </div>
-          <button type="submit" className="btn btn-solid">
-            {resolve(language, text('Submit volunteer interest', 'স্বেচ্ছাসেবক হিসেবে আবেদন করুন'))}
+          <button type="submit" className="btn btn-solid" disabled={volunteerSubmitting}>
+            {volunteerSubmitting ? resolve(language, text('Submitting...', 'আবেদন পাঠাচ্ছি...')) : resolve(language, text('Submit volunteer interest', 'স্বেচ্ছাসেবক হিসেবে আবেদন করুন'))}
           </button>
         </form>
       </section>
@@ -217,10 +246,34 @@ function GetInvolved() {
             </figcaption>
           </figure>
         </div>
-        <form className="contact-form form-panel" name="partner-form" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="partner-form" />
-          <input type="hidden" name="bot-field" />
-          <input type="hidden" name="_redirect" value="/thank-you" />
+        <form
+          className="contact-form form-panel"
+          onSubmit={async (e) => {
+            e.preventDefault()
+            setPartnerSubmitting(true)
+            setPartnerStatus(null)
+            try {
+              const formData = new FormData(e.target)
+              const result = await submitFormWeb3(formData, 'partner')
+              if (result.success) {
+                setPartnerStatus({ type: 'success', message: result.message })
+                e.target.reset()
+                window.location.href = '/thank-you'
+              } else {
+                setPartnerStatus({ type: 'error', message: result.message })
+              }
+            } catch (error) {
+              setPartnerStatus({ type: 'error', message: 'Failed to submit form. Please try again.' })
+            } finally {
+              setPartnerSubmitting(false)
+            }
+          }}
+        >
+          {partnerStatus && (
+            <div style={{ padding: '1rem', marginBottom: '1rem', borderRadius: '0.5rem', backgroundColor: partnerStatus.type === 'success' ? '#d4edda' : '#f8d7da', color: partnerStatus.type === 'success' ? '#155724' : '#721c24', border: `1px solid ${partnerStatus.type === 'success' ? '#c3e6cb' : '#f5c6cb'}` }}>
+              {partnerStatus.message}
+            </div>
+          )}
           <div className="section-head">
             <p>{resolve(language, text('Partner inquiry', 'পার্টনারশিপের কথা'))}</p>
             <h2>{resolve(language, text('Start a collaboration', 'চলুন একসাথে কাজ করি'))}</h2>
@@ -257,8 +310,8 @@ function GetInvolved() {
             <label htmlFor="partner-message">{resolve(language, text('Message', 'বার্তা'))}</label>
             <textarea id="partner-message" name="message" rows="5" required minLength="10" />
           </div>
-          <button type="submit" className="btn btn-solid">
-            {resolve(language, text('Submit partner inquiry', 'পার্টনারশিপের কথা পাঠান'))}
+          <button type="submit" className="btn btn-solid" disabled={partnerSubmitting}>
+            {partnerSubmitting ? resolve(language, text('Submitting...', 'পাঠাচ্ছি...')) : resolve(language, text('Submit partner inquiry', 'পার্টনারশিপের কথা পাঠান'))}
           </button>
         </form>
       </section>

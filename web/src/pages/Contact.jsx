@@ -1,9 +1,13 @@
 import { useOutletContext } from 'react-router-dom'
+import { useState } from 'react'
 import { facebookPosts, resolve, showcaseImages, text } from '../content'
 import { contactDetails } from '../content'
+import { submitFormWeb3 } from '../utils/web3forms'
 
 function Contact() {
   const { language } = useOutletContext()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(null)
 
   const copy = {
     en: {
@@ -62,10 +66,35 @@ function Contact() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
-        <form className="contact-form form-panel" name="contact-form" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" data-reveal>
-          <input type="hidden" name="form-name" value="contact-form" />
-          <input type="hidden" name="bot-field" />
-          <input type="hidden" name="_redirect" value="/thank-you" />
+        <form
+          className="contact-form form-panel"
+          data-reveal
+          onSubmit={async (e) => {
+            e.preventDefault()
+            setIsSubmitting(true)
+            setSubmitStatus(null)
+            try {
+              const formData = new FormData(e.target)
+              const result = await submitFormWeb3(formData, 'contact')
+              if (result.success) {
+                setSubmitStatus({ type: 'success', message: result.message })
+                e.target.reset()
+                window.location.href = '/thank-you'
+              } else {
+                setSubmitStatus({ type: 'error', message: result.message })
+              }
+            } catch (error) {
+              setSubmitStatus({ type: 'error', message: 'Failed to submit form. Please try again.' })
+            } finally {
+              setIsSubmitting(false)
+            }
+          }}
+        >
+          {submitStatus && (
+            <div style={{ padding: '1rem', marginBottom: '1rem', borderRadius: '0.5rem', backgroundColor: submitStatus.type === 'success' ? '#d4edda' : '#f8d7da', color: submitStatus.type === 'success' ? '#155724' : '#721c24', border: `1px solid ${submitStatus.type === 'success' ? '#c3e6cb' : '#f5c6cb'}` }}>
+              {submitStatus.message}
+            </div>
+          )}
           <div className="section-head">
             <p>{resolve(language, text('Contact form', 'যোগাযোগের ফর্ম'))}</p>
             <h2>{resolve(language, text('Send us a direct message', 'সরাসরি একটা মেসেজ পাঠান'))}</h2>
@@ -93,8 +122,8 @@ function Contact() {
               placeholder={resolve(language, text('Tell us how you want to help', 'আপনার কথা এখানে লিখুন'))}
             />
           </div>
-          <button type="submit" className="btn btn-solid">
-            {resolve(language, text('Send message', 'বার্তা পাঠান'))}
+          <button type="submit" className="btn btn-solid" disabled={isSubmitting}>
+            {isSubmitting ? resolve(language, text('Sending...', 'পাঠাচ্ছি...')) : resolve(language, text('Send message', 'বার্তা পাঠান'))}
           </button>
         </form>
       </section>
