@@ -1,3 +1,8 @@
 .agent/
-web/node_modules/
+node_modules/
+packages/web/node_modules/
+packages/*/node_modules/
+packages/*/dist/
 backup.zip
+.env
+.env.*

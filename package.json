@@ -1,0 +1,18 @@
+{
+  "name": "heritageofhope",
+  "private": true,
+  "workspaces": [
+    "packages/web",
+    "packages/admin",
+    "packages/api"
+  ],
+  "scripts": {
+    "build:web": "npm run build --workspace web",
+    "dev:web": "npm run dev --workspace web",
+    "lint:web": "npm run lint --workspace web",
+    "build:admin": "npm run build --workspace @heritageofhope/admin",
+    "dev:admin": "npm run dev --workspace @heritageofhope/admin",
+    "dev:api": "npm run dev --workspace @heritageofhope/api",
+    "build:api": "npm run build --workspace @heritageofhope/api"
+  }
+}

@@ -1,0 +1,183 @@
+import { Router } from 'express'
+import multer from 'multer'
+import { prisma } from '../../lib/prisma.js'
+import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
+import { verifyJWT } from '../../middleware/verifyJWT.js'
+
+const router = Router()
+const storage = multer.memoryStorage()
+
+const fileFilter = (_req, file, cb) => {
+  const allowedImageMimes = ['image/jpeg', 'image/png', 'image/webp']
+  const allowedPdfMimes = ['application/pdf']
+
+  if (allowedPdfMimes.includes(file.mimetype) || allowedImageMimes.includes(file.mimetype)) {
+    cb(null, true)
+    return
+  }
+
+  cb(new Error('Only PDF and image files are allowed'))
+}
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 15 * 1024 * 1024 },
+})
+
+router.use(verifyJWT)
+
+router.get('/', async (_req, res) => {
+  try {
+    const items = await prisma.document.findMany({ orderBy: { sortOrder: 'asc' } })
+    res.json({ success: true, items })
+  } catch (err) {
+    console.error('Failed fetching documents:', err)
+    res.status(500).json({ error: 'Failed to fetch documents' })
+  }
+})
+
+router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview', maxCount: 1 }]), async (req, res) => {
+  try {
+    const { titleEn, titleBn, descriptionEn, descriptionBn, date } = req.body
+    const pdfFile = req.files?.pdf?.[0]
+    const previewFile = req.files?.preview?.[0]
+
+    if (!titleEn) return res.status(400).json({ error: 'titleEn is required' })
+    if (!pdfFile) return res.status(400).json({ error: 'PDF file is required' })
+
+    if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME) {
+      return res.status(500).json({ error: 'Cloudinary not configured' })
+    }
+
+    const highestSort = await prisma.document.aggregate({ _max: { sortOrder: true } })
+    const nextSortOrder = (highestSort._max.sortOrder ?? -1) + 1
+
+    const pdfData = await uploadToCloudinary(pdfFile.buffer, 'heritage-of-hope/documents', {
+      resourceType: 'raw',
+    })
+
+    let previewImgUrl = null
+    let previewImgPublicId = null
+    if (previewFile) {
+      const previewData = await uploadToCloudinary(previewFile.buffer, 'heritage-of-hope/documents/previews', {
+        resourceType: 'image',
+        transformation: [{ width: 800, crop: 'limit', quality: 'auto:good' }],
+      })
+      previewImgUrl = previewData.secure_url
+      previewImgPublicId = previewData.public_id
+    }
+
+    const item = await prisma.document.create({
+      data: {
+        titleEn,
+        titleBn: titleBn || null,
+        descriptionEn: descriptionEn || null,
+        descriptionBn: descriptionBn || null,
+        date: date ? new Date(date) : null,
+        pdfUrl: pdfData.secure_url,
+        pdfPublicId: pdfData.public_id,
+        previewImgUrl,
+        previewImgPublicId,
+        sortOrder: nextSortOrder,
+      },
+    })
+
+    res.json({ success: true, data: item })
+  } catch (err) {
+    console.error('Failed creating document:', err)
+    res.status(500).json({ error: `Failed to create document: ${err.message}` })
+  }
+})
+
+router.patch('/reorder', async (req, res) => {
+  try {
+    const { items } = req.body
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'items must be array' })
+    }
+
+    const updated = await Promise.all(
+      items.map((item) =>
+        prisma.document.update({
+          where: { id: Number(item.id) },
+          data: { sortOrder: Number(item.sortOrder) },
+        })
+      )
+    )
+
+    res.json({ success: true, updated })
+  } catch (err) {
+    console.error('Failed reordering documents:', err)
+    res.status(500).json({ error: 'Failed to reorder documents' })
+  }
+})
+
+router.patch('/:id', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview', maxCount: 1 }]), async (req, res) => {
+  try {
+    const { id } = req.params
+    const { titleEn, titleBn, descriptionEn, descriptionBn, date } = req.body
+    const pdfFile = req.files?.pdf?.[0]
+    const previewFile = req.files?.preview?.[0]
+
+    const existing = await prisma.document.findUnique({ where: { id: Number(id) } })
+    if (!existing) return res.status(404).json({ error: 'Document not found' })
+
+    const data = {}
+    if (titleEn !== undefined) data.titleEn = titleEn
+    if (titleBn !== undefined) data.titleBn = titleBn || null
+    if (descriptionEn !== undefined) data.descriptionEn = descriptionEn || null
+    if (descriptionBn !== undefined) data.descriptionBn = descriptionBn || null
+    if (date !== undefined) data.date = date ? new Date(date) : null
+
+    if (pdfFile) {
+      if (existing.pdfPublicId) {
+        try { await deleteFromCloudinary(existing.pdfPublicId) } catch (e) { console.warn('Failed deleting old PDF:', e) }
+      }
+      const pdfData = await uploadToCloudinary(pdfFile.buffer, 'heritage-of-hope/documents', { resourceType: 'raw' })
+      data.pdfUrl = pdfData.secure_url
+      data.pdfPublicId = pdfData.public_id
+    }
+
+    if (previewFile) {
+      if (existing.previewImgPublicId) {
+        try { await deleteFromCloudinary(existing.previewImgPublicId) } catch (e) { console.warn('Failed deleting old preview:', e) }
+      }
+      const previewData = await uploadToCloudinary(previewFile.buffer, 'heritage-of-hope/documents/previews', {
+        resourceType: 'image',
+        transformation: [{ width: 800, crop: 'limit', quality: 'auto:good' }],
+      })
+      data.previewImgUrl = previewData.secure_url
+      data.previewImgPublicId = previewData.public_id
+    }
+
+    const item = await prisma.document.update({ where: { id: Number(id) }, data })
+    res.json({ success: true, data: item })
+  } catch (err) {
+    console.error('Failed updating document:', err)
+    res.status(500).json({ error: `Failed to update document: ${err.message}` })
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const item = await prisma.document.findUnique({ where: { id: Number(id) } })
+    if (!item) return res.status(404).json({ error: 'Document not found' })
+
+    if (item.pdfPublicId) {
+      try { await deleteFromCloudinary(item.pdfPublicId) } catch (e) { console.warn('Failed deleting PDF:', e) }
+    }
+    if (item.previewImgPublicId) {
+      try { await deleteFromCloudinary(item.previewImgPublicId) } catch (e) { console.warn('Failed deleting preview:', e) }
+    }
+
+    await prisma.document.delete({ where: { id: Number(id) } })
+    res.json({ success: true })
+  } catch (err) {
+    console.error('Failed deleting document:', err)
+    res.status(500).json({ error: `Failed to delete document: ${err.message}` })
+  }
+})
+
+export default router

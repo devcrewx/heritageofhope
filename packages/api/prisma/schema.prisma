@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SiteContent {
+  id        Int      @id @default(autoincrement())
+  page      String
+  section   String
+  fieldKey  String   @map("field_key")
+  valueEn   String?  @map("value_en") @db.Text
+  valueBn   String?  @map("value_bn") @db.Text
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  @@unique([page, section, fieldKey])
+  @@map("site_content")
+}
+
+model ImpactStat {
+  id        Int    @id @default(autoincrement())
+  value     String @unique
+  labelEn   String @map("label_en")
+  labelBn   String? @map("label_bn")
+  sortOrder Int    @default(0) @map("sort_order")
+
+  @@map("impact_stats")
+}
+
+model GalleryItem {
+  id        Int      @id @default(autoincrement())
+  url       String   @unique @db.Text
+  publicId  String   @map("public_id") @db.Text
+  altEn     String?  @map("alt_en")
+  altBn     String?  @map("alt_bn")
+  category  String?
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("gallery_items")
+}
+
+model Document {
+  id            Int      @id @default(autoincrement())
+  titleEn       String   @map("title_en")
+  titleBn       String?  @map("title_bn")
+  descriptionEn String?  @map("description_en") @db.Text
+  descriptionBn String?  @map("description_bn") @db.Text
+  date          DateTime? @db.Date
+  pdfUrl        String?  @map("pdf_url") @db.Text
+  pdfPublicId   String?  @map("pdf_public_id") @db.Text
+  previewImgUrl String?  @map("preview_img_url") @db.Text
+  previewImgPublicId String? @map("preview_img_public_id") @db.Text
+  sortOrder     Int      @default(0) @map("sort_order")
+
+  @@map("documents")
+}
+
+model TeamMember {
+  id            Int     @id @default(autoincrement())
+  name          String
+  roleEn        String? @map("role_en")
+  roleBn        String? @map("role_bn")
+  photoUrl      String? @unique @map("photo_url") @db.Text
+  photoPublicId String? @map("photo_public_id") @db.Text
+  sortOrder     Int     @default(0) @map("sort_order")
+
+  @@map("team_members")
+}
+
+model CoreValue {
+  id            Int     @id @default(autoincrement())
+  titleEn       String  @unique @map("title_en")
+  titleBn       String? @map("title_bn")
+  descriptionEn String? @map("description_en") @db.Text
+  descriptionBn String? @map("description_bn") @db.Text
+  sortOrder     Int     @default(0) @map("sort_order")
+
+  @@map("core_values")
+}
+
+model Partner {
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  logoUrl      String? @map("logo_url") @db.Text
+  logoPublicId String? @map("logo_public_id") @db.Text
+  isActive     Boolean @default(true) @map("is_active")
+  sortOrder    Int     @default(0) @map("sort_order")
+
+  @@map("partners")
+}
+
+model DonationTier {
+  id        Int     @id @default(autoincrement())
+  amount    Int     @unique
+  labelEn   String  @map("label_en")
+  labelBn   String? @map("label_bn")
+  sortOrder Int     @default(0) @map("sort_order")
+
+  @@map("donation_tiers")
+}
+
+model FundAllocation {
+  id         Int     @id @default(autoincrement())
+  categoryEn String  @unique @map("category_en")
+  categoryBn String? @map("category_bn")
+  percentage Int
+  sortOrder  Int     @default(0) @map("sort_order")
+
+  @@map("fund_allocation")
+}
+
+model VolunteerRole {
+  id            Int     @id @default(autoincrement())
+  titleEn       String  @unique @map("title_en")
+  titleBn       String? @map("title_bn")
+  descriptionEn String? @map("description_en") @db.Text
+  descriptionBn String? @map("description_bn") @db.Text
+  sortOrder     Int     @default(0) @map("sort_order")
+
+  @@map("volunteer_roles")
+}
+
+model ActivityPost {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  titleEn     String   @unique @map("title_en")
+  titleBn     String?  @map("title_bn")
+  bodyEn      String?  @map("body_en") @db.Text
+  bodyBn      String?  @map("body_bn") @db.Text
+  photoUrl    String?  @map("photo_url") @db.Text
+  photoPublicId String? @map("photo_public_id") @db.Text
+  isPublished Boolean  @default(true) @map("is_published")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("activity_posts")
+}
+
+model AdminUser {
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  passwordHash String     @map("password_hash") @db.Text
+  role         String     @default("editor")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  lastLogin    DateTime?  @map("last_login")
+  auditLogs    AuditLog[]
+
+  @@map("admin_users")
+}
+
+model Program {
+  id            Int     @id @default(autoincrement())
+  slug          String  @unique
+  imageUrl      String  @map("image_url") @db.Text
+  imagePublicId String? @map("image_public_id")
+  categoryEn    String  @map("category_en")
+  categoryBn    String? @map("category_bn")
+  titleEn       String  @map("title_en")
+  titleBn       String? @map("title_bn")
+  descriptionEn String? @map("description_en") @db.Text
+  descriptionBn String? @map("description_bn") @db.Text
+  highlightEn   String? @map("highlight_en")
+  highlightBn   String? @map("highlight_bn")
+  sortOrder     Int     @default(0) @map("sort_order")
+
+  @@map("programs")
+}
+
+model AuditLog {
+  id        Int       @id @default(autoincrement())
+  adminId   Int?      @map("admin_id")
+  action    String?
+  tableName String?   @map("table_name")
+  recordId  Int?      @map("record_id")
+  note      String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+  admin     AdminUser? @relation(fields: [adminId], references: [id])
+
+  @@map("audit_log")
+}
+
+model ContactSubmission {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  message   String    @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@map("contact_submissions")
+}
+
+model VolunteerSubmission {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  interest  String?   // e.g. "Teaching", "Healthcare", "Admin"
+  message   String?   @db.Text
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@map("volunteer_submissions")
+}
+
+model PartnerSubmission {
+  id               Int       @id @default(autoincrement())
+  organizationName String    @map("organization_name")
+  contactPerson    String    @map("contact_person")
+  email            String
+  phone            String?
+  inquiry          String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  @@map("partner_submissions")
+}
