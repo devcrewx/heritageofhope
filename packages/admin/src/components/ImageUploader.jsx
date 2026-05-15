@@ -158,3 +158,5 @@ export function ImageUploader({ onFilesSelected, disabled = false, maxFiles = 10
     </div>
   )
 }
+
+export default ImageUploader

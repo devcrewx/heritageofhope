@@ -1,15 +1,3 @@
-export async function apiFetch(path, opts = {}) {
-  const base = (import.meta && import.meta.env && import.meta.env.VITE_API_BASE) || 'http://localhost:4010'
-  const headers = opts.headers || {}
-  const token = (typeof localStorage !== 'undefined' && localStorage.getItem('token')) || null
-  if (token) headers['Authorization'] = `Bearer ${token}`
-  const res = await fetch(`${base}${path}`, { ...opts, headers })
-  if (!res.ok) {
-    const errText = await res.text()
-    throw new Error(`API ${res.status} ${errText}`)
-  }
-  return res.json()
-}
 import axios from 'axios'
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4010'
@@ -42,6 +30,45 @@ apiClient.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export async function request(...args) {
+  if (args.length === 1) {
+    const [endpoint] = args
+    return apiClient.get(endpoint).then((response) => response.data)
+  }
+
+  const [methodOrEndpoint, endpointOrOptions, bodyOrUndefined, extraOptions = {}] = args
+
+  if (typeof endpointOrOptions === 'string') {
+    const method = String(methodOrEndpoint || 'GET').toUpperCase()
+    const endpoint = endpointOrOptions
+    const config = {
+      method,
+      url: endpoint,
+      ...extraOptions,
+    }
+
+    if (bodyOrUndefined !== undefined) {
+      if (bodyOrUndefined instanceof FormData) {
+        config.data = bodyOrUndefined
+        config.headers = { ...(config.headers || {}), 'Content-Type': 'multipart/form-data' }
+      } else {
+        config.data = bodyOrUndefined
+      }
+    }
+
+    return apiClient.request(config).then((response) => response.data)
+  }
+
+  const endpoint = methodOrEndpoint
+  const options = endpointOrOptions || {}
+  return apiClient.request({ url: endpoint, ...options }).then((response) => response.data)
+}
+
+export async function apiFetch(path, opts = {}) {
+  const response = await request(path, opts)
+  return response
+}
 
 export default apiClient
 
