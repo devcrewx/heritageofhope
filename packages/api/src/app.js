@@ -7,6 +7,7 @@ import adminRoutes from './routes/admin/index.js'
 
 export function createApp() {
   const app = express()
+  app.set('trust proxy', 1)
   const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
     .split(',')
     .map((origin) => origin.trim())
