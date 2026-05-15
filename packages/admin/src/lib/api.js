@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4010'
+const API_BASE = import.meta.env.VITE_API_BASE || ''
 
 const apiClient = axios.create({
   baseURL: API_BASE,
+  timeout: 8000,
   headers: {
     'Content-Type': 'application/json',
   },
