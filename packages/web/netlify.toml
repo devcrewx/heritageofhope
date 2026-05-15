@@ -8,7 +8,6 @@
   to = "/index.html"
   status = 200
 
-# Set environment variable for production API base URL
-# Replace with your actual API server URL when available
+# Production API endpoint
 [env.production]
-  VITE_API_BASE_URL = "https://api.heritageofhope.org"
+  VITE_API_BASE_URL = "https://heritageofhope-api-production.up.railway.app"
