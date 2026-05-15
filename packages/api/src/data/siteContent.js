@@ -1,10 +1,12 @@
 import { prisma } from '../lib/prisma.js'
 import {
-  siteContent as webSiteContent,
   facebookPosts,
   contactDetails,
   navItems,
-} from '../../../../packages/web/src/content.js'
+  showcaseImages,
+  documents,
+  featuredPrograms as fallbackFeaturedPrograms,
+} from './staticContent.js'
 
 /**
  * Fetch all site content from database and combine with hardcoded items.
@@ -100,20 +102,22 @@ export async function getSiteContent() {
     const transformedPartners = partners.map((p) => p.name)
 
     // If programs were fetched from DB, transform them to the frontend shape
-    let transformedPrograms = webSiteContent.ourWork?.featuredPrograms || []
+    let transformedPrograms = fallbackFeaturedPrograms
     try {
       const dbPrograms = await prisma.program.findMany({ orderBy: { sortOrder: 'asc' } })
-      transformedPrograms = dbPrograms.map((p) => ({
-        slug: p.slug,
-        image: p.imageUrl,
-        category: { en: p.categoryEn, bn: p.categoryBn || p.categoryEn },
-        title: { en: p.titleEn, bn: p.titleBn || p.titleEn },
-        description: { en: p.descriptionEn, bn: p.descriptionBn || p.descriptionEn },
-        highlight: { en: p.highlightEn || '', bn: p.highlightBn || '' },
-      }))
+      if (dbPrograms.length > 0) {
+        transformedPrograms = dbPrograms.map((p) => ({
+          slug: p.slug,
+          image: p.imageUrl,
+          category: { en: p.categoryEn, bn: p.categoryBn || p.categoryEn },
+          title: { en: p.titleEn, bn: p.titleBn || p.titleEn },
+          description: { en: p.descriptionEn, bn: p.descriptionBn || p.descriptionEn },
+          highlight: { en: p.highlightEn || '', bn: p.highlightBn || '' },
+        }))
+      }
     } catch (e) {
       // fall back to static bundle if programs table missing
-      transformedPrograms = webSiteContent.ourWork?.featuredPrograms || []
+      transformedPrograms = fallbackFeaturedPrograms
     }
 
     const transformedDonationTiers = donationTiers.map((tier) => ({
@@ -154,12 +158,12 @@ export async function getSiteContent() {
         facebookPosts,
         impactMetrics: transformedImpactMetrics,
         donationSteps: transformedDonationTiers,
-        showcaseImages: webSiteContent.home.showcaseImages, // Keep hardcoded showcase
+        showcaseImages: showcaseImages.home,
       },
       about: {
         teamMembers: transformedTeamMembers,
         partners: transformedPartners,
-        documents: webSiteContent.about.documents,
+        documents,
         coreValues: transformedCoreValues,
       },
       impact: {
@@ -168,7 +172,7 @@ export async function getSiteContent() {
       },
       gallery: {
         galleryItems: transformedGalleryItems,
-        showcaseImages: webSiteContent.gallery.showcaseImages,
+        showcaseImages: showcaseImages.gallery,
       },
       getInvolved: {
         donationSteps: transformedDonationTiers,
@@ -178,7 +182,7 @@ export async function getSiteContent() {
       contact: {
         contactDetails: contactDetailsFromSettings,
         facebookPosts,
-        showcaseImages: webSiteContent.contact.showcaseImages,
+        showcaseImages: showcaseImages.contact,
       },
       ourWork: {
         featuredPrograms: transformedPrograms,
