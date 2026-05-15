@@ -1,0 +1,45 @@
+redirectsOrigin = "config"
+plugins = []
+headers = []
+
+[env]
+
+[env.production]
+VITE_API_BASE_URL = "https://heritageofhope-api-production.up.railway.app"
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "/home/DevCrewX/Projects/heritageofhope/packages/web/dist"
+publishOrigin = "config"
+commandOrigin = "config"
+base = "/home/DevCrewX/Projects/heritageofhope/packages/web"
+command = "npm run build"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
