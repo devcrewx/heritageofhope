@@ -134,7 +134,7 @@ function Contact() {
             <p>{resolve(language, text('Featured from Facebook', 'ফেসবুকের কিছু ঝলক'))}</p>
             <h2>{resolve(language, text('Recent moments from the page', 'পেজের সাম্প্রতিক কিছু ছবি'))}</h2>
           </div>
-          <a href="https://www.facebook.com/profile.php?id=61559891799273" target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
+
           <a href={contact.contactDetails.facebookUrl || 'https://www.facebook.com/profile.php?id=61559891799273'} target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
             {resolve(language, text('Visit Official Facebook Page', 'অফিসিয়াল ফেসবুক পেজে যান'))} &rarr;
           </a>
