@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "node src/index.js",
     "build": "node -e \"console.log('API build step is not required yet')\"",

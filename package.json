@@ -1,6 +1,9 @@
 {
   "name": "heritageofhope",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "workspaces": [
     "packages/web",
     "packages/admin",
