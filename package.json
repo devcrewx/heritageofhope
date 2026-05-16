@@ -13,6 +13,7 @@
     "build:admin": "npm run build --workspace @heritageofhope/admin",
     "dev:admin": "npm run dev --workspace @heritageofhope/admin",
     "dev:api": "npm run dev --workspace @heritageofhope/api",
-    "build:api": "npm run build --workspace @heritageofhope/api"
+    "build:api": "npm run build --workspace @heritageofhope/api",
+    "start": "node packages/api/src/index.js"
   }
 }

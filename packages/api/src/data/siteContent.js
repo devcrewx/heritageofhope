@@ -14,6 +14,55 @@ const fallbackDocuments = [
   { title: { en: '80G Certificate', bn: '৮०जी शंसापत्र' }, href: '#', thumb: '/docs/thumbs/pdf-thumb.svg' },
 ]
 
+function buildFallbackSiteContent() {
+  return {
+    navItems,
+    home: {
+      featuredPrograms: fallbackFeaturedPrograms,
+      activityPosts: facebookPosts,
+      facebookPosts,
+      impactMetrics: fallbackImpactMetrics,
+      donationSteps: [],
+      showcaseImages: showcaseImages.home,
+      hero: {},
+      mission: {},
+      cta: {},
+    },
+    about: {
+      teamMembers: [],
+      partners: [],
+      documents: fallbackDocuments,
+      coreValues: [],
+      pageContent: {},
+    },
+    impact: {
+      impactMetrics: fallbackImpactMetrics,
+      fundAllocation: [],
+      pageContent: {},
+    },
+    gallery: {
+      galleryItems: showcaseImages.gallery,
+      showcaseImages: showcaseImages.gallery,
+    },
+    getInvolved: {
+      donationSteps: [],
+      volunteerRoles: [],
+      contactDetails,
+      pageContent: {},
+    },
+    siteMeta: contactDetails,
+    contact: {
+      contactDetails,
+      facebookPosts,
+      showcaseImages: showcaseImages.contact,
+    },
+    ourWork: {
+      featuredPrograms: fallbackFeaturedPrograms,
+      pageContent: {},
+    },
+  }
+}
+
 /**
  * Fetch all site content from database and combine with hardcoded items.
  * This function retrieves seeded data from Supabase and merges it with
@@ -350,6 +399,6 @@ export async function getSiteContent() {
   } catch (error) {
     console.error('Error fetching site content:', error)
     // Fallback to web content if DB fails
-    return webSiteContent
+    return buildFallbackSiteContent()
   }
 }
