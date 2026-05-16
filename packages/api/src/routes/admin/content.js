@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = Router()
@@ -51,6 +52,9 @@ router.patch('/settings/:fieldKey', async (req, res) => {
       })
     }
 
+    // Invalidate cached content so next request fetches fresh data
+    invalidateCache()
+
     res.json({
       success: true,
       data: content,
@@ -99,6 +103,9 @@ router.patch('/:page/:section/:fieldKey', async (req, res) => {
         },
       })
     }
+
+    // Invalidate cached content so next request fetches fresh data
+    invalidateCache()
 
     res.json({
       success: true,

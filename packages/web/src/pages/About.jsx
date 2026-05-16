@@ -7,35 +7,9 @@ function About() {
   const { language, siteContent } = useOutletContext()
   const { about } = siteContent
   const documents = about.documents || []
+  const page = about.pageContent || {}
 
-  const copy = {
-    en: {
-      title: 'Rooted in community. Driven by impact.',
-      intro:
-        'We work directly with the people we serve, ensuring every initiative brings lasting, positive change.',
-      mission: 'Mission',
-      vision: 'Vision',
-      values: 'Core values',
-      legal: 'Legally registered and transparent',
-      storyTitle: 'Our story',
-      storyBody:
-        'The foundation began from direct work with children and women in underserved areas.',
-    },
-    bn: {
-      title: 'মানুষের মধ্যেই আমাদের শিকড়। কাজের ফলই আমাদের পথ দেখায়।',
-      intro:
-        'আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।',
-      mission: 'আমাদের লক্ষ্য',
-      vision: 'আমাদের দৃষ্টিভঙ্গি',
-      values: 'আমাদের আদর্শ',
-      legal: 'আইনগতভাবে নিবন্ধিত আর খোলামেলা',
-      storyTitle: 'আমাদের গল্প',
-      storyBody:
-        'শিশু আর নারীদের সঙ্গে কাজ করতে করতেই ফাউন্ডেশনের শুরু।',
-    },
-  }
-
-  const values = [
+  const values = (page.values && page.values.length > 0) ? page.values : [
     text('Compassion', 'সহানুভূতি'),
     text('Transparency', 'স্বচ্ছতা'),
     text('Community', 'সম্প্রদায়'),
@@ -75,8 +49,8 @@ function About() {
       <section className="panel split-panel" data-reveal>
         <div>
           <p className="eyebrow">{resolve(language, text('About', 'আমাদের কথা'))}</p>
-          <h1 className="page-title">{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <h1 className="page-title">{resolve(language, page.title || text('Rooted in community. Driven by impact.', 'মানুষের মধ্যেই আমাদের শিকড়। কাজের ফলই আমাদের পথ দেখায়।'))}</h1>
+          <p>{resolve(language, page.intro || text('We work directly with the people we serve, ensuring every initiative brings lasting, positive change.', 'আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।'))}</p>
         </div>
         <div className="image-frame framed">
           <img loading="lazy" src="/assets/foundation.webp" alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
@@ -100,9 +74,9 @@ function About() {
           hasPrev={modalDocIndex !== null && modalDocIndex > 0}
         />
         <div className="card-grid docs-grid">
-          {documents.map((doc) => (
+          {documents && documents.length > 0 ? documents.map((doc) => (
             <article
-              key={doc.href}
+              key={doc?.href || doc?.id || Math.random()}
               className="card doc-card"
               data-reveal
               role="button"
@@ -113,17 +87,17 @@ function About() {
               }}
             >
               <div className="doc-thumb-wrap">
-                <img className="doc-thumb" src={doc.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={resolve(language, doc.title)} />
+                <img className="doc-thumb" src={doc?.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={resolve(language, doc?.title)} />
               </div>
               <div className="card-body">
-                <h3>{resolve(language, doc.title)}</h3>
-                {doc.meta ? <p className="muted">{doc.meta}</p> : null}
-                {doc.caption ? <p className="muted small">{resolve(language, doc.caption)}</p> : null}
+                <h3>{resolve(language, doc?.title)}</h3>
+                {doc?.meta ? <p className="muted">{doc.meta}</p> : null}
+                {doc?.caption ? <p className="muted small">{resolve(language, doc.caption)}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
                   <button type="button" className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
                     {resolve(language, text('View', 'দেখুন'))}
                   </button>
-                  {doc.href.endsWith('.pdf') ? (
+                  {doc?.href && doc.href.endsWith('.pdf') ? (
                     <a className="btn" style={{ marginLeft: '0.5rem' }} href={doc.href} download onClick={(e) => e.stopPropagation()}>
                       {resolve(language, text('Download', 'ডাউনলোড'))}
                     </a>
@@ -131,54 +105,38 @@ function About() {
                 </div>
               </div>
             </article>
-          ))}
+          )) : null}
         </div>
       </section>
 
       <section className="panel split-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{copy[language].storyTitle}</p>
+            <p>{resolve(language, text('Our story', 'আমাদের গল্প'))}</p>
             <h2>{resolve(language, text('Grounded in field realities', 'মানুষের মাঝ থেকে'))}</h2>
           </div>
-          <p>{copy[language].storyBody}</p>
+          <p>{resolve(language, page.story || text('The foundation began from direct work with children and women in underserved areas.', 'শিশু আর নারীদের সঙ্গে কাজ করতে করতেই ফাউন্ডেশনের শুরু।'))}</p>
         </div>
         <div className="dual-card">
           <article>
-            <p className="meta">{copy[language].mission}</p>
-            <p>
-              {resolve(
-                language,
-                text(
-                  'Improve lives through education, healthcare, and basic support.',
-                  'শিক্ষা, স্বাস্থ্য আর দরকারি সাহায্যের মাধ্যমে মানুষের জীবন একটু সহজ করা।',
-                ),
-              )}
-            </p>
+            <p className="meta">{resolve(language, text('Mission', 'আমাদের লক্ষ্য'))}</p>
+            <p>{resolve(language, page.mission || text('To create lasting, positive change in the lives of children, women, and communities in South 24 Parganas.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের জীবনে স্থায়ী, ইতিবাচক পরিবর্তন আনা।'))}</p>
           </article>
           <article>
-            <p className="meta">{copy[language].vision}</p>
-            <p>
-              {resolve(
-                language,
-                text(
-                  'A Bengal where every child can learn and live with dignity.',
-                  'এমন এক বাংলা, যেখানে সব বাচ্চা পড়তে পারবে আর সম্মান নিয়ে বড় হবে।',
-                ),
-              )}
-            </p>
+            <p className="meta">{resolve(language, text('Vision', 'আমাদের দৃষ্টিভঙ্গি'))}</p>
+            <p>{resolve(language, page.vision || text('A community where every child has access to quality education, healthcare, and dignity.', 'এমন এক সম্প্রদায় যেখানে প্রতিটি শিশু মানসম্পন্ন শিক্ষা, স্বাস্থ্যসেবা ও মর্যাদা পায়।'))}</p>
           </article>
         </div>
       </section>
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{copy[language].values}</p>
+          <p>{resolve(language, text('Guided by shared principles', 'আমাদের ভাগ করা নীতিগুলি আমাদের পথ দেখায়'))}</p>
           <h2>{resolve(language, text('How we work', 'আমাদের কাজের ধরন'))}</h2>
         </div>
         <div className="card-grid four-up">
-          {values.map((value) => (
-            <article key={resolve(language, value)} className="card value-card" data-reveal>
+          {(page.values && page.values.length ? page.values : values).map((value, idx) => (
+            <article key={idx} className="card value-card" data-reveal>
               <div className="card-body">
                 <h3>{resolve(language, value)}</h3>
                 <p>
@@ -205,7 +163,7 @@ function About() {
         </div>
         <div>
           <div className="section-head">
-            <p>{copy[language].legal}</p>
+            <p>{resolve(language, text('Legally registered and transparent', 'আইনগতভাবে নিবন্ধিত আর খোলামেলা'))}</p>
             <h2>{resolve(language, text('Registration and accountability', 'নিবন্ধন ও স্বচ্ছতা'))}</h2>
           </div>
           <div className="stack-list">
@@ -224,11 +182,13 @@ function About() {
             <article className="stack-card">
               <p className="meta">{resolve(language, text('Partners', 'সহযোগীরা'))}</p>
               <div className="partner-list" role="list" aria-label={resolve(language, text('Partners', 'সহযোগীরা'))}>
-                {about.partners.map((partner) => (
-                  <span key={resolve(language, partner)} className="pill partner-pill" role="listitem">
-                    {resolve(language, partner)}
-                  </span>
-                ))}
+                {about.partners && about.partners.length > 0
+                  ? about.partners.map((partner) => (
+                      <span key={resolve(language, partner)} className="pill partner-pill" role="listitem">
+                        {resolve(language, partner)}
+                      </span>
+                    ))
+                  : null}
               </div>
             </article>
           </div>
@@ -237,19 +197,21 @@ function About() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{copy[language].values}</p>
+          <p>{resolve(language, text('Dedicated people, doing important work', 'নিবেদিতপ্রাণ মানুষ, গুরুত্বপূর্ণ কাজ করছেন'))}</p>
           <h2>{resolve(language, text('Team snapshot', 'আমাদের দলের এক ঝলক'))}</h2>
         </div>
         <div className="card-grid">
-          {about.teamMembers.map((member) => (
-            <article key={resolve(language, member.name)} className="card person-card" data-reveal>
-              <img loading="lazy" src={member.image} alt={resolve(language, member.name)} />
-              <div className="card-body">
-                <h3>{resolve(language, member.name)}</h3>
-                <p>{resolve(language, member.role)}</p>
-              </div>
-            </article>
-          ))}
+          {about.teamMembers && about.teamMembers.length > 0
+            ? about.teamMembers.map((member) => (
+                <article key={resolve(language, member.name)} className="card person-card" data-reveal>
+                  <img loading="lazy" src={member.image} alt={resolve(language, member.name)} />
+                  <div className="card-body">
+                    <h3>{resolve(language, member.name)}</h3>
+                    <p>{resolve(language, member.role)}</p>
+                  </div>
+                </article>
+              ))
+            : null}
         </div>
       </section>
     </main>

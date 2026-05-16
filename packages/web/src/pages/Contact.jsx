@@ -141,24 +141,28 @@ function Contact() {
         </div>
         <div className="story-layout contact-story-layout">
           <div className="stack-list">
-            {contact.facebookPosts.slice(3, 6).map((post) => (
-              <article key={post.date} className="post-card compact-post" data-reveal>
-                <img loading="lazy" src={post.image} alt={resolve(language, post.title)} />
-                <div className="card-body">
-                  <p className="meta">{post.date}</p>
-                  <h3>{resolve(language, post.title)}</h3>
-                  <p>{resolve(language, post.excerpt)}</p>
-                </div>
-              </article>
-            ))}
+            {contact.facebookPosts && contact.facebookPosts.length > 0 
+              ? contact.facebookPosts.slice(3, 6).map((post) => (
+                  <article key={post.date} className="post-card compact-post" data-reveal>
+                    <img loading="lazy" src={post.image} alt={resolve(language, post.title)} />
+                    <div className="card-body">
+                      <p className="meta">{post.date}</p>
+                      <h3>{resolve(language, post.title)}</h3>
+                      <p>{resolve(language, post.excerpt)}</p>
+                    </div>
+                  </article>
+                ))
+              : null}
           </div>
           <div className="photo-mosaic">
-            {contact.showcaseImages.map((photo) => (
-              <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
-                <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
-                <figcaption>{resolve(language, photo.label)}</figcaption>
-              </figure>
-            ))}
+            {contact.showcaseImages && contact.showcaseImages.length > 0
+              ? contact.showcaseImages.map((photo) => (
+                  <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
+                    <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
+                    <figcaption>{resolve(language, photo.label)}</figcaption>
+                  </figure>
+                ))
+              : null}
           </div>
         </div>
       </section>

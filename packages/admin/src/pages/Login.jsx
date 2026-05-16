@@ -21,7 +21,7 @@ function Login({ onLogin, isAuthenticated }) {
       await onLogin(email, password)
       navigate('/')
     } catch (err) {
-      setError(err.message || 'Unable to sign in')
+      setError(err.response?.data?.error || err.message || 'Unable to sign in')
     } finally {
       setLoading(false)
     }

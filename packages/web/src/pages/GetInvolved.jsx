@@ -4,13 +4,10 @@ import { resolve, text } from '../content'
 import DocumentModal from '../components/DocumentModal'
 import { submitFormWeb3 } from '../utils/web3forms'
 
-const demoUpiQr = '/docs/upi-qr.jpeg'
-const upiIntentUrl =
-  'upi://pay?pa=8420119790%40okbizaxis&pn=Heritage%20of%20Hope%20Foundation&cu=INR'
-
 function GetInvolved() {
   const { language, siteContent } = useOutletContext()
   const { getInvolved } = siteContent
+  const page = getInvolved.pageContent || {}
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalDoc, setModalDoc] = useState(null)
@@ -19,48 +16,24 @@ function GetInvolved() {
   const [partnerSubmitting, setPartnerSubmitting] = useState(false)
   const [partnerStatus, setPartnerStatus] = useState(null)
 
-  const copy = {
-    en: {
-      title: 'Join us in making a difference.',
-      intro:
-        'Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.',
-      qrTitle: 'Scan to donate',
-      qrBody:
-        'Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.',
-      upiCta: 'Pay via UPI app',
-      upiHint: 'On mobile, this opens your installed UPI app directly.',
-      upiFallback: 'If no UPI app opens on this device, please use the QR code above to complete payment.',
-    },
-    bn: {
-      title: 'পরিবর্তন আনতে পাশে থাকুন।',
-      intro:
-        'অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়।',
-      qrTitle: 'স্ক্যান করে অনুদান দিন',
-      qrBody:
-        'আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।',
-      upiCta: 'UPI অ্যাপ দিয়ে পেমেন্ট করুন',
-      upiHint: 'মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।',
-      upiFallback: 'এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন।',
-    },
-  }
 
   return (
     <main className="page-stack page-involved">
       <section className="panel split-panel" id="donate" data-reveal>
         <div>
           <p className="eyebrow">{resolve(language, text('Get Involved', 'সাথে থাকুন'))}</p>
-          <h1 className="page-title">{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <h1 className="page-title">{resolve(language, page.title || text('Join us in making a difference.', 'পরিবর্তন আনতে পাশে থাকুন।'))}</h1>
+          <p>{resolve(language, page.intro || text('Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.', 'অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়।'))}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, text('Bank details', 'ব্যাংক তথ্য'))}</p>
-          <p>Heritage of Hope Foundation</p>
-          <p>{resolve(language, text('State Bank of India, Ruby Park Branch', 'স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক ব্রাঞ্চ'))}</p>
-          <p>{resolve(language, text('A/C No: 43107075580', 'হিসাব নম্বর: 43107075580'))}</p>
-          <p>{resolve(language, text('IFSC: SBIN0008438', 'আইএফএসসি: SBIN0008438'))}</p>
+          <p className="meta">{resolve(language, page.bankLabel || text('Bank details', 'ব্যাংক তথ্য'))}</p>
+          <p>{page.bank?.name || 'Heritage of Hope Foundation'}</p>
+          <p>{resolve(language, page.bank?.branch || text('State Bank of India, Ruby Park Branch', 'স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক ব্রাঞ্চ'))}</p>
+          <p>{resolve(language, page.bank?.account || text('A/C No: 43107075580', 'হিসাব নম্বর: 43107075580'))}</p>
+          <p>{resolve(language, page.bank?.ifsc || text('IFSC: SBIN0008438', 'আইএফএসসি: SBIN0008438'))}</p>
           <div style={{ marginTop: '0.75rem' }}>
-            <button type="button" className="btn btn-ghost" onClick={() => { setModalDoc({ src: '/docs/empty-cheque.jpeg', title: resolve(language, text('Specimen cheque', 'উদাহরণ চেক')) }); setModalOpen(true) }}>
-              {resolve(language, text('View specimen cheque', 'চেক দেখুন'))}
+            <button type="button" className="btn btn-ghost" onClick={() => { setModalDoc({ src: page.chequeSpecimen || '/docs/empty-cheque.jpeg', title: resolve(language, page.chequeSpecimenLabel || text('Specimen cheque', 'উদাহরণ চেক')) }); setModalOpen(true) }}>
+              {resolve(language, page.chequeSpecimenLabel || text('View specimen cheque', 'চেক দেখুন'))}
             </button>
           </div>
         </div>
@@ -75,8 +48,8 @@ function GetInvolved() {
             <h2>{resolve(language, text('What your support can do', 'আপনার সাহায্যে কী করা যায়'))}</h2>
           </div>
           <div className="donation-ladder-list">
-            {getInvolved.donationSteps.map((step) => (
-              <article key={step.amount} className="donation-option card value-card" data-reveal>
+            {(page.donationSteps || getInvolved.donationSteps || []).map((step) => (
+              <article key={step.amount || step.id} className="donation-option card value-card" data-reveal>
                 <span className="donation-amount">{step.amount}</span>
                 <p>{resolve(language, step.title)}</p>
               </article>
@@ -86,23 +59,23 @@ function GetInvolved() {
         <aside className="mini-panel accent-panel qr-panel">
           <div className="section-head">
             <p>{resolve(language, text('UPI payment', 'ইউপিআই পেমেন্ট'))}</p>
-            <h2>{copy[language].qrTitle}</h2>
+            <h2>{resolve(language, page.qrTitle || text('Scan to donate', 'স্ক্যান করে অনুদান দিন'))}</h2>
           </div>
           <div className="qr-frame">
             <img
-              src={demoUpiQr}
-              alt={resolve(language, text('Official UPI QR code for donations', 'দানের জন্য আনুষ্ঠানিক ইউপিআই কিউআর কোড'))}
+              src={page.upiQr || '/docs/upi-qr.jpeg'}
+              alt={resolve(language, page.upiQrAlt || text('Official UPI QR code for donations', 'দানের জন্য আনুষ্ঠানিক ইউপিআই কিউআর কোড'))}
               loading="lazy"
             />
           </div>
           <div style={{ marginTop: '0.75rem' }}>
-            <a className="btn btn-solid" href={upiIntentUrl}>
-              {copy[language].upiCta}
+            <a className="btn btn-solid" href={page.upiIntentUrl || 'upi://pay?pa=8420119790%40okbizaxis&pn=Heritage%20of%20Hope%20Foundation&cu=INR'}>
+              {resolve(language, page.upiCta || text('Pay via UPI app', 'UPI অ্যাপ দিয়ে পেমেন্ট করুন'))}
             </a>
           </div>
-          <p className="qr-note" style={{ marginTop: '0.45rem' }}>{copy[language].upiHint}</p>
-          <p className="qr-note">{copy[language].upiFallback}</p>
-          <p className="qr-note">{copy[language].qrBody}</p>
+          <p className="qr-note" style={{ marginTop: '0.45rem' }}>{resolve(language, page.upiHint || text('On mobile, this opens your installed UPI app directly.', 'মোবাইলে চাপলে আপনার UPI অ্যাপ খুলে যাবে।'))}</p>
+          <p className="qr-note">{resolve(language, page.upiFallback || text('If no UPI app opens on this device, please use the QR code above to complete payment.', 'এই ডিভাইসে UPI অ্যাপ না খুললে, উপরের QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন।'))}</p>
+          <p className="qr-note">{resolve(language, page.qrBody || text('Scan this official UPI QR code to donate. You can also use the bank details above for direct transfers. After donating, email us your UTR for a receipt.', 'আনুষ্ঠানিক ইউপিআই কিউআর কোড স্ক্যান করে অনুদান দিন। চাইলে উপরের ব্যাংক তথ্য দিয়েও টাকা পাঠাতে পারেন। দানের পরে রসিদের জন্য UTR ইমেল করুন।'))}</p>
         </aside>
       </section>
 
@@ -113,7 +86,7 @@ function GetInvolved() {
             <h2>{resolve(language, text('People matter more than perfection', 'মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়'))}</h2>
           </div>
           <div className="card-grid two-up">
-            {getInvolved.volunteerRoles.map((role) => (
+            {(page.volunteerRoles || getInvolved.volunteerRoles || []).map((role) => (
               <article key={resolve(language, role)} className="card value-card" data-reveal>
                 <div className="card-body">
                   <h3>{resolve(language, role)}</h3>
@@ -182,7 +155,7 @@ function GetInvolved() {
               <label htmlFor="volunteer-role">{resolve(language, text('Area of interest', 'আগ্রহের ক্ষেত্র'))}</label>
               <select id="volunteer-role" name="area_of_interest" required>
                 <option value="">{resolve(language, text('Choose one', 'একটি বেছে নিন'))}</option>
-                {getInvolved.volunteerRoles.map((role) => (
+                {(page.volunteerRoles || getInvolved.volunteerRoles || []).map((role) => (
                   <option key={resolve(language, role)} value={resolve(language, role)}>
                     {resolve(language, role)}
                   </option>

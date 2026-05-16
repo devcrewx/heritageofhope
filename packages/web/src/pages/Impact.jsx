@@ -5,6 +5,7 @@ import CountUp from '../components/CountUp'
 function Impact() {
   const { language, siteContent } = useOutletContext()
   const { impact } = siteContent
+  const page = impact.pageContent || {}
 
   const copy = {
     en: {
@@ -24,8 +25,8 @@ function Impact() {
       <section className="panel split-panel" data-reveal>
         <div>
           <p className="eyebrow">{resolve(language, text('Impact', 'ফলাফল'))}</p>
-          <h1 className="page-title">{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <h1 className="page-title">{resolve(language, page.title || copy[language].title)}</h1>
+          <p>{resolve(language, page.intro || copy[language].intro)}</p>
         </div>
         <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, text('Our Promise', 'আমাদের অঙ্গীকার'))}</p>
@@ -35,8 +36,8 @@ function Impact() {
 
       <section className="panel" data-reveal>
         <div className="metric-grid">
-          {impact.impactMetrics.map((metric) => (
-            <article key={resolve(language, metric.label)} className="metric-card" data-reveal>
+          {(Array.isArray(page.metrics) && page.metrics.length > 0 ? page.metrics : impact.impactMetrics || []).map((metric) => (
+            <article key={resolve(language, metric.label) || metric.id || metric.value} className="metric-card" data-reveal>
               <h3><CountUp value={metric.value} /></h3>
               <p>{resolve(language, metric.label)}</p>
             </article>
@@ -51,8 +52,8 @@ function Impact() {
             <h2>{resolve(language, text('How support is used', 'আপনাদের সাহায্য কীভাবে কাজে লাগে'))}</h2>
           </div>
           <div className="stack-list">
-            {impact.fundAllocation.map((item) => (
-              <article key={resolve(language, item.label)} className="stack-card progress-card" data-reveal>
+            {(Array.isArray(page.fundAllocation) && page.fundAllocation.length > 0 ? page.fundAllocation : impact.fundAllocation || []).map((item) => (
+              <article key={resolve(language, item.label) || item.id || item.label} className="stack-card progress-card" data-reveal>
                 <div className="progress-line">
                   <span>{resolve(language, item.label)}</span>
                   <strong>{item.value}%</strong>
@@ -64,28 +65,12 @@ function Impact() {
         </div>
         <div className="stack-list">
           <article className="stack-card quote-card" data-reveal>
-            <p className="meta">{resolve(language, text('Community Feedback', 'মানুষের কথা'))}</p>
-            <p>
-              {resolve(
-                language,
-                text(
-                  '"Thanks to Kishalaya Pathsala and the Foundation, our children receive dedicated guidance and winter support that keeps them learning year-round."',
-                  '"কিশলয় পাঠশালা ও ফাউন্ডেশনের কারণে আমাদের ছেলেমেয়েরা যত্নশীল শিক্ষা ও শীতের সহায়তা পাচ্ছে, যা তাদের সারা বছর পড়াশোনায় যুক্ত রাখে।"',
-                ),
-              )}
-            </p>
+            <p className="meta">{resolve(language, page.feedbackLabel || text('Community Feedback', 'মানুষের কথা'))}</p>
+            <p>{resolve(language, page.feedback || text('"Thanks to Kishalaya Pathsala and the Foundation, our children receive dedicated guidance and winter support that keeps them learning year-round."', '"কিশলয় পাঠশালা ও ফাউন্ডেশনের কারণে আমাদের ছেলেমেয়েরা যত্নশীল শিক্ষা ও শীতের সহায়তা পাচ্ছে, যা তাদের সারা বছর পড়াশোনায় যুক্ত রাখে।"'))}</p>
           </article>
           <article className="stack-card quote-card" data-reveal>
-            <p className="meta">{resolve(language, text('Annual report', 'বার্ষিক রিপোর্ট'))}</p>
-            <p>
-              {resolve(
-                language,
-                text(
-                  'Our 2025-2026 Impact Report is currently being compiled and will be available for download soon.',
-                  '২০২৫-২৬ সালের কাজের রিপোর্ট এখন তৈরি হচ্ছে, শীঘ্রই ডাউনলোড করতে পারবেন।',
-                ),
-              )}
-            </p>
+            <p className="meta">{resolve(language, page.reportLabel || text('Annual report', 'বার্ষিক রিপোর্ট'))}</p>
+            <p>{resolve(language, page.report || text('Our 2025-2026 Impact Report is currently being compiled and will be available for download soon.', '২০২৫-২৬ সালের কাজের রিপোর্ট এখন তৈরি হচ্ছে, শীঘ্রই ডাউনলোড করতে পারবেন।'))}</p>
           </article>
         </div>
       </section>

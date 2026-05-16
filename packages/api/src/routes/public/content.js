@@ -1,15 +1,35 @@
 import { Router } from 'express'
 import { getSiteContent } from '../../data/siteContent.js'
+import { getCachedContent, setCachedContent, invalidateCache } from '../../lib/contentCache.js'
 import { prisma } from '../../lib/prisma.js'
 
 const router = Router()
 
 router.get('/', async (_req, res) => {
   try {
+    // Try cached version first
+    const cached = getCachedContent()
+    if (cached) {
+      return res.json(cached)
+    }
+
+    // Fetch fresh from database (batched to reduce connection pool strain)
     const content = await getSiteContent()
+    
+    // Cache for 1 minute
+    setCachedContent(content)
+    
     res.json(content)
   } catch (error) {
     console.error('Error fetching content:', error)
+    
+    // If freshness fails, try serving stale cache as degraded response
+    const stale = getCachedContent()
+    if (stale) {
+      console.warn('Serving stale cache due to database error')
+      return res.json(stale)
+    }
+    
     res.status(500).json({ error: 'Failed to fetch site content' })
   }
 })

@@ -39,14 +39,16 @@ function Home() {
         'অল্প সাহায্যেও আমাদের ক্লাস চালানো, স্বাস্থ্যকাজ সামলানো আর মানুষের পাশে থাকা সহজ হয়।',
     },
   }
+  const hero = home.hero || {}
+  const cta = home.cta || {}
 
   return (
     <main className="page-stack page-home">
       <section className="hero-panel" id="home" data-reveal>
         <div className="hero-content">
-          <p className="eyebrow">{copy[language].eyebrow}</p>
-          <h1>{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <p className="eyebrow">{resolve(language, hero.eyebrow || text(copy.en.eyebrow, copy.bn.eyebrow))}</p>
+          <h1>{resolve(language, hero.headline || text(copy.en.title, copy.bn.title))}</h1>
+          <p>{resolve(language, hero.intro || text(copy.en.intro, copy.bn.intro))}</p>
           <div className="hero-cta">
             <Link className="btn btn-solid" to="/get-involved#donate">
               {copy[language].primary}
@@ -56,11 +58,11 @@ function Home() {
             </Link>
           </div>
           <div className="trust-strip">
-            <span>{resolve(language, siteMeta.registeredBadge || text('Registered NGO', 'নিবন্ধিত সংস্থা'))}</span>
-            <span>{resolve(language, text(siteMeta.estYear || 'Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
-            <span>{resolve(language, text('Govt. of West Bengal', 'পশ্চিমবঙ্গ সরকার'))}</span>
+            <span>{resolve(language, hero.badge1 || siteMeta.registeredBadge || text('Registered NGO', 'নিবন্ধিত সংস্থা'))}</span>
+            <span>{resolve(language, hero.badge2 || text(siteMeta.estYear || 'Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
+            <span>{resolve(language, hero.badge3 || text('Govt. of West Bengal', 'পশ্চিমবঙ্গ সরকার'))}</span>
           </div>
-          <p className="hero-footnote">{resolve(language, siteMeta.navbarSubtitle || text(copy.en.heroTagline, copy.bn.heroTagline))}</p>
+          <p className="hero-footnote">{resolve(language, hero.eyebrow ? (hero.eyebrow) : (siteMeta.navbarSubtitle || text(copy.en.heroTagline, copy.bn.heroTagline)))}</p>
         </div>
 
         <aside className="hero-media editorial-hero">
@@ -98,12 +100,14 @@ function Home() {
           <h2>{resolve(language, text('Impact snapshot', 'এক নজরে আমাদের কাজ'))}</h2>
         </div>
         <div className="metric-grid">
-          {home.impactMetrics.map((metric) => (
-            <article key={resolve(language, metric.label)} className="metric-card">
-              <h3><CountUp value={metric.value} /></h3>
-              <p>{resolve(language, metric.label)}</p>
-            </article>
-          ))}
+          {home.impactMetrics && home.impactMetrics.length > 0
+            ? home.impactMetrics.map((metric) => (
+                <article key={resolve(language, metric.label)} className="metric-card">
+                  <h3><CountUp value={metric.value} /></h3>
+                  <p>{resolve(language, metric.label)}</p>
+                </article>
+              ))
+            : null}
         </div>
       </section>
 
@@ -113,16 +117,18 @@ function Home() {
           <h2>{resolve(language, text('What we do on the ground', 'মানুষের দোরগোড়ায় আমাদের কাজ'))}</h2>
         </div>
         <div className="card-grid">
-          {home.featuredPrograms.slice(0, 3).map((program) => (
-              <article key={program.slug} className="card program-card" data-reveal>
-              <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
-              <div className="card-body">
-                <span className="pill">{resolve(language, program.category)}</span>
-                <h3>{resolve(language, program.title)}</h3>
-                <p>{resolve(language, program.description)}</p>
-              </div>
-            </article>
-          ))}
+          {home.featuredPrograms && home.featuredPrograms.length > 0
+            ? home.featuredPrograms.slice(0, 3).map((program) => (
+                <article key={program.slug} className="card program-card" data-reveal>
+                  <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
+                  <div className="card-body">
+                    <span className="pill">{resolve(language, program.category)}</span>
+                    <h3>{resolve(language, program.title)}</h3>
+                    <p>{resolve(language, program.description)}</p>
+                  </div>
+                </article>
+              ))
+            : null}
         </div>
       </section>
 
@@ -133,24 +139,28 @@ function Home() {
         </div>
         <div className="story-layout">
           <div className="post-list">
-            {home.facebookPosts.slice(0, 4).map((post) => (
-              <article key={post.date} className="post-card compact-row" data-reveal>
-                <img loading="lazy" className="post-thumb" src={post.image} alt={resolve(language, post.title)} />
-                <div className="card-body">
-                  <p className="meta">{post.date}</p>
-                  <h3>{resolve(language, post.title)}</h3>
-                  <p>{resolve(language, post.excerpt)}</p>
-                </div>
-              </article>
-            ))}
+            {home.facebookPosts && home.facebookPosts.length > 0
+              ? home.facebookPosts.slice(0, 4).map((post) => (
+                  <article key={post.date} className="post-card compact-row" data-reveal>
+                    <img loading="lazy" className="post-thumb" src={post.image} alt={resolve(language, post.title)} />
+                    <div className="card-body">
+                      <p className="meta">{post.date}</p>
+                      <h3>{resolve(language, post.title)}</h3>
+                      <p>{resolve(language, post.excerpt)}</p>
+                    </div>
+                  </article>
+                ))
+              : null}
           </div>
           <div className="photo-mosaic">
-            {home.showcaseImages.map((photo) => (
-              <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
-                <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
-                <figcaption>{resolve(language, photo.label)}</figcaption>
-              </figure>
-            ))}
+            {home.showcaseImages && home.showcaseImages.length > 0
+              ? home.showcaseImages.map((photo) => (
+                  <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
+                    <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
+                    <figcaption>{resolve(language, photo.label)}</figcaption>
+                  </figure>
+                ))
+              : null}
           </div>
         </div>
       </section>
@@ -158,8 +168,8 @@ function Home() {
       <section className="panel donation-cta" data-reveal>
         <div>
           <p className="eyebrow">{resolve(language, text('Donate', 'সাহায্য করুন'))}</p>
-          <h2>{copy[language].donationTitle}</h2>
-          <p>{copy[language].donationBody}</p>
+          <h2>{resolve(language, cta.headline || text(copy.en.donationTitle, copy.bn.donationTitle))}</h2>
+          <p>{resolve(language, cta.body || text(copy.en.donationBody, copy.bn.donationBody))}</p>
         </div>
         <Link className="btn btn-solid" to="/get-involved#donate">
           {resolve(language, text('Donate now', 'আজই সাহায্যের হাত বাড়িয়ে দিন'))}

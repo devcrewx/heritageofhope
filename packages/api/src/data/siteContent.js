@@ -4,53 +4,74 @@ import {
   contactDetails,
   navItems,
   showcaseImages,
-  documents,
+  documents as staticDocuments,
   featuredPrograms as fallbackFeaturedPrograms,
+  impactMetrics as fallbackImpactMetrics,
 } from './staticContent.js'
+
+const fallbackDocuments = [
+  { title: { en: '12A Certificate', bn: '১२এ শংসাপত্র' }, href: '#', thumb: '/docs/thumbs/pdf-thumb.svg' },
+  { title: { en: '80G Certificate', bn: '৮०जी शंसापत्र' }, href: '#', thumb: '/docs/thumbs/pdf-thumb.svg' },
+]
 
 /**
  * Fetch all site content from database and combine with hardcoded items.
  * This function retrieves seeded data from Supabase and merges it with
  * design system items (nav, programs, contacts) that are static.
+ * 
+ * Uses sequential batching to avoid exhausting Supabase free tier connection pool (15 max).
  */
 export async function getSiteContent() {
   try {
-    // Fetch all database-backed content in parallel
+    // Batch 1: Fetch page content (5 queries)
     const [
       settings,
-      ourWorkContent,
+      homeContent,
+      aboutContent,
+      impactContent,
+      getInvolvedContent,
+    ] = await Promise.all([
+      prisma.siteContent.findMany({ where: { page: 'settings' } }),
+      prisma.siteContent.findMany({ where: { page: 'home' } }),
+      prisma.siteContent.findMany({ where: { page: 'about' } }),
+      prisma.siteContent.findMany({ where: { page: 'impact' } }),
+      prisma.siteContent.findMany({ where: { page: 'getInvolved' } }),
+    ])
+
+    // Also fetch our-work page content
+    const ourWorkContent = await prisma.siteContent.findMany({ where: { page: 'our-work' } })
+
+    // Batch 2: Fetch data tables (5 queries)
+    const [
       impactStats,
       galleryItems,
       teamMembers,
       partners,
+      documents,
+    ] = await Promise.all([
+      prisma.impactStat.findMany({ orderBy: { sortOrder: 'asc' } }),
+      prisma.galleryItem.findMany({ orderBy: { sortOrder: 'asc' } }),
+      prisma.teamMember.findMany({ orderBy: { sortOrder: 'asc' } }),
+      prisma.partner.findMany({ orderBy: { sortOrder: 'asc' } }),
+      prisma.document.findMany({ orderBy: { sortOrder: 'asc' } }),
+    ])
+
+    // Batch 3: Fetch remaining (5 queries)
+    const [
       donationTiers,
       fundAllocation,
       volunteerRoles,
       activityPosts,
       coreValues,
     ] = await Promise.all([
-      prisma.siteContent.findMany({ where: { page: 'settings' } }),
-      prisma.siteContent.findMany({ where: { page: 'our-work' } }),
-      prisma.impactStat.findMany({ orderBy: { sortOrder: 'asc' } }),
-      prisma.galleryItem.findMany({ orderBy: { sortOrder: 'asc' } }),
-      prisma.teamMember.findMany({ orderBy: { sortOrder: 'asc' } }),
-      prisma.partner.findMany({
-        where: { isActive: true },
-        orderBy: { sortOrder: 'asc' },
-      }),
       prisma.donationTier.findMany({ orderBy: { sortOrder: 'asc' } }),
       prisma.fundAllocation.findMany({ orderBy: { sortOrder: 'asc' } }),
       prisma.volunteerRole.findMany({ orderBy: { sortOrder: 'asc' } }),
-      prisma.activityPost.findMany({
-        where: { isPublished: true },
-        orderBy: { sortOrder: 'asc' },
-      }),
+      prisma.activityPost.findMany({ orderBy: { sortOrder: 'asc' } }),
       prisma.coreValue.findMany({ orderBy: { sortOrder: 'asc' } }),
-      // Fetch programs from DB instead of using the static bundle
-      prisma.program.findMany({ orderBy: { sortOrder: 'asc' } }),
     ])
 
-    // (programs fetched directly below when transforming)
+    // Transform and organize all content into the siteContent object structure
 
     const settingsMap = settings.reduce((accumulator, item) => {
       accumulator[item.fieldKey] = {
@@ -96,10 +117,29 @@ export async function getSiteContent() {
     }
 
     // Transform database records to match frontend structure
-    const transformedImpactMetrics = impactStats.map((stat) => ({
-      value: stat.value,
-      label: { en: stat.labelEn, bn: stat.labelBn || stat.labelEn },
-    }))
+    const transformedImpactMetrics = (impactStats && impactStats.length > 0)
+      ? impactStats.map((stat) => {
+          const raw = String(stat.value || '')
+          const digitsOnly = /^\d+$/.test(raw)
+          return {
+            value: digitsOnly ? `${raw}+` : raw,
+            label: { en: stat.labelEn, bn: stat.labelBn || stat.labelEn },
+          }
+        })
+      : fallbackImpactMetrics
+
+    // Build maps for pages that store structured key/value rows (home, about, impact, getInvolved)
+    const buildPageMap = (rows) =>
+      rows.reduce((acc, item) => {
+        if (!acc[item.section]) acc[item.section] = {}
+        acc[item.section][item.fieldKey] = { en: item.valueEn, bn: item.valueBn }
+        return acc
+      }, {})
+
+    const homeMap = buildPageMap(homeContent || [])
+    const aboutMap = buildPageMap(aboutContent || [])
+    const impactMap = buildPageMap(impactContent || [])
+    const getInvolvedMap = buildPageMap(getInvolvedContent || [])
 
     const transformedGalleryItems = galleryItems.map((item) => ({
       image: item.url,
@@ -163,6 +203,17 @@ export async function getSiteContent() {
       bn: value.titleBn || value.titleEn,
     }))
 
+    const transformedDocuments = documents && documents.length > 0 
+      ? documents.map((doc) => ({
+          title: { en: doc.titleEn, bn: doc.titleBn || doc.titleEn },
+          href: doc.url || doc.documentUrl || '#',
+          thumb: doc.thumbnailUrl || doc.previewUrl || '/docs/thumbs/pdf-thumb.svg',
+          description: { en: doc.descriptionEn || '', bn: doc.descriptionBn || doc.descriptionEn || '' },
+          meta: doc.meta,
+          caption: { en: doc.captionEn, bn: doc.captionBn || doc.captionEn },
+        }))
+      : fallbackDocuments  // Use fallback from staticContent if DB is empty
+
     // Construct response matching original siteContent structure
     return {
       navItems,
@@ -173,16 +224,55 @@ export async function getSiteContent() {
         impactMetrics: transformedImpactMetrics,
         donationSteps: transformedDonationTiers,
         showcaseImages: showcaseImages.home,
+        // admin-managed fields (hero, mission, cta)
+        hero: {
+          eyebrow: homeMap.hero?.eyebrow,
+          headline: homeMap.hero?.headline,
+          intro: homeMap.hero?.intro,
+          badge1: homeMap.hero?.badge1,
+          badge2: homeMap.hero?.badge2,
+          badge3: homeMap.hero?.badge3,
+        },
+        mission: {
+          heading: homeMap.mission?.heading,
+        },
+        cta: {
+          headline: homeMap.cta?.headline,
+          body: homeMap.cta?.body,
+        },
       },
       about: {
         teamMembers: transformedTeamMembers,
         partners: transformedPartners,
-        documents,
+        documents: transformedDocuments,
         coreValues: transformedCoreValues,
+        pageContent: {
+          title: aboutMap.intro?.title,
+          intro: aboutMap.intro?.paragraph,
+          story: aboutMap.story?.body,
+          mission: aboutMap.mission?.statement,
+          vision: aboutMap.mission?.vision,
+          values: [
+            aboutMap.values?.value1_title,
+            aboutMap.values?.value2_title,
+            aboutMap.values?.value3_title,
+            aboutMap.values?.value4_title,
+          ].filter(Boolean),
+        },
       },
       impact: {
         impactMetrics: transformedImpactMetrics,
         fundAllocation: transformedFundAllocation,
+        pageContent: {
+          title: impactMap.intro?.title,
+          intro: impactMap.intro?.paragraph,
+          metrics: transformedImpactMetrics,
+          fundAllocation: transformedFundAllocation,
+          feedbackLabel: impactMap.feedback?.label,
+          feedback: impactMap.feedback?.quote,
+          reportLabel: impactMap.report?.label,
+          report: impactMap.report?.status,
+        },
       },
       gallery: {
         galleryItems: transformedGalleryItems,
@@ -192,6 +282,45 @@ export async function getSiteContent() {
         donationSteps: transformedDonationTiers,
         volunteerRoles: transformedVolunteerRoles,
         contactDetails: contactDetailsFromSettings,
+        pageContent: {
+          title: getInvolvedMap.intro?.title,
+          intro: getInvolvedMap.intro?.paragraph,
+          bankLabel: getInvolvedMap.bank?.label,
+          bank: {
+            name: getInvolvedMap.bank?.name,
+            branch: getInvolvedMap.bank?.branch,
+            account: getInvolvedMap.bank?.account,
+            ifsc: getInvolvedMap.bank?.ifsc,
+          },
+          chequeSpecimenLabel: getInvolvedMap.bank?.chequeLabel,
+          chequeSpecimen: getInvolvedMap.bank?.chequeUrl,
+          qrTitle: getInvolvedMap.upi?.qrTitle,
+          upiQrAlt: getInvolvedMap.upi?.qrAlt,
+          upiQr: getInvolvedMap.upi?.qrUrl,
+          upiIntentUrl: getInvolvedMap.upi?.intentUrl,
+          upiCta: getInvolvedMap.upi?.ctaText,
+          upiHint: getInvolvedMap.upi?.hint,
+          upiFallback: getInvolvedMap.upi?.fallback,
+          qrBody: getInvolvedMap.upi?.body,
+          donationSteps: (
+            (
+              getInvolvedMap.donation?.steps ? JSON.parse(getInvolvedMap.donation?.steps) : null
+            ) || null
+          ) ?? transformedDonationTiers,
+          volunteerRoles: (
+            (
+              getInvolvedMap.volunteer?.roles ? JSON.parse(getInvolvedMap.volunteer?.roles) : null
+            ) || null
+          ) ?? transformedVolunteerRoles,
+          volunteer: {
+            heading: getInvolvedMap.volunteer?.heading,
+            description: getInvolvedMap.volunteer?.description,
+          },
+          partner: {
+            heading: getInvolvedMap.partner?.heading,
+            description: getInvolvedMap.partner?.description,
+          },
+        },
       },
       siteMeta: contactDetailsFromSettings,
       contact: {

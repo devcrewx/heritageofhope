@@ -23,10 +23,16 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const requestPath = error.config?.url || ''
+    const isLoginRequest = requestPath.includes('/api/admin/login')
+
+    if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem('hoh_admin_token')
       localStorage.removeItem('adminToken')
-      window.location.href = '/login'
+
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }

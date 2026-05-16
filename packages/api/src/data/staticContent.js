@@ -42,6 +42,13 @@ export const facebookPosts = [
   },
 ]
 
+export const impactMetrics = [
+  { value: '200+', label: { en: 'children supported', bn: 'শিশুর কাছে পৌঁছানো হয়েছে' } },
+  { value: '15+', label: { en: 'health & education drives', bn: 'স্বাস্থ্য ও শিক্ষা উদ্যোগ' } },
+  { value: '3+', label: { en: 'active partner organizations', bn: 'সক্রিয় সহযোগী সংস্থা' } },
+  { value: '5+', label: { en: 'communities served', bn: 'উপকৃত গ্রাম/এলাকা' } },
+]
+
 export const showcaseImages = {
   home: [
     { image: '/assets/pathsala.webp', label: { en: 'Learning Space', bn: 'শিক্ষা কেন্দ্র' } },
