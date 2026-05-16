@@ -10,4 +10,4 @@
 
 # Production API endpoint
 [env.production]
-  VITE_API_BASE_URL = "https://heritageofhope-api-production.up.railway.app"
+  VITE_API_BASE_URL = "https://heritageofhope-api.onrender.com"
