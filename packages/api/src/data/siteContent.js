@@ -75,6 +75,20 @@ export async function getSiteContent() {
     }, {})
 
     const contactDetailsFromSettings = {
+      orgName: settingsMap.org_name?.en || 'Heritage of Hope Foundation',
+      navbarSubtitle: {
+        en: settingsMap.navbar_subtitle?.en || 'Registered NGO | West Bengal',
+        bn: settingsMap.navbar_subtitle?.bn || 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ',
+      },
+      registeredBadge: {
+        en: settingsMap.registered_badge?.en || 'Registered NGO',
+        bn: settingsMap.registered_badge?.bn || 'নিবন্ধিত সংস্থা',
+      },
+      estYear: settingsMap.est_year?.en || 'Est. 2024',
+      footerMission: {
+        en: settingsMap.footer_mission?.en || 'Children, women and communities in South 24 Parganas, West Bengal.',
+        bn: settingsMap.footer_mission?.bn || 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
+      },
       phone: settingsMap.phone?.en || contactDetails.phone,
       email: settingsMap.email?.en || contactDetails.email,
       address: settingsMap.address?.en || contactDetails.address,
@@ -179,6 +193,7 @@ export async function getSiteContent() {
         volunteerRoles: transformedVolunteerRoles,
         contactDetails: contactDetailsFromSettings,
       },
+      siteMeta: contactDetailsFromSettings,
       contact: {
         contactDetails: contactDetailsFromSettings,
         facebookPosts,

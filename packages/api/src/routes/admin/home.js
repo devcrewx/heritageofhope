@@ -57,8 +57,8 @@ router.patch('/:section/:fieldKey', async (req, res) => {
       content = await prisma.siteContent.update({
         where: { id: existing.id },
         data: {
-          valueEn: valueEn || existing.valueEn,
-          valueBn: valueBn || existing.valueBn,
+          valueEn: valueEn !== undefined ? valueEn : existing.valueEn,
+          valueBn: valueBn !== undefined ? valueBn : existing.valueBn,
           updatedAt: new Date(),
         },
       })

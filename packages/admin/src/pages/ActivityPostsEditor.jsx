@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Upload, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
-import { apiClient } from '../api';
+import apiClient from '../lib/api';
+import { Toast } from '../components/Toast';
 
 export default function ActivityPostsEditor() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     titleEn: '',
@@ -20,14 +22,17 @@ export default function ActivityPostsEditor() {
     loadPosts();
   }, []);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
   const loadPosts = async () => {
     try {
       setLoading(true);
-      const { data } = await apiClient.get('/admin/activity-posts');
-      setPosts(data);
+      const response = await apiClient.get('/api/admin/activity-posts');
+      setPosts(response.data);
     } catch (error) {
-      console.error('Error loading activity posts:', error);
-      alert('Failed to load activity posts');
+      showToast('Failed to load activity posts', 'error');
     } finally {
       setLoading(false);
     }
@@ -83,20 +88,20 @@ export default function ActivityPostsEditor() {
       }
 
       if (editingId) {
-        await apiClient.patch(`/admin/activity-posts/${editingId}`, data, {
+        await apiClient.patch(`/api/admin/activity-posts/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       } else {
-        await apiClient.post('/admin/activity-posts', data, {
+        await apiClient.post('/api/admin/activity-posts', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }
 
       resetForm();
+      showToast(editingId ? 'Post updated' : 'Post created', 'success');
       await loadPosts();
     } catch (error) {
-      console.error('Error saving activity post:', error);
-      alert('Failed to save activity post');
+      showToast('Failed to save activity post', 'error');
     } finally {
       setLoading(false);
     }
@@ -120,11 +125,11 @@ export default function ActivityPostsEditor() {
 
     try {
       setLoading(true);
-      await apiClient.delete(`/admin/activity-posts/${id}`);
+      await apiClient.delete(`/api/admin/activity-posts/${id}`);
+      showToast('Post deleted', 'success');
       await loadPosts();
     } catch (error) {
-      console.error('Error deleting activity post:', error);
-      alert('Failed to delete activity post');
+      showToast('Failed to delete activity post', 'error');
     } finally {
       setLoading(false);
     }
@@ -143,7 +148,7 @@ export default function ActivityPostsEditor() {
 
     try {
       setLoading(true);
-      await apiClient.patch('/admin/activity-posts/reorder', {
+      await apiClient.patch('/api/admin/activity-posts/reorder', {
         posts: updatedPosts.map((p, i) => ({
           id: p.id,
           sortOrder: i
@@ -151,8 +156,7 @@ export default function ActivityPostsEditor() {
       });
       setPosts(updatedPosts);
     } catch (error) {
-      console.error('Error reordering posts:', error);
-      alert('Failed to reorder posts');
+      showToast('Failed to reorder posts', 'error');
     } finally {
       setLoading(false);
     }
@@ -374,6 +378,11 @@ export default function ActivityPostsEditor() {
           ))
         )}
       </div>
+
+      {/* Toast notification */}
+      {toast && (
+        <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
+      )}
     </div>
   );
 }

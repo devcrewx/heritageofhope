@@ -39,6 +39,11 @@ async function main() {
     await prisma.siteContent.createMany({
       data: [
         // Settings
+        { page: 'settings', section: 'general', fieldKey: 'org_name', valueEn: 'Heritage of Hope Foundation', valueBn: null },
+        { page: 'settings', section: 'general', fieldKey: 'navbar_subtitle', valueEn: 'Registered NGO | West Bengal', valueBn: 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ' },
+        { page: 'settings', section: 'general', fieldKey: 'registered_badge', valueEn: 'Registered NGO', valueBn: 'নিবন্ধিত সংস্থা' },
+        { page: 'settings', section: 'general', fieldKey: 'est_year', valueEn: 'Est. 2024', valueBn: 'প্রতিষ্ঠিত ২০২৪' },
+        { page: 'settings', section: 'general', fieldKey: 'footer_mission', valueEn: 'Children, women and communities in South 24 Parganas, West Bengal.', valueBn: 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।' },
         { page: 'settings', section: 'general', fieldKey: 'phone', valueEn: '+91 98765 43210', valueBn: null },
         { page: 'settings', section: 'general', fieldKey: 'email', valueEn: 'heritageofhopefoundation@gmail.com', valueBn: null },
         { page: 'settings', section: 'general', fieldKey: 'address', valueEn: 'Sukantapally, Subhas Gram, West Bengal 700147, India', valueBn: 'সুকান্তপল্লী, সুভাস গ্রাম, পশ্চিমবঙ্গ ৭০০১৪৭, ভারত' },

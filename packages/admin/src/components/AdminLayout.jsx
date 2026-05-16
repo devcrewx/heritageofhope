@@ -16,6 +16,7 @@ const links = [
   { to: '/get-involved', label: 'Get Involved' },
   { to: '/contact', label: 'Contact Page' },
   { to: '/submissions', label: 'Form Submissions' },
+  { to: '/change-password', label: 'Change Password' },
 ]
 
 function AdminLayout({ user, onLogout }) {

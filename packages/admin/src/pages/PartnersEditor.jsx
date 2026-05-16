@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Upload, ChevronUp, ChevronDown } from 'lucide-react';
-import { apiClient } from '../api';
+import apiClient from '../lib/api';
+import { Toast } from '../components/Toast';
 
 export default function PartnersEditor() {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     isActive: true,
@@ -16,14 +18,17 @@ export default function PartnersEditor() {
     loadPartners();
   }, []);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
   const loadPartners = async () => {
     try {
       setLoading(true);
-      const { data } = await apiClient.get('/admin/partners');
-      setPartners(data);
+      const response = await apiClient.get('/api/admin/partners');
+      setPartners(response.data);
     } catch (error) {
-      console.error('Error loading partners:', error);
-      alert('Failed to load partners');
+      showToast('Failed to load partners', 'error');
     } finally {
       setLoading(false);
     }
@@ -67,20 +72,20 @@ export default function PartnersEditor() {
       }
 
       if (editingId) {
-        await apiClient.patch(`/admin/partners/${editingId}`, data, {
+        await apiClient.patch(`/api/admin/partners/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       } else {
-        await apiClient.post('/admin/partners', data, {
+        await apiClient.post('/api/admin/partners', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }
 
       resetForm();
+      showToast(editingId ? 'Partner updated' : 'Partner added', 'success');
       await loadPartners();
     } catch (error) {
-      console.error('Error saving partner:', error);
-      alert('Failed to save partner');
+      showToast('Failed to save partner', 'error');
     } finally {
       setLoading(false);
     }
@@ -100,11 +105,11 @@ export default function PartnersEditor() {
 
     try {
       setLoading(true);
-      await apiClient.delete(`/admin/partners/${id}`);
+      await apiClient.delete(`/api/admin/partners/${id}`);
+      showToast('Partner deleted', 'success');
       await loadPartners();
     } catch (error) {
-      console.error('Error deleting partner:', error);
-      alert('Failed to delete partner');
+      showToast('Failed to delete partner', 'error');
     } finally {
       setLoading(false);
     }
@@ -123,7 +128,7 @@ export default function PartnersEditor() {
 
     try {
       setLoading(true);
-      await apiClient.patch('/admin/partners/reorder', {
+      await apiClient.patch('/api/admin/partners/reorder', {
         partners: updatedPartners.map((p, i) => ({
           id: p.id,
           sortOrder: i
@@ -131,8 +136,7 @@ export default function PartnersEditor() {
       });
       setPartners(updatedPartners);
     } catch (error) {
-      console.error('Error reordering partners:', error);
-      alert('Failed to reorder partners');
+      showToast('Failed to reorder partners', 'error');
     } finally {
       setLoading(false);
     }
@@ -288,6 +292,11 @@ export default function PartnersEditor() {
           ))
         )}
       </div>
+
+      {/* Toast notification */}
+      {toast && (
+        <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
+      )}
     </div>
   );
 }

@@ -7,6 +7,14 @@ const router = Router()
 // Apply JWT verification to all routes
 router.use(verifyJWT)
 
+function mergeContentValues(existing, valueEn, valueBn) {
+  return {
+    valueEn: valueEn !== undefined ? valueEn : existing.valueEn,
+    valueBn: valueBn !== undefined ? valueBn : existing.valueBn,
+    updatedAt: new Date(),
+  }
+}
+
 /**
  * PATCH /api/admin/content/settings/:fieldKey
  * Simple settings endpoint for basic NGO contact info
@@ -29,11 +37,7 @@ router.patch('/settings/:fieldKey', async (req, res) => {
     if (existing) {
       content = await prisma.siteContent.update({
         where: { id: existing.id },
-        data: {
-          valueEn: valueEn || existing.valueEn,
-          valueBn: valueBn || existing.valueBn,
-          updatedAt: new Date(),
-        },
+        data: mergeContentValues(existing, valueEn, valueBn),
       })
     } else {
       content = await prisma.siteContent.create({
@@ -67,7 +71,9 @@ router.patch('/:page/:section/:fieldKey', async (req, res) => {
     const { page, section, fieldKey } = req.params
     const { valueEn, valueBn } = req.body
 
-    if (!valueEn && !valueBn) {
+    // Only reject if both language values are completely absent (undefined).
+    // Allow empty strings so admins can explicitly clear content.
+    if (valueEn === undefined && valueBn === undefined) {
       return res.status(400).json({ error: 'At least one language value is required' })
     }
 
@@ -80,11 +86,7 @@ router.patch('/:page/:section/:fieldKey', async (req, res) => {
     if (existing) {
       content = await prisma.siteContent.update({
         where: { id: existing.id },
-        data: {
-          valueEn: valueEn || existing.valueEn,
-          valueBn: valueBn || existing.valueBn,
-          updatedAt: new Date(),
-        },
+        data: mergeContentValues(existing, valueEn, valueBn),
       })
     } else {
       content = await prisma.siteContent.create({

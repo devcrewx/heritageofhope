@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import { resolve, text } from '../content'
 
 function Layout({ language, setLanguage, siteContent }) {
+  const siteMeta = siteContent.siteMeta || {}
   const navCopy = {
     en: { donate: 'Donate Now', switchTo: 'বাংলা' },
     bn: { donate: 'সহযোগিতার হাত বাড়িয়ে দিন', switchTo: 'EN' },
@@ -80,12 +81,12 @@ function Layout({ language, setLanguage, siteContent }) {
         <Link
           className="brand"
           to="/"
-          aria-label="Heritage of Hope Foundation"
+          aria-label={siteMeta.orgName || 'Heritage of Hope Foundation'}
         >
           <img src="/assets/profile_pic.webp" alt="" />
           <div>
-            <p className="brand-name">Heritage of Hope Foundation</p>
-            <p className="brand-sub" aria-hidden="true">{resolve(language, text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
+            <p className="brand-name">{siteMeta.orgName || 'Heritage of Hope Foundation'}</p>
+            <p className="brand-sub" aria-hidden="true">{resolve(language, siteMeta.navbarSubtitle || text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
           </div>
         </Link>
 
@@ -141,12 +142,9 @@ function Layout({ language, setLanguage, siteContent }) {
 
         <footer className="footer">
           <div>
-            <p className="footer-title">Heritage of Hope Foundation</p>
+            <p className="footer-title">{siteMeta.orgName || 'Heritage of Hope Foundation'}</p>
             <p>
-              {resolve(
-                language,
-                text('Children, women and communities in South 24 Parganas, West Bengal.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।'),
-              )}
+              {resolve(language, siteMeta.footerMission || text('Children, women and communities in South 24 Parganas, West Bengal.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।'))}
             </p>
             <div style={{ marginTop: '1.5rem' }}>
               <a href={siteContent.contact.contactDetails.facebookUrl || 'https://www.facebook.com/profile.php?id=61559891799273'} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: '0.5rem 0', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>

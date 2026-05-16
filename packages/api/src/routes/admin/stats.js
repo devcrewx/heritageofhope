@@ -63,9 +63,9 @@ router.patch('/:id', async (req, res) => {
     const stat = await prisma.impactStat.update({
       where: { id: parseInt(id) },
       data: {
-        ...(value && { value }),
-        ...(labelEn && { labelEn }),
-        ...(labelBn && { labelBn }),
+        ...(value !== undefined && { value }),
+        ...(labelEn !== undefined && { labelEn }),
+        ...(labelBn !== undefined && { labelBn }),
         ...(sortOrder !== undefined && { sortOrder }),
       },
     })

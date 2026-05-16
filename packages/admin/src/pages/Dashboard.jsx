@@ -45,6 +45,7 @@ function Dashboard() {
     { label: 'Impact Page', action: () => navigate('/impact'), description: 'Fund allocation, testimonials' },
     { label: 'Get Involved', action: () => navigate('/get-involved'), description: 'Donations, volunteer roles' },
     { label: 'Contact Page', action: () => navigate('/contact'), description: 'Phone, email, location' },
+    { label: 'Change Password', action: () => navigate('/change-password'), description: 'Update the admin account password' },
   ]
 
   return (

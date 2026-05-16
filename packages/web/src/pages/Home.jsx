@@ -5,6 +5,7 @@ import CountUp from '../components/CountUp'
 function Home() {
   const { language, siteContent } = useOutletContext()
   const { home } = siteContent
+  const siteMeta = siteContent.siteMeta || {}
 
   const copy = {
     en: {
@@ -55,11 +56,11 @@ function Home() {
             </Link>
           </div>
           <div className="trust-strip">
-            <span>{resolve(language, text('Registered NGO', 'নিবন্ধিত সংস্থা'))}</span>
-            <span>{resolve(language, text('Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
+            <span>{resolve(language, siteMeta.registeredBadge || text('Registered NGO', 'নিবন্ধিত সংস্থা'))}</span>
+            <span>{resolve(language, text(siteMeta.estYear || 'Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
             <span>{resolve(language, text('Govt. of West Bengal', 'পশ্চিমবঙ্গ সরকার'))}</span>
           </div>
-          <p className="hero-footnote">{copy[language].heroTagline}</p>
+          <p className="hero-footnote">{resolve(language, siteMeta.navbarSubtitle || text(copy.en.heroTagline, copy.bn.heroTagline))}</p>
         </div>
 
         <aside className="hero-media editorial-hero">

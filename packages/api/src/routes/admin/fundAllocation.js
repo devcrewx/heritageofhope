@@ -77,7 +77,7 @@ router.patch('/:id', async (req, res) => {
     const item = await prisma.fundAllocation.update({
       where: { id: Number(id) },
       data: {
-        ...(categoryEn && { categoryEn }),
+        ...(categoryEn !== undefined && { categoryEn }),
         ...(categoryBn !== undefined && { categoryBn }),
         ...(percentage !== undefined && { percentage: Number(percentage) }),
         ...(sortOrder !== undefined && { sortOrder: Number(sortOrder) }),

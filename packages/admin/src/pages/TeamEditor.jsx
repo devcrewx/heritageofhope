@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Upload, ChevronUp, ChevronDown } from 'lucide-react';
-import { apiClient } from '../api';
+import apiClient from '../lib/api';
+import { Toast } from '../components/Toast';
 
 export default function TeamEditor() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [toast, setToast] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     roleEn: '',
@@ -17,14 +19,17 @@ export default function TeamEditor() {
     loadMembers();
   }, []);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  };
+
   const loadMembers = async () => {
     try {
       setLoading(true);
-      const { data } = await apiClient.get('/admin/team');
-      setMembers(data);
+      const response = await apiClient.get('/api/admin/team');
+      setMembers(response.data);
     } catch (error) {
-      console.error('Error loading team members:', error);
-      alert('Failed to load team members');
+      showToast('Failed to load team members', 'error');
     } finally {
       setLoading(false);
     }
@@ -69,20 +74,20 @@ export default function TeamEditor() {
       }
 
       if (editingId) {
-        await apiClient.patch(`/admin/team/${editingId}`, data, {
+        await apiClient.patch(`/api/admin/team/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       } else {
-        await apiClient.post('/admin/team', data, {
+        await apiClient.post('/api/admin/team', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }
 
       resetForm();
+      showToast(editingId ? 'Member updated' : 'Member added', 'success');
       await loadMembers();
     } catch (error) {
-      console.error('Error saving team member:', error);
-      alert('Failed to save team member');
+      showToast('Failed to save team member', 'error');
     } finally {
       setLoading(false);
     }
@@ -103,11 +108,11 @@ export default function TeamEditor() {
 
     try {
       setLoading(true);
-      await apiClient.delete(`/admin/team/${id}`);
+      await apiClient.delete(`/api/admin/team/${id}`);
+      showToast('Member deleted', 'success');
       await loadMembers();
     } catch (error) {
-      console.error('Error deleting team member:', error);
-      alert('Failed to delete team member');
+      showToast('Failed to delete team member', 'error');
     } finally {
       setLoading(false);
     }
@@ -126,7 +131,7 @@ export default function TeamEditor() {
 
     try {
       setLoading(true);
-      await apiClient.patch('/admin/team/reorder', {
+      await apiClient.patch('/api/admin/team/reorder', {
         members: updatedMembers.map((m, i) => ({
           id: m.id,
           sortOrder: i
@@ -134,8 +139,7 @@ export default function TeamEditor() {
       });
       setMembers(updatedMembers);
     } catch (error) {
-      console.error('Error reordering team members:', error);
-      alert('Failed to reorder team members');
+      showToast('Failed to reorder team members', 'error');
     } finally {
       setLoading(false);
     }
@@ -295,6 +299,11 @@ export default function TeamEditor() {
           </div>
         )}
       </div>
+
+      {/* Toast notification */}
+      {toast && (
+        <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
+      )}
     </div>
   );
 }

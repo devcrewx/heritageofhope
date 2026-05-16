@@ -338,6 +338,16 @@ export const aboutDocuments = [
 
 export const siteContent = {
   navItems,
+  siteMeta: {
+    orgName: 'Heritage of Hope Foundation',
+    navbarSubtitle: text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'),
+    registeredBadge: text('Registered NGO', 'নিবন্ধিত সংস্থা'),
+    estYear: 'Est. 2024',
+    footerMission: text(
+      'Children, women and communities in South 24 Parganas, West Bengal.',
+      'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
+    ),
+  },
   home: {
     featuredPrograms,
     activityPosts,
