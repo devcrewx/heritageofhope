@@ -78,9 +78,14 @@ function About() {
           hasPrev={modalDocIndex !== null && modalDocIndex > 0}
         />
         <div className="card-grid docs-grid">
-          {documents && documents.length > 0 ? documents.map((doc) => (
+          {documents && documents.length > 0 ? documents.map((doc, idx) => {
+            const titleText = resolve(language, doc?.title)
+            const metaText = resolve(language, doc?.meta)
+            const captionText = resolve(language, doc?.caption)
+
+            return (
             <article
-              key={doc?.href || doc?.id || Math.random()}
+              key={`${doc?.id || 'doc'}-${doc?.href || 'href'}-${idx}`}
               className="card doc-card"
               data-reveal
               role="button"
@@ -91,12 +96,12 @@ function About() {
               }}
             >
               <div className="doc-thumb-wrap">
-                <img className="doc-thumb" src={doc?.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={resolve(language, doc?.title)} />
+                <img className="doc-thumb" src={doc?.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={titleText} />
               </div>
               <div className="card-body">
-                <h3>{resolve(language, doc?.title)}</h3>
-                {doc?.meta ? <p className="muted">{doc.meta}</p> : null}
-                {doc?.caption ? <p className="muted small">{resolve(language, doc.caption)}</p> : null}
+                <h3>{titleText}</h3>
+                {metaText ? <p className="muted">{metaText}</p> : null}
+                {captionText ? <p className="muted small">{captionText}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
                   <button type="button" className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
                     {resolve(language, text('View', 'দেখুন'))}
@@ -109,7 +114,8 @@ function About() {
                 </div>
               </div>
             </article>
-          )) : null}
+            )
+          }) : null}
         </div>
       </section>
 

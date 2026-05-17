@@ -29,7 +29,7 @@ function GetInvolved() {
         </div>
         <div className="mini-panel accent-panel">
           <p className="meta">{resolve(language, page.bankLabel || text('Bank details', 'ব্যাংক তথ্য'))}</p>
-          <p>{page.bank?.name || 'Heritage of Hope Foundation'}</p>
+          <p>{resolve(language, page.bank?.name || 'Heritage of Hope Foundation')}</p>
           <p>{resolve(language, page.bank?.branch || text('State Bank of India, Ruby Park Branch', 'স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক ব্রাঞ্চ'))}</p>
           <p>{resolve(language, page.bank?.account || text('A/C No: 43107075580', 'হিসাব নম্বর: 43107075580'))}</p>
           <p>{resolve(language, page.bank?.ifsc || text('IFSC: SBIN0008438', 'আইএফএসসি: SBIN0008438'))}</p>
