@@ -65,7 +65,7 @@ function About() {
         <DocumentModal
           open={modalOpen}
           onClose={closeDoc}
-          title={modalDoc?.title || ''}
+          title={resolve(language, modalDoc?.title || '')}
           src={modalDoc?.href || ''}
           type={modalDoc && modalDoc.href.match(/\.pdf$/i) ? 'pdf' : 'image'}
           onNext={nextDoc}
