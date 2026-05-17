@@ -22,10 +22,6 @@ function About() {
   const modalDoc = modalDocIndex !== null ? documents[modalDocIndex] : null
 
   const openDoc = (d) => {
-    if (d?.href && d.href.match(/\.pdf$/i)) {
-      window.open(d.href, '_blank', 'noopener,noreferrer')
-      return
-    }
     const index = documents.findIndex((doc) => doc.href === d.href)
     setModalDocIndex(index)
     setModalOpen(true)
