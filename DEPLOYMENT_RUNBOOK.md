@@ -219,6 +219,7 @@ npm run seed
 - [ ] Test public site load: https://cheery-praline-30b4a8.netlify.app
 - [ ] Verify admin panel loads: https://rococo-sherbet-6244e2.netlify.app
 - [ ] Confirm content is visible on public site
+- [ ] Open About → Documents and verify the modal opens/closes without a blank screen
 
 ---
 

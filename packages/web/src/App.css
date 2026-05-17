@@ -913,6 +913,7 @@ img[loading="lazy"] {
 .doc-modal-inner { background: #f7fafc; border-radius: 8px; overflow: hidden; min-height: 320px; display: flex; align-items: center; justify-content: center }
 .doc-modal-inner img { width: auto; max-width: 100%; height: auto; max-height: 72vh }
 .doc-modal-inner iframe { width: 100%; height: 72vh; border: 0 }
+.doc-modal-inner object { width: 100%; height: 72vh; border: 0; display: block }
 .doc-modal-actions { display: flex; gap: 8px; justify-content: flex-end }
 
 @keyframes docOverlayFade {

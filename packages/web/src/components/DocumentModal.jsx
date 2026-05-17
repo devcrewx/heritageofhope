@@ -53,7 +53,9 @@ export default function DocumentModal({ open, onClose, title, src, type = 'pdf',
             {type === 'image' ? (
               <img src={src} alt={title} />
             ) : (
-              <iframe src={src} title={title} frameBorder="0" />
+              <object data={src} type="application/pdf" width="100%" height="100%">
+                <p>Cannot display this document in the browser. <a href={src} target="_blank" rel="noopener noreferrer">Open in a new tab</a>.</p>
+              </object>
             )}
           </div>
           <div className="doc-modal-actions">
