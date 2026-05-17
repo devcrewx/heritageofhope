@@ -1114,7 +1114,7 @@ Summary: most feature work and deploys are complete. Remaining items below were 
 - [ ] 1-page "How to use the admin panel" guide for the client — NOT STARTED
 - [ ] Deliver admin login credentials to client securely — PENDING
 - [x] Ensure all existing photos uploaded to Cloudinary and linked in DB — completed via bulk upload and verification on 2026-05-17
-- [ ] Upload all 6 official documents (trust cert, DARPAN, 12A, 80G, CSR, awards) as PDFs — PENDING
+- [x] Upload all 6 official documents (trust cert, DARPAN, 12A, 80G, CSR, awards) as PDFs — completed via bulk Cloudinary import on 2026-05-17
 - [ ] Client verification: test updating a stat, uploading a gallery photo, adding an activity post — PENDING (recommended step)
 - [ ] Add developer contact & handoff notes for bug reports — PENDING
 - [ ] Post-deploy monitoring / regression sign-off (health endpoints, logs) — RECOMMENDED
