@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react'
 import BilingualField from '../components/BilingualField'
+import MediaUploadField from '../components/MediaUploadField'
+import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 
 const tabDefinitions = [
   { key: 'tiers', label: 'Donation Tiers' },
   { key: 'bank', label: 'Bank Details' },
+  { key: 'payment', label: 'UPI / Payment' },
   { key: 'volunteer', label: 'Volunteer Section' },
   { key: 'partner', label: 'Partner Section' },
 ]
@@ -18,7 +24,12 @@ export default function GetInvolvedEditor() {
   const [newRole, setNewRole] = useState({ titleEn: '', titleBn: '', descriptionEn: '', descriptionBn: '' })
   const [activeTab, setActiveTab] = useState('tiers')
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
+  const [heroUploading, setHeroUploading] = useState(false)
+  const [paymentUploading, setPaymentUploading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, itemId: null, kind: '' })
 
   useEffect(() => {
     loadContent()
@@ -39,7 +50,128 @@ export default function GetInvolvedEditor() {
       setDonationTiers(tiersResponse.items || [])
       setVolunteerRoles(rolesResponse.items || [])
     } catch (error) {
-      setMessage(`Error: ${error.message}`)
+      setError(error.message)
+    } finally {
+      setInitialLoading(false)
+    }
+  }
+
+  const heroImageUrl = data.hero?.heroImage?.en || ''
+  const upiQrImageUrl = data.payment?.upiQrImage?.en || ''
+
+  const uploadHeroImage = async (file) => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'getInvolved')
+      formData.append('section', 'hero')
+
+      const response = await apiClient.post('/api/admin/media/hero', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          hero: {
+            ...current.hero,
+            heroImage: {
+              en: response.data.data.url,
+              bn: response.data.data.publicId || response.data.data.url,
+            },
+          },
+        }))
+      }
+
+      setStatusMessage('Partnership photo updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  const deleteHeroImage = async () => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/hero/getInvolved/hero')
+      setData((current) => ({
+        ...current,
+        hero: {
+          ...current.hero,
+          heroImage: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('Partnership photo removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  const uploadUpiQrImage = async (file) => {
+    setPaymentUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'getInvolved')
+      formData.append('section', 'payment')
+
+      const response = await apiClient.post('/api/admin/media/upi-qr', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          payment: {
+            ...current.payment,
+            upiQrImage: {
+              en: response.data.data.url,
+              bn: response.data.data.publicId || response.data.data.url,
+            },
+          },
+        }))
+      }
+
+      setStatusMessage('UPI QR image updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setPaymentUploading(false)
+    }
+  }
+
+  const deleteUpiQrImage = async () => {
+    setPaymentUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/upi-qr')
+      setData((current) => ({
+        ...current,
+        payment: {
+          ...current.payment,
+          upiQrImage: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('UPI QR image removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setPaymentUploading(false)
     }
   }
 
@@ -63,6 +195,8 @@ export default function GetInvolvedEditor() {
 
   const saveSection = async (section) => {
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       const updates = data[section] || {}
       await Promise.all(
@@ -73,10 +207,9 @@ export default function GetInvolvedEditor() {
           })
         )
       )
-      setMessage('✓ Saved successfully')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Saved successfully')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -84,6 +217,8 @@ export default function GetInvolvedEditor() {
 
   const saveDonationTiers = async () => {
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       await Promise.all(
         donationTiers.map((tier) =>
@@ -93,10 +228,9 @@ export default function GetInvolvedEditor() {
           })
         )
       )
-      setMessage('✓ Donation tiers saved successfully')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Donation tiers saved successfully')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -104,11 +238,13 @@ export default function GetInvolvedEditor() {
 
   const addDonationTier = async () => {
     if (!newTier.amount || !newTier.labelEn) {
-      setMessage('✗ Amount and English label are required')
+      setError('Amount and English label are required')
       return
     }
 
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       await request('/api/admin/donation-tiers', {
         method: 'POST',
@@ -116,28 +252,32 @@ export default function GetInvolvedEditor() {
       })
       setNewTier({ amount: '', labelEn: '', labelBn: '' })
       await loadContent()
-      setMessage('✓ Donation tier added')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Donation tier added')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
   }
 
-  const deleteDonationTier = async (id) => {
-    if (!window.confirm('Delete this donation tier?')) {
-      return
-    }
+  const confirmDeleteDonationTier = (itemId) => {
+    setDeleteConfirm({ isOpen: true, itemId, kind: 'tier' })
+  }
+
+  const deleteDonationTier = async () => {
+    const { itemId } = deleteConfirm
+    if (!itemId) return
 
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
-      await request(`/api/admin/donation-tiers/${id}`, { method: 'DELETE' })
+      await request(`/api/admin/donation-tiers/${itemId}`, { method: 'DELETE' })
       await loadContent()
-      setMessage('✓ Donation tier deleted')
-      setTimeout(() => setMessage(''), 2000)
+      setDeleteConfirm({ isOpen: false, itemId: null, kind: '' })
+      setStatusMessage('Donation tier deleted')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -145,6 +285,8 @@ export default function GetInvolvedEditor() {
 
   const saveVolunteerRoles = async () => {
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       await Promise.all(
         volunteerRoles.map((role) =>
@@ -154,10 +296,9 @@ export default function GetInvolvedEditor() {
           })
         )
       )
-      setMessage('✓ Volunteer roles saved successfully')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Volunteer roles saved successfully')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -165,11 +306,13 @@ export default function GetInvolvedEditor() {
 
   const addVolunteerRole = async () => {
     if (!newRole.titleEn) {
-      setMessage('✗ English title is required')
+      setError('English title is required')
       return
     }
 
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       await request('/api/admin/volunteer-roles', {
         method: 'POST',
@@ -177,28 +320,32 @@ export default function GetInvolvedEditor() {
       })
       setNewRole({ titleEn: '', titleBn: '', descriptionEn: '', descriptionBn: '' })
       await loadContent()
-      setMessage('✓ Volunteer role added')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Volunteer role added')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
   }
 
-  const deleteVolunteerRole = async (id) => {
-    if (!window.confirm('Delete this volunteer role?')) {
-      return
-    }
+  const confirmDeleteVolunteerRole = (itemId) => {
+    setDeleteConfirm({ isOpen: true, itemId, kind: 'role' })
+  }
+
+  const deleteVolunteerRole = async () => {
+    const { itemId } = deleteConfirm
+    if (!itemId) return
 
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
-      await request(`/api/admin/volunteer-roles/${id}`, { method: 'DELETE' })
+      await request(`/api/admin/volunteer-roles/${itemId}`, { method: 'DELETE' })
       await loadContent()
-      setMessage('✓ Volunteer role deleted')
-      setTimeout(() => setMessage(''), 2000)
+      setDeleteConfirm({ isOpen: false, itemId: null, kind: '' })
+      setStatusMessage('Volunteer role deleted')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -212,13 +359,17 @@ export default function GetInvolvedEditor() {
     tab: { padding: '0.6rem 1rem', border: '1px solid #d1d5db', borderRadius: '999px', cursor: 'pointer', fontWeight: 600, fontSize: '0.92rem', background: '#fff' },
   }
 
-  const messageStyle = {
+  const successStyle = {
     marginTop: '1rem',
     padding: '0.75rem',
     borderRadius: '0.4rem',
     fontSize: '0.9rem',
-    background: message.includes('✗') ? '#fee2e2' : '#dbeafe',
-    color: message.includes('✗') ? '#991b1b' : '#0c4a6e',
+    background: '#dbeafe',
+    color: '#0c4a6e',
+  }
+
+  if (initialLoading) {
+    return <LoadingSpinner fullPage text="Loading get involved content..." />
   }
 
   return (
@@ -270,7 +421,7 @@ export default function GetInvolvedEditor() {
                     placeholder="একটি পরিবারকে খাবার"
                     style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
-                  <button type="button" onClick={() => deleteDonationTier(tier.id)} disabled={saving} style={{ ...styles.button, marginTop: 0, background: '#b91c1c' }}>
+                  <button type="button" onClick={() => confirmDeleteDonationTier(tier.id)} disabled={saving} style={{ ...styles.button, marginTop: 0, background: '#b91c1c' }}>
                     Delete
                   </button>
                 </div>
@@ -318,18 +469,20 @@ export default function GetInvolvedEditor() {
         <div style={styles.section}>
           <div style={styles.title}>Bank Details</div>
           <BilingualField
-            label="Account Name"
-            enValue={data.bank?.accountName?.en}
-            bnValue={data.bank?.accountName?.bn}
-            onEnChange={(val) => updateField('bank', 'accountName', 'en', val)}
-            onBnChange={(val) => updateField('bank', 'accountName', 'bn', val)}
+            labelEn="Account Name (EN)"
+            labelBn="Account Name (BN)"
+            valueEn={data.bank?.accountName?.en}
+            valueBn={data.bank?.accountName?.bn}
+            onChangeEn={(val) => updateField('bank', 'accountName', 'en', val)}
+            onChangeBn={(val) => updateField('bank', 'accountName', 'bn', val)}
           />
           <BilingualField
-            label="Bank & Branch"
-            enValue={data.bank?.bankName?.en}
-            bnValue={data.bank?.bankName?.bn}
-            onEnChange={(val) => updateField('bank', 'bankName', 'en', val)}
-            onBnChange={(val) => updateField('bank', 'bankName', 'bn', val)}
+            labelEn="Bank & Branch (EN)"
+            labelBn="Bank & Branch (BN)"
+            valueEn={data.bank?.bankName?.en}
+            valueBn={data.bank?.bankName?.bn}
+            onChangeEn={(val) => updateField('bank', 'bankName', 'en', val)}
+            onChangeBn={(val) => updateField('bank', 'bankName', 'bn', val)}
           />
           <p style={{ fontSize: '0.9rem', color: '#64748b', marginTop: '0.75rem', marginBottom: '0.75rem' }}>Account Number (English only)</p>
           <input
@@ -353,23 +506,41 @@ export default function GetInvolvedEditor() {
         </div>
       )}
 
+      {activeTab === 'payment' && (
+        <div style={styles.section}>
+          <div style={styles.title}>UPI / Payment</div>
+          <MediaUploadField
+            label="UPI QR Code"
+            helperText="Use a sharp, scan-friendly image. This replaces the QR shown on the public site."
+            currentUrl={upiQrImageUrl}
+            currentAlt="UPI QR code"
+            onUpload={uploadUpiQrImage}
+            onDelete={upiQrImageUrl ? deleteUpiQrImage : undefined}
+            uploading={paymentUploading}
+            previewClassName="h-72 w-full object-contain bg-white"
+          />
+        </div>
+      )}
+
       {activeTab === 'volunteer' && (
         <div style={styles.section}>
           <div style={styles.title}>Volunteer Section</div>
           <BilingualField
-            label="Section Heading"
-            enValue={data.volunteer?.heading?.en}
-            bnValue={data.volunteer?.heading?.bn}
-            onEnChange={(val) => updateField('volunteer', 'heading', 'en', val)}
-            onBnChange={(val) => updateField('volunteer', 'heading', 'bn', val)}
+            labelEn="Section Heading"
+            labelBn="Section Heading (Bangla)"
+            valueEn={data.volunteer?.heading?.en}
+            valueBn={data.volunteer?.heading?.bn}
+            onChangeEn={(val) => updateField('volunteer', 'heading', 'en', val)}
+            onChangeBn={(val) => updateField('volunteer', 'heading', 'bn', val)}
           />
           <BilingualField
-            label="Section Description"
-            enValue={data.volunteer?.description?.en}
-            bnValue={data.volunteer?.description?.bn}
-            onEnChange={(val) => updateField('volunteer', 'description', 'en', val)}
-            onBnChange={(val) => updateField('volunteer', 'description', 'bn', val)}
-            type="textarea"
+            labelEn="Section Description"
+            labelBn="Section Description (Bangla)"
+            valueEn={data.volunteer?.description?.en}
+            valueBn={data.volunteer?.description?.bn}
+            onChangeEn={(val) => updateField('volunteer', 'description', 'en', val)}
+            onChangeBn={(val) => updateField('volunteer', 'description', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('volunteer')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Volunteer Section'}
@@ -381,19 +552,21 @@ export default function GetInvolvedEditor() {
               {volunteerRoles.map((role, index) => (
                 <div key={role.id} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
                   <BilingualField
-                    label="Role Title"
-                    enValue={role.titleEn}
-                    bnValue={role.titleBn}
-                    onEnChange={(val) => updateRole(role.id, 'titleEn', val)}
-                    onBnChange={(val) => updateRole(role.id, 'titleBn', val)}
+                    labelEn="Role Title"
+                    labelBn="Role Title (Bangla)"
+                    valueEn={role.titleEn}
+                    valueBn={role.titleBn}
+                    onChangeEn={(val) => updateRole(role.id, 'titleEn', val)}
+                    onChangeBn={(val) => updateRole(role.id, 'titleBn', val)}
                   />
                   <BilingualField
-                    label="Role Description"
-                    enValue={role.descriptionEn}
-                    bnValue={role.descriptionBn}
-                    onEnChange={(val) => updateRole(role.id, 'descriptionEn', val)}
-                    onBnChange={(val) => updateRole(role.id, 'descriptionBn', val)}
-                    type="textarea"
+                    labelEn="Role Description"
+                    labelBn="Role Description (Bangla)"
+                    valueEn={role.descriptionEn}
+                    valueBn={role.descriptionBn}
+                    onChangeEn={(val) => updateRole(role.id, 'descriptionEn', val)}
+                    onChangeBn={(val) => updateRole(role.id, 'descriptionBn', val)}
+                    isTextArea
                   />
                   <div style={{ display: 'grid', gridTemplateColumns: '120px auto', gap: '0.75rem', alignItems: 'center' }}>
                     <input
@@ -402,7 +575,7 @@ export default function GetInvolvedEditor() {
                       onChange={(event) => updateRole(role.id, 'sortOrder', Number(event.target.value))}
                       style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                     />
-                    <button type="button" onClick={() => deleteVolunteerRole(role.id)} disabled={saving} style={{ ...styles.button, marginTop: 0, background: '#b91c1c', width: 'fit-content' }}>
+                    <button type="button" onClick={() => confirmDeleteVolunteerRole(role.id)} disabled={saving} style={{ ...styles.button, marginTop: 0, background: '#b91c1c', width: 'fit-content' }}>
                       Delete
                     </button>
                   </div>
@@ -416,19 +589,21 @@ export default function GetInvolvedEditor() {
             <div style={{ marginTop: '1rem', borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
               <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Add Role</div>
               <BilingualField
-                label="Role Title"
-                enValue={newRole.titleEn}
-                bnValue={newRole.titleBn}
-                onEnChange={(val) => setNewRole({ ...newRole, titleEn: val })}
-                onBnChange={(val) => setNewRole({ ...newRole, titleBn: val })}
+                labelEn="Role Title"
+                labelBn="Role Title (Bangla)"
+                valueEn={newRole.titleEn}
+                valueBn={newRole.titleBn}
+                onChangeEn={(val) => setNewRole({ ...newRole, titleEn: val })}
+                onChangeBn={(val) => setNewRole({ ...newRole, titleBn: val })}
               />
               <BilingualField
-                label="Role Description"
-                enValue={newRole.descriptionEn}
-                bnValue={newRole.descriptionBn}
-                onEnChange={(val) => setNewRole({ ...newRole, descriptionEn: val })}
-                onBnChange={(val) => setNewRole({ ...newRole, descriptionBn: val })}
-                type="textarea"
+                labelEn="Role Description"
+                labelBn="Role Description (Bangla)"
+                valueEn={newRole.descriptionEn}
+                valueBn={newRole.descriptionBn}
+                onChangeEn={(val) => setNewRole({ ...newRole, descriptionEn: val })}
+                onChangeBn={(val) => setNewRole({ ...newRole, descriptionBn: val })}
+                isTextArea
               />
               <button type="button" onClick={addVolunteerRole} disabled={saving} style={styles.button}>
                 Add Role
@@ -444,20 +619,32 @@ export default function GetInvolvedEditor() {
       {activeTab === 'partner' && (
         <div style={styles.section}>
           <div style={styles.title}>Partner Section</div>
-          <BilingualField
-            label="Partner Heading"
-            enValue={data.partner?.heading?.en}
-            bnValue={data.partner?.heading?.bn}
-            onEnChange={(val) => updateField('partner', 'heading', 'en', val)}
-            onBnChange={(val) => updateField('partner', 'heading', 'bn', val)}
+          <MediaUploadField
+            label="Partnership Photo"
+            helperText="This image appears in the public Get Involved partnership section."
+            currentUrl={heroImageUrl}
+            currentAlt="Get involved partnership photo"
+            onUpload={uploadHeroImage}
+            onDelete={heroImageUrl ? deleteHeroImage : undefined}
+            uploading={heroUploading}
+            previewClassName="h-72 w-full object-cover"
           />
           <BilingualField
-            label="Partner Description"
-            enValue={data.partner?.description?.en}
-            bnValue={data.partner?.description?.bn}
-            onEnChange={(val) => updateField('partner', 'description', 'en', val)}
-            onBnChange={(val) => updateField('partner', 'description', 'bn', val)}
-            type="textarea"
+            labelEn="Partner Heading"
+            labelBn="Partner Heading (Bangla)"
+            valueEn={data.partner?.heading?.en}
+            valueBn={data.partner?.heading?.bn}
+            onChangeEn={(val) => updateField('partner', 'heading', 'en', val)}
+            onChangeBn={(val) => updateField('partner', 'heading', 'bn', val)}
+          />
+          <BilingualField
+            labelEn="Partner Description"
+            labelBn="Partner Description (Bangla)"
+            valueEn={data.partner?.description?.en}
+            valueBn={data.partner?.description?.bn}
+            onChangeEn={(val) => updateField('partner', 'description', 'en', val)}
+            onChangeBn={(val) => updateField('partner', 'description', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('partner')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Partner Section'}
@@ -465,7 +652,19 @@ export default function GetInvolvedEditor() {
         </div>
       )}
 
-      {message && <div style={messageStyle}>{message}</div>}
+      {statusMessage && <div style={successStyle}>{statusMessage}</div>}
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title={deleteConfirm.kind === 'role' ? 'Delete Volunteer Role?' : 'Delete Donation Tier?'}
+        message="This item will be permanently deleted. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={saving}
+        onConfirm={deleteConfirm.kind === 'role' ? deleteVolunteerRole : deleteDonationTier}
+        onCancel={() => setDeleteConfirm({ isOpen: false, itemId: null, kind: '' })}
+      />
     </div>
   )
 }

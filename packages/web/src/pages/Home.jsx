@@ -6,6 +6,7 @@ function Home() {
   const { language, siteContent } = useOutletContext()
   const { home } = siteContent
   const siteMeta = siteContent.siteMeta || {}
+  const page = home.pageContent || {}
 
   const copy = {
     en: {
@@ -67,7 +68,7 @@ function Home() {
 
         <aside className="hero-media editorial-hero">
           <figure className="hero-photo-frame">
-            <img loading="lazy" src="/assets/pathsala.webp" alt={resolve(language, text('Children and volunteers at a community event', 'শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে'))} />
+            <img loading="lazy" src={page.heroImage || '/assets/pathsala.webp'} alt={resolve(language, text('Children and volunteers at a community event', 'শিশু আর স্বেচ্ছাসেবকদের একটি কমিউনিটি অনুষ্ঠানে দেখা যাচ্ছে'))} />
             <figcaption>
               {resolve(
                 language,

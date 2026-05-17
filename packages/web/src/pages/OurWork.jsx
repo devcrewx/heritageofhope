@@ -6,6 +6,7 @@ function OurWork() {
   const { ourWork } = siteContent
 
   const pageContent = ourWork.pageContent || {}
+  const heroImage = pageContent.heroImage || '/assets/pathsala.webp'
 
   const copy = {
     en: {
@@ -52,6 +53,9 @@ function OurWork() {
           <p>{copy[language].intro}</p>
         </div>
         <div className="mini-panel accent-panel">
+          <figure className="image-frame framed" style={{ marginBottom: '1rem' }}>
+            <img loading="lazy" src={heroImage} alt={resolve(language, text('Community program activity', 'কমিউনিটি কর্মসূচির ছবি'))} />
+          </figure>
           <p className="meta">{resolve(language, text('Focus', 'যেখানে আমরা কাজ করি'))}</p>
           <div className="pill-row">
             {focusTags.map((tag, index) => (

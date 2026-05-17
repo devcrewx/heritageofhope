@@ -2,11 +2,25 @@ import express from 'express';
 import multer from 'multer';
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js';
 import { prisma } from '../../lib/prisma.js';
+import { verifyJWT } from '../../middleware/verifyJWT.js';
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// PATCH reorder partners (must come BEFORE /:id routes)
+// Public GET: list partners
+router.get('/', async (req, res) => {
+  try {
+    const partners = await prisma.partner.findMany({ orderBy: { sortOrder: 'asc' } })
+    res.json(partners)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch partners' })
+  }
+})
+
+// Protect admin mutations
+router.use(verifyJWT)
+
+// PATCH reorder partners
 router.patch('/reorder', async (req, res) => {
   try {
     const { partners: partnerUpdates } = req.body;

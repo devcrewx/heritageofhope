@@ -53,7 +53,7 @@ function About() {
           <p>{resolve(language, page.intro || text('We work directly with the people we serve, ensuring every initiative brings lasting, positive change.', 'আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।'))}</p>
         </div>
         <div className="image-frame framed">
-          <img loading="lazy" src="/assets/foundation.webp" alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
+          <img loading="lazy" src={page.heroImage || '/assets/foundation.webp'} alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
         </div>
       </section>
 

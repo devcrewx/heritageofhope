@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
-import BilingualField from '../components/BilingualField'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 import { useApi } from '../hooks/useApi'
 
 export default function ContactEditor() {
   const { request } = useApi()
   const [data, setData] = useState({})
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
     loadContent()
@@ -19,11 +23,14 @@ export default function ContactEditor() {
         setData(response.sections || {})
       }
     } catch (error) {
-      setMessage(`Error: ${error.message}`)
+      setError(error.message)
+    } finally {
+      setInitialLoading(false)
     }
   }
 
   const updateField = (section, fieldKey, value) => {
+    setFormErrors((current) => ({ ...current, [fieldKey]: '' }))
     setData({
       ...data,
       [section]: {
@@ -33,8 +40,45 @@ export default function ContactEditor() {
     })
   }
 
+  const validateSection = () => {
+    const nextErrors = {}
+    const phone = data.contact?.phone?.en?.trim() || ''
+    const email = data.contact?.email?.en?.trim() || ''
+    const address = data.contact?.address?.en?.trim() || ''
+    const facebookUrl = data.contact?.facebookUrl?.en?.trim() || ''
+
+    if (!phone) {
+      nextErrors.phone = 'Phone number is required.'
+    } else if (!/^[+()\d\s-]{7,}$/.test(phone)) {
+      nextErrors.phone = 'Enter a valid phone number.'
+    }
+
+    if (!email) {
+      nextErrors.email = 'Email address is required.'
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+      nextErrors.email = 'Enter a valid email address.'
+    }
+
+    if (!address) {
+      nextErrors.address = 'Address is required.'
+    }
+
+    if (facebookUrl && !/^https?:\/\//i.test(facebookUrl)) {
+      nextErrors.facebookUrl = 'Facebook URL must start with http:// or https://.'
+    }
+
+    setFormErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
   const saveSection = async (section) => {
+    if (!validateSection()) {
+      return
+    }
+
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       const updates = data[section] || {}
       await Promise.all(
@@ -45,10 +89,9 @@ export default function ContactEditor() {
           })
         )
       )
-      setMessage('✓ Saved successfully')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Saved successfully')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -61,15 +104,16 @@ export default function ContactEditor() {
     label: { display: 'block', marginBottom: '0.5rem', fontWeight: 600, color: '#0f172a', fontSize: '0.95rem' },
     input: { padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem', width: '100%', fontSize: '0.95rem', marginBottom: '1rem' },
     button: { padding: '0.6rem 1.25rem', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600, marginTop: '1.25rem' },
+    fieldError: { marginTop: '-0.5rem', marginBottom: '1rem', color: '#b91c1c', fontSize: '0.9rem' },
   }
 
-  const messageStyle = {
+  const successStyle = {
     marginTop: '1rem',
     padding: '0.75rem',
     borderRadius: '0.4rem',
     fontSize: '0.9rem',
-    background: message.includes('✗') ? '#fee2e2' : '#dbeafe',
-    color: message.includes('✗') ? '#991b1b' : '#0c4a6e',
+    background: '#dbeafe',
+    color: '#0c4a6e',
   }
 
   return (
@@ -77,45 +121,56 @@ export default function ContactEditor() {
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>Contact Page Editor</h1>
       <p style={{ marginBottom: '1.25rem', color: '#475569' }}>These values power the public Contact page and footer.</p>
 
-      <div style={styles.section}>
-        <div style={styles.title}>Contact Information</div>
-        <label style={styles.label}>Phone Number</label>
-        <input
-          type="tel"
-          value={data.contact?.phone?.en || ''}
-          onChange={(e) => updateField('contact', 'phone', e.target.value)}
-          placeholder="+91 08420119790"
-          style={styles.input}
-        />
-        <label style={styles.label}>Email Address</label>
-        <input
-          type="email"
-          value={data.contact?.email?.en || ''}
-          onChange={(e) => updateField('contact', 'email', e.target.value)}
-          placeholder="heritageofhopefoundation@gmail.com"
-          style={styles.input}
-        />
-        <label style={styles.label}>Address</label>
-        <input
-          type="text"
-          value={data.contact?.address?.en || ''}
-          onChange={(e) => updateField('contact', 'address', e.target.value)}
-          placeholder="Sukantapally, Subhas Gram, 700147, South 24 Pgs, WB"
-          style={styles.input}
-        />
-        <label style={styles.label}>Facebook Page URL</label>
-        <input
-          type="url"
-          value={data.contact?.facebookUrl?.en || ''}
-          onChange={(e) => updateField('contact', 'facebookUrl', e.target.value)}
-          placeholder="https://facebook.com/..."
-          style={styles.input}
-        />
-        <button onClick={() => saveSection('contact')} disabled={saving} style={styles.button}>
-          {saving ? 'Saving...' : 'Save Contact Info'}
-        </button>
-        {message && <div style={messageStyle}>{message}</div>}
-      </div>
+      {initialLoading ? (
+        <LoadingSpinner fullPage text="Loading contact settings..." />
+      ) : (
+        <>
+          {error && <ErrorMessage error={error} onClose={() => setError('')} className="mb-4" />}
+          <div style={styles.section}>
+            <div style={styles.title}>Contact Information</div>
+            <label style={styles.label}>Phone Number</label>
+            <input
+              type="tel"
+              value={data.contact?.phone?.en || ''}
+              onChange={(e) => updateField('contact', 'phone', e.target.value)}
+              placeholder="+91 08420119790"
+              style={styles.input}
+            />
+            {formErrors.phone && <div style={styles.fieldError}>{formErrors.phone}</div>}
+            <label style={styles.label}>Email Address</label>
+            <input
+              type="email"
+              value={data.contact?.email?.en || ''}
+              onChange={(e) => updateField('contact', 'email', e.target.value)}
+              placeholder="heritageofhopefoundation@gmail.com"
+              style={styles.input}
+            />
+            {formErrors.email && <div style={styles.fieldError}>{formErrors.email}</div>}
+            <label style={styles.label}>Address</label>
+            <input
+              type="text"
+              value={data.contact?.address?.en || ''}
+              onChange={(e) => updateField('contact', 'address', e.target.value)}
+              placeholder="Sukantapally, Subhas Gram, 700147, South 24 Pgs, WB"
+              style={styles.input}
+            />
+            {formErrors.address && <div style={styles.fieldError}>{formErrors.address}</div>}
+            <label style={styles.label}>Facebook Page URL</label>
+            <input
+              type="url"
+              value={data.contact?.facebookUrl?.en || ''}
+              onChange={(e) => updateField('contact', 'facebookUrl', e.target.value)}
+              placeholder="https://facebook.com/..."
+              style={styles.input}
+            />
+            {formErrors.facebookUrl && <div style={styles.fieldError}>{formErrors.facebookUrl}</div>}
+            <button onClick={() => saveSection('contact')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Contact Info'}
+            </button>
+            {statusMessage && <div style={successStyle}>{statusMessage}</div>}
+          </div>
+        </>
+      )}
     </div>
   )
 }

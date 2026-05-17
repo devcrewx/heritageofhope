@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, Upload, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
-import apiClient from '../lib/api';
-import { Toast } from '../components/Toast';
+import React, { useState, useEffect } from 'react'
+import { Trash2, Upload, ChevronUp, ChevronDown, Eye, EyeOff, AlertCircle } from 'lucide-react'
+import apiClient from '../lib/api'
+import { Toast } from '../components/Toast'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 
 export default function ActivityPostsEditor() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [toast, setToast] = useState(null);
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [editingId, setEditingId] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [toast, setToast] = useState(null)
+  const [error, setError] = useState(null)
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, postId: null })
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     titleEn: '',
@@ -16,42 +23,83 @@ export default function ActivityPostsEditor() {
     bodyBn: '',
     isPublished: true,
     file: null
-  });
+  })
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
-    loadPosts();
-  }, []);
+    loadPosts()
+  }, [])
 
   const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-  };
+    setToast({ message, type })
+  }
 
   const loadPosts = async () => {
     try {
-      setLoading(true);
-      const response = await apiClient.get('/api/admin/activity-posts');
-      setPosts(response.data);
-    } catch (error) {
-      showToast('Failed to load activity posts', 'error');
+      setInitialLoading(true)
+      setError(null)
+      const response = await apiClient.get('/api/admin/activity-posts')
+      setPosts(response.data)
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to load activity posts'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setInitialLoading(false)
     }
-  };
+  }
+
+  const validateForm = () => {
+    const errors = {}
+    
+    if (!formData.date) {
+      errors.date = 'Date is required'
+    }
+
+    if (!formData.titleEn.trim()) {
+      errors.titleEn = 'English title is required'
+    } else if (formData.titleEn.trim().length < 3) {
+      errors.titleEn = 'English title must be at least 3 characters'
+    } else if (formData.titleEn.length > 150) {
+      errors.titleEn = 'English title must be at most 150 characters'
+    }
+
+    if (formData.titleBn && formData.titleBn.length > 150) {
+      errors.titleBn = 'Bengali title must be at most 150 characters'
+    }
+
+    if (formData.bodyEn && formData.bodyEn.length > 2000) {
+      errors.bodyEn = 'English body must be at most 2000 characters'
+    }
+
+    if (formData.bodyBn && formData.bodyBn.length > 2000) {
+      errors.bodyBn = 'Bengali body must be at most 2000 characters'
+    }
+
+    return errors
+  }
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
-    }));
-  };
+    }))
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }))
+    }
+  }
 
   const handleFileChange = (e) => {
     setFormData(prev => ({
       ...prev,
       file: e.target.files[0]
-    }));
-  };
+    }))
+  }
 
   const resetForm = () => {
     setFormData({
@@ -62,53 +110,59 @@ export default function ActivityPostsEditor() {
       bodyBn: '',
       isPublished: true,
       file: null
-    });
-    setEditingId(null);
-  };
+    })
+    setEditingId(null)
+    setFormErrors({})
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    if (!formData.date || !formData.titleEn.trim()) {
-      alert('Please enter date and English title');
-      return;
+    const errors = validateForm()
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      showToast('Please fix validation errors', 'error')
+      return
     }
 
     try {
-      setLoading(true);
-      const data = new FormData();
-      data.append('date', formData.date);
-      data.append('titleEn', formData.titleEn);
-      data.append('titleBn', formData.titleBn);
-      data.append('bodyEn', formData.bodyEn);
-      data.append('bodyBn', formData.bodyBn);
-      data.append('isPublished', formData.isPublished);
+      setSubmitting(true)
+      setError(null)
+      const data = new FormData()
+      data.append('date', formData.date)
+      data.append('titleEn', formData.titleEn)
+      data.append('titleBn', formData.titleBn)
+      data.append('bodyEn', formData.bodyEn)
+      data.append('bodyBn', formData.bodyBn)
+      data.append('isPublished', formData.isPublished)
       if (formData.file) {
-        data.append('file', formData.file);
+        data.append('file', formData.file)
       }
 
       if (editingId) {
         await apiClient.patch(`/api/admin/activity-posts/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        })
       } else {
         await apiClient.post('/api/admin/activity-posts', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        })
       }
 
-      resetForm();
-      showToast(editingId ? 'Post updated' : 'Post created', 'success');
-      await loadPosts();
-    } catch (error) {
-      showToast('Failed to save activity post', 'error');
+      resetForm()
+      showToast(editingId ? 'Post updated successfully' : 'Post created successfully', 'success')
+      await loadPosts()
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || err.message || 'Failed to save activity post'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   const handleEdit = (post) => {
-    setEditingId(post.id);
+    setEditingId(post.id)
     setFormData({
       date: post.date.split('T')[0],
       titleEn: post.titleEn,
@@ -117,54 +171,79 @@ export default function ActivityPostsEditor() {
       bodyBn: post.bodyBn || '',
       isPublished: post.isPublished,
       file: null
-    });
-  };
+    })
+    setFormErrors({})
+    setError(null)
+  }
 
-  const handleDelete = async (id) => {
-    if (!confirm('Delete this activity post? This cannot be undone.')) return;
+  const confirmDelete = (postId) => {
+    setDeleteConfirm({ isOpen: true, postId })
+  }
+
+  const handleDelete = async () => {
+    const { postId } = deleteConfirm
+    if (!postId) return
 
     try {
-      setLoading(true);
-      await apiClient.delete(`/api/admin/activity-posts/${id}`);
-      showToast('Post deleted', 'success');
-      await loadPosts();
-    } catch (error) {
-      showToast('Failed to delete activity post', 'error');
+      setLoading(true)
+      await apiClient.delete(`/api/admin/activity-posts/${postId}`)
+      showToast('Post deleted successfully', 'success')
+      setDeleteConfirm({ isOpen: false, postId: null })
+      await loadPosts()
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to delete activity post'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const movePost = async (id, direction) => {
-    const index = posts.findIndex(p => p.id === id);
-    if (index === -1) return;
+    const index = posts.findIndex(p => p.id === id)
+    if (index === -1) return
 
-    if (direction === 'up' && index === 0) return;
-    if (direction === 'down' && index === posts.length - 1) return;
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === posts.length - 1) return
 
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
-    const updatedPosts = [...posts];
-    [updatedPosts[index], updatedPosts[newIndex]] = [updatedPosts[newIndex], updatedPosts[index]];
+    const newIndex = direction === 'up' ? index - 1 : index + 1
+    const updatedPosts = [...posts]
+    ;[updatedPosts[index], updatedPosts[newIndex]] = [
+      updatedPosts[newIndex],
+      updatedPosts[index]
+    ]
 
     try {
-      setLoading(true);
+      setLoading(true)
       await apiClient.patch('/api/admin/activity-posts/reorder', {
         posts: updatedPosts.map((p, i) => ({
           id: p.id,
           sortOrder: i
         }))
-      });
-      setPosts(updatedPosts);
-    } catch (error) {
-      showToast('Failed to reorder posts', 'error');
+      })
+      setPosts(updatedPosts)
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to reorder posts'
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+
+
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Activity Posts</h1>
+
+      {/* Error Message */}
+      {error && (
+        <ErrorMessage 
+          error={error} 
+          onClose={() => setError(null)}
+          className="mb-6"
+        />
+      )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow mb-6">
@@ -174,27 +253,49 @@ export default function ActivityPostsEditor() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Date *</label>
+            <label className="block text-sm font-medium mb-1">
+              Date <span className="text-red-500">*</span>
+            </label>
             <input
               type="date"
               name="date"
               value={formData.date}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                formErrors.date 
+                  ? 'border-red-500 focus:ring-red-500' 
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
             />
+            {formErrors.date && (
+              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <AlertCircle size={14} /> {formErrors.date}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Title (English) *</label>
+              <label className="block text-sm font-medium mb-1">
+                Title (English) <span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="titleEn"
                 value={formData.titleEn}
                 onChange={handleInputChange}
                 placeholder="e.g., Summer camp begins"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.titleEn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.titleEn && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <AlertCircle size={14} /> {formErrors.titleEn}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Title (Bengali)</label>
@@ -204,8 +305,17 @@ export default function ActivityPostsEditor() {
                 value={formData.titleBn}
                 onChange={handleInputChange}
                 placeholder="যেমন, গ্রীষ্মকালীন শিবির শুরু"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.titleBn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.titleBn && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <AlertCircle size={14} /> {formErrors.titleBn}
+                </p>
+              )}
             </div>
           </div>
 
@@ -218,8 +328,17 @@ export default function ActivityPostsEditor() {
                 onChange={handleInputChange}
                 placeholder="Event details..."
                 rows="3"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.bodyEn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.bodyEn && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <AlertCircle size={14} /> {formErrors.bodyEn}
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Body (Bengali)</label>
@@ -229,8 +348,17 @@ export default function ActivityPostsEditor() {
                 onChange={handleInputChange}
                 placeholder="ইভেন্ট বিবরণ..."
                 rows="3"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.bodyBn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.bodyBn && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <AlertCircle size={14} /> {formErrors.bodyBn}
+                </p>
+              )}
             </div>
           </div>
 
@@ -243,7 +371,7 @@ export default function ActivityPostsEditor() {
                 name="file"
                 onChange={handleFileChange}
                 accept="image/*"
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
               />
             </div>
             {formData.file && (
@@ -272,16 +400,18 @@ export default function ActivityPostsEditor() {
         <div className="flex gap-2 mt-6">
           <button
             type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+            disabled={submitting || loading}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition flex items-center gap-2"
           >
-            {loading ? 'Saving...' : editingId ? 'Update Post' : 'Create Post'}
+            {submitting && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+            {submitting ? 'Saving...' : editingId ? 'Update Post' : 'Create Post'}
           </button>
           {editingId && (
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+              disabled={submitting}
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
             >
               Cancel
             </button>
@@ -291,9 +421,13 @@ export default function ActivityPostsEditor() {
 
       {/* Posts List */}
       <div className="space-y-3">
-        <h2 className="text-xl font-semibold mb-4">Posts ({posts.length})</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Posts ({posts.length})
+        </h2>
         {posts.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No activity posts yet</p>
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+            <p className="text-gray-500">No activity posts yet. Create one using the form above.</p>
+          </div>
         ) : (
           posts.map((post, index) => (
             <div
@@ -347,7 +481,7 @@ export default function ActivityPostsEditor() {
                 <button
                   onClick={() => movePost(post.id, 'up')}
                   disabled={index === 0 || loading}
-                  className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30 transition"
                   title="Move up"
                 >
                   <ChevronUp size={16} />
@@ -355,21 +489,23 @@ export default function ActivityPostsEditor() {
                 <button
                   onClick={() => movePost(post.id, 'down')}
                   disabled={index === posts.length - 1 || loading}
-                  className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                  className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30 transition"
                   title="Move down"
                 >
                   <ChevronDown size={16} />
                 </button>
                 <button
                   onClick={() => handleEdit(post)}
-                  className="px-3 py-2 text-sm border rounded-lg hover:bg-gray-50"
+                  disabled={loading}
+                  className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(post.id)}
+                  onClick={() => confirmDelete(post.id)}
                   disabled={loading}
-                  className="p-2 text-red-500 hover:text-red-700 disabled:opacity-30"
+                  className="p-2 text-red-500 hover:text-red-700 disabled:opacity-30 transition"
+                  title="Delete"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -379,10 +515,23 @@ export default function ActivityPostsEditor() {
         )}
       </div>
 
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Activity Post?"
+        message="This post will be permanently deleted. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={loading}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteConfirm({ isOpen: false, postId: null })}
+      />
+
       {/* Toast notification */}
       {toast && (
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
-  );
+  )
 }

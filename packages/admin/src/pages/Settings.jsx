@@ -104,14 +104,16 @@ function Settings() {
             <div key={field.fieldKey}>
               {field.type === 'bilingual' ? (
                 <BilingualField
-                  label={field.label}
-                  enValue={form[field.fieldKey]?.en || ''}
-                  bnValue={form[field.fieldKey]?.bn || ''}
-                  onEnChange={(value) => updateField(field.fieldKey, 'en', value)}
-                  onBnChange={(value) => updateField(field.fieldKey, 'bn', value)}
+                  labelEn={field.label}
+                  labelBn={field.label}
+                  valueEn={form[field.fieldKey]?.en || ''}
+                  valueBn={form[field.fieldKey]?.bn || ''}
+                  onChangeEn={(value) => updateField(field.fieldKey, 'en', value)}
+                  onChangeBn={(value) => updateField(field.fieldKey, 'bn', value)}
                   type="text"
+                  isTextArea={false}
                   required={field.fieldKey === 'navbar_subtitle'}
-                />
+                  />
               ) : (
                 <div>
                   <label htmlFor={field.fieldKey} className="block text-sm font-semibold text-gray-900 mb-2">
@@ -141,12 +143,13 @@ function Settings() {
             <div key={field.fieldKey}>
               {field.type === 'bilingual' ? (
                 <BilingualField
-                  label={field.label}
-                  enValue={form[field.fieldKey]?.en || ''}
-                  bnValue={form[field.fieldKey]?.bn || ''}
-                  onEnChange={(value) => updateField(field.fieldKey, 'en', value)}
-                  onBnChange={(value) => updateField(field.fieldKey, 'bn', value)}
-                  type="textarea"
+                  labelEn={field.label}
+                  labelBn={field.label}
+                  valueEn={form[field.fieldKey]?.en || ''}
+                  valueBn={form[field.fieldKey]?.bn || ''}
+                  onChangeEn={(value) => updateField(field.fieldKey, 'en', value)}
+                  onChangeBn={(value) => updateField(field.fieldKey, 'bn', value)}
+                  isTextArea={true}
                   required={field.fieldKey === 'address'}
                 />
               ) : (

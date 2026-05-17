@@ -1,7 +1,9 @@
 import express from 'express'
 import { prisma } from '../../lib/prisma.js'
+import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = express.Router()
+router.use(verifyJWT)
 
 // GET /api/admin/forms/submissions - Get all submissions (paginated, filterable by type)
 router.get('/submissions', async (req, res) => {

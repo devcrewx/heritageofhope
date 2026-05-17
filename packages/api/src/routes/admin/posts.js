@@ -2,11 +2,25 @@ import express from 'express';
 import multer from 'multer';
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js';
 import { prisma } from '../../lib/prisma.js';
+import { verifyJWT } from '../../middleware/verifyJWT.js';
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// PATCH reorder activity posts (must come BEFORE /:id routes)
+// Public GET: list activity posts
+router.get('/', async (req, res) => {
+  try {
+    const posts = await prisma.activityPost.findMany({ orderBy: { sortOrder: 'desc' } })
+    res.json(posts)
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch activity posts' })
+  }
+})
+
+// Protect admin mutations
+router.use(verifyJWT)
+
+// PATCH reorder activity posts
 router.patch('/reorder', async (req, res) => {
   try {
     const { posts: postUpdates } = req.body;

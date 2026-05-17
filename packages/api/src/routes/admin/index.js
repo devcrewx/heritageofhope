@@ -14,6 +14,7 @@ import postsRouter from './posts.js'
 import programsRouter from './programs.js'
 import usersRouter from './users.js'
 import submissionsRouter from './submissions.js'
+import mediaRouter from './media.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = Router()
@@ -33,6 +34,7 @@ router.use('/activity-posts', postsRouter)
 router.use('/programs', programsRouter)
 router.use('/users', usersRouter)
 router.use('/forms', submissionsRouter)
+router.use('/media', mediaRouter)
 
 router.get('/me', verifyJWT, (req, res) => {
   res.json({ user: req.user })

@@ -1,153 +1,226 @@
-import React, { useState, useEffect } from 'react';
-import { Trash2, Upload, ChevronUp, ChevronDown } from 'lucide-react';
-import apiClient from '../lib/api';
-import { Toast } from '../components/Toast';
+import React, { useState, useEffect } from 'react'
+import { Trash2, Upload, ChevronUp, ChevronDown, AlertCircle } from 'lucide-react'
+import apiClient from '../lib/api'
+import { Toast } from '../components/Toast'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 
 export default function TeamEditor() {
-  const [members, setMembers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-  const [toast, setToast] = useState(null);
+  const [members, setMembers] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [editingId, setEditingId] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [toast, setToast] = useState(null)
+  const [error, setError] = useState(null)
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, memberId: null })
   const [formData, setFormData] = useState({
     name: '',
     roleEn: '',
     roleBn: '',
     file: null
-  });
+  })
+  const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
-    loadMembers();
-  }, []);
+    loadMembers()
+  }, [])
 
   const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-  };
+    setToast({ message, type })
+  }
 
   const loadMembers = async () => {
     try {
-      setLoading(true);
-      const response = await apiClient.get('/api/admin/team');
-      setMembers(response.data);
-    } catch (error) {
-      showToast('Failed to load team members', 'error');
+      setInitialLoading(true)
+      setError(null)
+      const response = await apiClient.get('/api/admin/team')
+      setMembers(response.data)
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to load team members'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setInitialLoading(false)
     }
-  };
+  }
+
+  const validateForm = () => {
+    const errors = {}
+    
+    if (!formData.name.trim()) {
+      errors.name = 'Member name is required'
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters'
+    } else if (formData.name.length > 100) {
+      errors.name = 'Name must be at most 100 characters'
+    }
+
+    if (formData.roleEn && formData.roleEn.length > 100) {
+      errors.roleEn = 'Role (English) must be at most 100 characters'
+    }
+
+    if (formData.roleBn && formData.roleBn.length > 100) {
+      errors.roleBn = 'Role (Bengali) must be at most 100 characters'
+    }
+
+    return errors
+  }
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
-    }));
-  };
+    }))
+    // Clear error for this field when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }))
+    }
+  }
 
   const handleFileChange = (e) => {
     setFormData(prev => ({
       ...prev,
       file: e.target.files[0]
-    }));
-  };
+    }))
+  }
 
   const resetForm = () => {
-    setFormData({ name: '', roleEn: '', roleBn: '', file: null });
-    setEditingId(null);
-  };
+    setFormData({ name: '', roleEn: '', roleBn: '', file: null })
+    setEditingId(null)
+    setFormErrors({})
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!formData.name.trim()) {
-      alert('Please enter a member name');
-      return;
+    e.preventDefault()
+    
+    const errors = validateForm()
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      showToast('Please fix validation errors', 'error')
+      return
     }
 
     try {
-      setLoading(true);
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('roleEn', formData.roleEn);
-      data.append('roleBn', formData.roleBn);
+      setSubmitting(true)
+      setError(null)
+      const data = new FormData()
+      data.append('name', formData.name)
+      data.append('roleEn', formData.roleEn)
+      data.append('roleBn', formData.roleBn)
       if (formData.file) {
-        data.append('file', formData.file);
+        data.append('file', formData.file)
       }
 
       if (editingId) {
         await apiClient.patch(`/api/admin/team/${editingId}`, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        })
       } else {
         await apiClient.post('/api/admin/team', data, {
           headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        })
       }
 
-      resetForm();
-      showToast(editingId ? 'Member updated' : 'Member added', 'success');
-      await loadMembers();
-    } catch (error) {
-      showToast('Failed to save team member', 'error');
+      resetForm()
+      showToast(editingId ? 'Member updated successfully' : 'Member added successfully', 'success')
+      await loadMembers()
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || err.message || 'Failed to save team member'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   const handleEdit = (member) => {
-    setEditingId(member.id);
+    setEditingId(member.id)
     setFormData({
       name: member.name,
       roleEn: member.roleEn || '',
       roleBn: member.roleBn || '',
       file: null
-    });
-  };
+    })
+    setFormErrors({})
+    setError(null)
+  }
 
-  const handleDelete = async (id) => {
-    if (!confirm('Delete this team member? This cannot be undone.')) return;
+  const confirmDelete = (memberId) => {
+    setDeleteConfirm({ isOpen: true, memberId })
+  }
+
+  const handleDelete = async () => {
+    const { memberId } = deleteConfirm
+    if (!memberId) return
 
     try {
-      setLoading(true);
-      await apiClient.delete(`/api/admin/team/${id}`);
-      showToast('Member deleted', 'success');
-      await loadMembers();
-    } catch (error) {
-      showToast('Failed to delete team member', 'error');
+      setLoading(true)
+      await apiClient.delete(`/api/admin/team/${memberId}`)
+      showToast('Member deleted successfully', 'success')
+      setDeleteConfirm({ isOpen: false, memberId: null })
+      await loadMembers()
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to delete team member'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const moveMember = async (id, direction) => {
-    const index = members.findIndex(m => m.id === id);
-    if (index === -1) return;
+    const index = members.findIndex(m => m.id === id)
+    if (index === -1) return
 
-    if (direction === 'up' && index === 0) return;
-    if (direction === 'down' && index === members.length - 1) return;
+    if (direction === 'up' && index === 0) return
+    if (direction === 'down' && index === members.length - 1) return
 
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
-    const updatedMembers = [...members];
-    [updatedMembers[index], updatedMembers[newIndex]] = [updatedMembers[newIndex], updatedMembers[index]];
+    const newIndex = direction === 'up' ? index - 1 : index + 1
+    const updatedMembers = [...members]
+    ;[updatedMembers[index], updatedMembers[newIndex]] = [
+      updatedMembers[newIndex],
+      updatedMembers[index]
+    ]
 
     try {
-      setLoading(true);
+      setLoading(true)
       await apiClient.patch('/api/admin/team/reorder', {
         members: updatedMembers.map((m, i) => ({
           id: m.id,
           sortOrder: i
         }))
-      });
-      setMembers(updatedMembers);
-    } catch (error) {
-      showToast('Failed to reorder team members', 'error');
+      })
+      setMembers(updatedMembers)
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || 'Failed to reorder team members'
+      showToast(errorMsg, 'error')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+
+  if (initialLoading) {
+    return <LoadingSpinner fullPage text="Loading team members..." />
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Team Members</h1>
+
+      {/* Error Message */}
+      {error && (
+        <ErrorMessage 
+          error={error} 
+          onClose={() => setError(null)}
+          className="mb-6"
+        />
+      )}
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow mb-6">
@@ -157,15 +230,26 @@ export default function TeamEditor() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Name *</label>
+            <label className="block text-sm font-medium mb-1">
+              Name <span className="text-red-500">*</span>
+            </label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
               placeholder="e.g., Dr. Sharma"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                formErrors.name 
+                  ? 'border-red-500 focus:ring-red-500' 
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
             />
+            {formErrors.name && (
+              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <AlertCircle size={14} /> {formErrors.name}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -177,8 +261,15 @@ export default function TeamEditor() {
                 value={formData.roleEn}
                 onChange={handleInputChange}
                 placeholder="e.g., Founder & Director"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.roleEn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.roleEn && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.roleEn}</p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">Role (Bengali)</label>
@@ -188,8 +279,15 @@ export default function TeamEditor() {
                 value={formData.roleBn}
                 onChange={handleInputChange}
                 placeholder="যেমন, প্রতিষ্ঠাতা ও পরিচালক"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                  formErrors.roleBn 
+                    ? 'border-red-500 focus:ring-red-500' 
+                    : 'border-gray-300 focus:ring-blue-500'
+                }`}
               />
+              {formErrors.roleBn && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.roleBn}</p>
+              )}
             </div>
           </div>
 
@@ -202,7 +300,7 @@ export default function TeamEditor() {
                 name="file"
                 onChange={handleFileChange}
                 accept="image/*"
-                className="flex-1 px-3 py-2 border rounded-lg"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg"
               />
             </div>
             {formData.file && (
@@ -217,16 +315,18 @@ export default function TeamEditor() {
         <div className="flex gap-2 mt-6">
           <button
             type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+            disabled={submitting || loading}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition flex items-center gap-2"
           >
-            {loading ? 'Saving...' : editingId ? 'Update Member' : 'Add Member'}
+            {submitting && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+            {submitting ? 'Saving...' : editingId ? 'Update Member' : 'Add Member'}
           </button>
           {editingId && (
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2 border rounded-lg hover:bg-gray-50"
+              disabled={submitting}
+              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
             >
               Cancel
             </button>
@@ -236,9 +336,13 @@ export default function TeamEditor() {
 
       {/* Team List */}
       <div className="space-y-3">
-        <h2 className="text-xl font-semibold mb-4">Team ({members.length})</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Team Members ({members.length})
+        </h2>
         {members.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">No team members yet</p>
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 text-center">
+            <p className="text-gray-500">No team members yet. Add one using the form above.</p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {members.map((member, index) => (
@@ -267,7 +371,7 @@ export default function TeamEditor() {
                   <button
                     onClick={() => moveMember(member.id, 'up')}
                     disabled={index === 0 || loading}
-                    className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                    className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30 transition"
                     title="Move up"
                   >
                     <ChevronUp size={16} />
@@ -275,21 +379,23 @@ export default function TeamEditor() {
                   <button
                     onClick={() => moveMember(member.id, 'down')}
                     disabled={index === members.length - 1 || loading}
-                    className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30"
+                    className="p-2 text-gray-500 hover:text-gray-700 disabled:opacity-30 transition"
                     title="Move down"
                   >
                     <ChevronDown size={16} />
                   </button>
                   <button
                     onClick={() => handleEdit(member)}
-                    className="px-3 py-2 text-sm border rounded-lg hover:bg-gray-50"
+                    disabled={loading}
+                    className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(member.id)}
+                    onClick={() => confirmDelete(member.id)}
                     disabled={loading}
-                    className="p-2 text-red-500 hover:text-red-700 disabled:opacity-30"
+                    className="p-2 text-red-500 hover:text-red-700 disabled:opacity-30 transition"
+                    title="Delete"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -300,10 +406,25 @@ export default function TeamEditor() {
         )}
       </div>
 
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Team Member?"
+        message="This team member will be permanently deleted. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={loading}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteConfirm({ isOpen: false, memberId: null })}
+      />
+
       {/* Toast notification */}
       {toast && (
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
-  );
+  )
 }
+
+

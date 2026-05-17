@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import BilingualField from '../components/BilingualField'
 import { useApi } from '../hooks/useApi'
+import { ConfirmDialog } from '../components/ConfirmDialog'
 
 export default function ImpactEditor() {
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
   const { request } = useApi()
   const [data, setData] = useState({})
   const [stats, setStats] = useState([])
@@ -11,6 +14,9 @@ export default function ImpactEditor() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [activeSection, setActiveSection] = useState('stats')
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
 
   useEffect(() => {
     loadContent()
@@ -36,12 +42,16 @@ export default function ImpactEditor() {
     } catch (error) {
       setMessage(`Error: ${error.message}`)
     }
-  }
+      setError(error.message)
+    } finally {
+      setInitialLoading(false)
 
   const updateField = (section, fieldKey, lang, value) => {
     setData({
       ...data,
       [section]: {
+    setError('')
+    setStatusMessage('')
         ...data[section],
         [fieldKey]: { ...data[section]?.[fieldKey], [lang]: value },
       },
@@ -52,10 +62,9 @@ export default function ImpactEditor() {
     setAllocation(
       allocation.map((item) =>
         item.id === id ? { ...item, [field]: value } : item
-      )
-    )
+      setStatusMessage('Saved successfully')
   }
-
+      setError(error.message)
   const saveSection = async (section) => {
     setSaving(true)
     try {
@@ -63,6 +72,8 @@ export default function ImpactEditor() {
       await Promise.all(
         Object.entries(updates).map(([fieldKey, values]) =>
           request(`/api/admin/content/impact/${section}/${fieldKey}`, {
+    setError('')
+    setStatusMessage('')
             method: 'PATCH',
             body: JSON.stringify(values),
           })
@@ -73,10 +84,9 @@ export default function ImpactEditor() {
     } catch (error) {
       setMessage(`✗ Error: ${error.message}`)
     } finally {
-      setSaving(false)
-    }
+      setStatusMessage('Stats saved successfully')
   }
-
+      setError(error.message)
   const saveStats = async () => {
     setSaving(true)
     try {
@@ -84,11 +94,13 @@ export default function ImpactEditor() {
       await Promise.all(
         next.map((stat) =>
           request(`/api/admin/stats/${stat.id}`, {
-            method: 'PATCH',
+      setError('Value and English label are required')
             body: JSON.stringify(stat),
           })
         )
       )
+    setError('')
+    setStatusMessage('')
       setMessage('✓ Stats saved successfully')
       setTimeout(() => setMessage(''), 2000)
     } catch (error) {
@@ -96,10 +108,9 @@ export default function ImpactEditor() {
     } finally {
       setSaving(false)
     }
-  }
-
+      setStatusMessage('Stat added')
   const addStat = async () => {
-    if (!newStat.value || !newStat.labelEn) {
+      setError(error.message)
       setMessage('✗ Value and English label are required')
       return
     }
@@ -110,30 +121,38 @@ export default function ImpactEditor() {
         method: 'POST',
         body: JSON.stringify(newStat),
       })
+    setError('')
+    setStatusMessage('')
       setNewStat({ value: '', labelEn: '', labelBn: '' })
       await loadContent()
       setMessage('✓ Stat added')
       setTimeout(() => setMessage(''), 2000)
-    } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setStatusMessage('Stat deleted')
     } finally {
-      setSaving(false)
+      setError(error.message)
     }
   }
 
-  const deleteStat = async (id) => {
-    if (!window.confirm('Delete this stat?')) return
+  const confirmDeleteStat = (statId) => {
+    setDeleteConfirm({ isOpen: true, statId })
+  }
+
+  const deleteStat = async () => {
+      setError(`Allocation must total 100%, currently ${total}%`)
+    if (!statId) return
 
     setSaving(true)
     try {
-      await request(`/api/admin/stats/${id}`, { method: 'DELETE' })
+    setError('')
+    setStatusMessage('')
+      await request(`/api/admin/stats/${statId}`, { method: 'DELETE' })
       await loadContent()
+      setDeleteConfirm({ isOpen: false, statId: null })
       setMessage('✓ Stat deleted')
       setTimeout(() => setMessage(''), 2000)
-    } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setStatusMessage('Allocation saved successfully')
     } finally {
-      setSaving(false)
+      setError(error.message)
     }
   }
 
@@ -161,6 +180,12 @@ export default function ImpactEditor() {
 
   const totalAllocation = allocation.reduce((sum, item) => sum + Number(item.percentage || 0), 0)
 
+      {initialLoading ? (
+        <LoadingSpinner fullPage text="Loading impact content..." />
+      ) : (
+        <>
+          {error && <ErrorMessage error={error} onClose={() => setError('')} className="mb-4" />}
+
   const styles = {
     container: { maxWidth: '980px' },
     section: { background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' },
@@ -183,6 +208,9 @@ export default function ImpactEditor() {
         Update the shared impact stats, fund allocation, testimonial, and annual report.
       </p>
 
+          {statusMessage && <div style={successStyle}>{statusMessage}</div>}
+        </>
+      )}
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
         {[
           { key: 'stats', label: 'Impact Stats' },
@@ -234,7 +262,7 @@ export default function ImpactEditor() {
                   />
                   <button
                     type="button"
-                    onClick={() => deleteStat(stat.id)}
+                    onClick={() => confirmDeleteStat(stat.id)}
                     disabled={saving}
                     style={{ ...styles.button, marginTop: 0, background: '#b91c1c' }}
                   >
@@ -293,12 +321,13 @@ export default function ImpactEditor() {
         <div style={styles.section}>
           <div style={styles.title}>Community Feedback</div>
           <BilingualField
-            label="Testimonial Quote"
-            enValue={data.feedback?.quote?.en}
-            bnValue={data.feedback?.quote?.bn}
-            onEnChange={(val) => updateField('feedback', 'quote', 'en', val)}
-            onBnChange={(val) => updateField('feedback', 'quote', 'bn', val)}
-            type="textarea"
+            labelEn="Testimonial Quote"
+            labelBn="Testimonial Quote (Bangla)"
+            valueEn={data.feedback?.quote?.en}
+            valueBn={data.feedback?.quote?.bn}
+            onChangeEn={(val) => updateField('feedback', 'quote', 'en', val)}
+            onChangeBn={(val) => updateField('feedback', 'quote', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('feedback')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Feedback'}
@@ -310,12 +339,13 @@ export default function ImpactEditor() {
         <div style={styles.section}>
           <div style={styles.title}>Annual Report</div>
           <BilingualField
-            label="Report Status"
-            enValue={data.report?.status?.en}
-            bnValue={data.report?.status?.bn}
-            onEnChange={(val) => updateField('report', 'status', 'en', val)}
-            onBnChange={(val) => updateField('report', 'status', 'bn', val)}
-            type="textarea"
+            labelEn="Report Status"
+            labelBn="Report Status (Bangla)"
+            valueEn={data.report?.status?.en}
+            valueBn={data.report?.status?.bn}
+            onChangeEn={(val) => updateField('report', 'status', 'en', val)}
+            onChangeBn={(val) => updateField('report', 'status', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('report')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Report'}
@@ -325,5 +355,17 @@ export default function ImpactEditor() {
 
       {message && <div style={messageStyle}>{message}</div>}
     </div>
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Stat?"
+        message="This stat will be permanently deleted. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={saving}
+        onConfirm={deleteStat}
+        onCancel={() => setDeleteConfirm({ isOpen: false, statId: null })}
+      />
   )
 }

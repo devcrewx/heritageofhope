@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowUp, GripVertical, Trash2 } from 'lucide-react'
+import { ArrowDown, ArrowUp, GripVertical, Trash2, AlertCircle } from 'lucide-react'
 import apiClient from '../lib/api'
 import { Toast } from '../components/Toast'
 import { ImageUploader } from '../components/ImageUploader'
 import BilingualField from '../components/BilingualField'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 
 export function GalleryManager() {
   const [galleryItems, setGalleryItems] = useState([])
@@ -15,7 +18,10 @@ export function GalleryManager() {
   const [uploading, setUploading] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({})
+  const [formErrors, setFormErrors] = useState({})
   const [toast, setToast] = useState(null)
+  const [error, setError] = useState(null)
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, itemId: null })
 
   function showToast(message, type = 'success') {
     setToast({ message, type })
@@ -41,10 +47,55 @@ export function GalleryManager() {
     setFiles(selectedFiles)
   }
 
+  function validateUploadForm() {
+    const errors = {}
+
+    if (!uploadCategory.trim()) {
+      errors.uploadCategory = 'Category is required'
+    }
+
+    if (!uploadAltEn.trim()) {
+      errors.uploadAltEn = 'English alt text is required'
+    } else if (uploadAltEn.length > 200) {
+      errors.uploadAltEn = 'English alt text must be at most 200 characters'
+    }
+
+    if (uploadAltBn.length > 200) {
+      errors.uploadAltBn = 'Bengali alt text must be at most 200 characters'
+    }
+
+    return errors
+  }
+
+  function validateEditForm() {
+    const errors = {}
+
+    if (!editForm.category?.trim()) {
+      errors.category = 'Category is required'
+    }
+
+    if (editForm.altEn && editForm.altEn.length > 200) {
+      errors.altEn = 'English alt text must be at most 200 characters'
+    }
+
+    if (editForm.altBn && editForm.altBn.length > 200) {
+      errors.altBn = 'Bengali alt text must be at most 200 characters'
+    }
+
+    return errors
+  }
+
   // Upload new images
   async function handleUpload() {
     if (files.length === 0) {
       showToast('Please select at least one image', 'error')
+      return
+    }
+
+    const validationErrors = validateUploadForm()
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors)
+      showToast('Please fix validation errors', 'error')
       return
     }
 
@@ -69,6 +120,7 @@ export function GalleryManager() {
       setUploadCategory('gallery')
       setUploadAltEn('Gallery photo')
       setUploadAltBn('গ্যালারি ফটো')
+      setFormErrors({})
       showToast(`Uploaded ${response.data.count} image(s)`, 'success')
     } catch (error) {
       showToast(error.response?.data?.message || 'Upload failed', 'error')
@@ -85,10 +137,18 @@ export function GalleryManager() {
       altBn: item.altBn || '',
       category: item.category || 'gallery',
     })
+    setFormErrors({})
   }
 
   // Save edit
   async function handleSaveEdit(itemId) {
+    const validationErrors = validateEditForm()
+    if (Object.keys(validationErrors).length > 0) {
+      setFormErrors(validationErrors)
+      showToast('Please fix validation errors', 'error')
+      return
+    }
+
     try {
       const response = await apiClient.patch(`/api/admin/gallery/${itemId}`, editForm)
       setGalleryItems(
@@ -97,6 +157,7 @@ export function GalleryManager() {
         )
       )
       setEditingId(null)
+      setFormErrors({})
       showToast('Photo updated', 'success')
     } catch (error) {
       showToast('Failed to update photo', 'error')
@@ -130,31 +191,47 @@ export function GalleryManager() {
     }
   }
 
-  // Delete item
-  async function handleDelete(itemId) {
-    if (!confirm('Delete this photo?')) return
+  // Delete item with confirmation
+  const confirmDelete = (itemId) => {
+    setDeleteConfirm({ isOpen: true, itemId })
+  }
+
+  async function handleDelete() {
+    const { itemId } = deleteConfirm
+    if (!itemId) return
 
     try {
+      setLoading(true)
       await apiClient.delete(`/api/admin/gallery/${itemId}`)
       setGalleryItems(galleryItems.filter((item) => item.id !== itemId))
-      showToast('Photo deleted', 'success')
+      setDeleteConfirm({ isOpen: false, itemId: null })
+      showToast('Photo deleted successfully', 'success')
     } catch (error) {
-      showToast('Failed to delete photo', 'error')
+      const errorMsg = error.response?.data?.error || 'Failed to delete photo'
+      setError(errorMsg)
+      showToast(errorMsg, 'error')
+    } finally {
+      setLoading(false)
     }
   }
 
   if (loading) {
-    return (
-      <div className="p-6">
-        <p className="text-gray-500">Loading gallery...</p>
-      </div>
-    )
+    return <LoadingSpinner fullPage text="Loading gallery..." />
   }
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Gallery Manager</h1>
       <p className="text-gray-600 mb-6">Upload and manage gallery photos</p>
+
+      {/* Error Message */}
+      {error && (
+        <ErrorMessage 
+          error={error} 
+          onClose={() => setError(null)}
+          className="mb-6"
+        />
+      )}
 
       {/* Upload Section */}
       <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
@@ -166,27 +243,63 @@ export function GalleryManager() {
             <input
               type="text"
               value={uploadCategory}
-              onChange={(e) => setUploadCategory(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              onChange={(e) => {
+                setUploadCategory(e.target.value)
+                if (formErrors.uploadCategory) {
+                  setFormErrors((prev) => ({ ...prev, uploadCategory: '' }))
+                }
+              }}
+              className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                formErrors.uploadCategory ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {formErrors.uploadCategory && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {formErrors.uploadCategory}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">Alt Text EN</label>
             <input
               type="text"
               value={uploadAltEn}
-              onChange={(e) => setUploadAltEn(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              onChange={(e) => {
+                setUploadAltEn(e.target.value)
+                if (formErrors.uploadAltEn) {
+                  setFormErrors((prev) => ({ ...prev, uploadAltEn: '' }))
+                }
+              }}
+              className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                formErrors.uploadAltEn ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {formErrors.uploadAltEn && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {formErrors.uploadAltEn}
+              </p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">Alt Text BN</label>
             <input
               type="text"
               value={uploadAltBn}
-              onChange={(e) => setUploadAltBn(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              onChange={(e) => {
+                setUploadAltBn(e.target.value)
+                if (formErrors.uploadAltBn) {
+                  setFormErrors((prev) => ({ ...prev, uploadAltBn: '' }))
+                }
+              }}
+              className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                formErrors.uploadAltBn ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {formErrors.uploadAltBn && (
+              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3.5 h-3.5" /> {formErrors.uploadAltBn}
+              </p>
+            )}
           </div>
         </div>
 
@@ -235,19 +348,30 @@ export function GalleryManager() {
                           <input
                             type="text"
                             value={editForm.category}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               setEditForm({ ...editForm, category: e.target.value })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                              if (formErrors.category) {
+                                setFormErrors((prev) => ({ ...prev, category: '' }))
+                              }
+                            }}
+                            className={`w-full px-3 py-2 border rounded-lg text-sm ${
+                              formErrors.category ? 'border-red-500' : 'border-gray-300'
+                            }`}
                           />
+                          {formErrors.category && (
+                            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                              <AlertCircle className="w-3.5 h-3.5" /> {formErrors.category}
+                            </p>
+                          )}
                         </div>
 
                         <BilingualField
-                          label="Alt Text"
-                          enValue={editForm.altEn}
-                          bnValue={editForm.altBn}
-                          onEnChange={(v) => setEditForm({ ...editForm, altEn: v })}
-                          onBnChange={(v) => setEditForm({ ...editForm, altBn: v })}
+                          labelEn="Alt Text (EN)"
+                          labelBn="Alt Text (BN)"
+                          valueEn={editForm.altEn}
+                          valueBn={editForm.altBn}
+                          onChangeEn={(v) => setEditForm({ ...editForm, altEn: v })}
+                          onChangeBn={(v) => setEditForm({ ...editForm, altBn: v })}
                         />
                       </div>
                     </div>
@@ -320,8 +444,8 @@ export function GalleryManager() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(item.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        onClick={() => confirmDelete(item.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -333,6 +457,19 @@ export function GalleryManager() {
           </div>
         )}
       </div>
+
+      {/* Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Photo?"
+        message="This photo will be permanently deleted and removed from Cloudinary. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={loading}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteConfirm({ isOpen: false, itemId: null })}
+      />
 
       {toast && (
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />

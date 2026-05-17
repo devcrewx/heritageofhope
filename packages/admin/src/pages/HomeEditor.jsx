@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import BilingualField from '../components/BilingualField'
 import { Toast } from '../components/Toast'
+import { ConfirmDialog } from '../components/ConfirmDialog'
+import MediaUploadField from '../components/MediaUploadField'
 import apiClient from '../lib/api'
 
 function HomeEditor() {
@@ -10,6 +12,7 @@ function HomeEditor() {
   const [heroHeadlineBn, setHeroHeadlineBn] = useState('')
   const [heroIntroEn, setHeroIntroEn] = useState('')
   const [heroIntroBn, setHeroIntroBn] = useState('')
+  const [heroImageUrl, setHeroImageUrl] = useState('')
 
   // Trust badges
   const [badge1, setBadge1] = useState('')
@@ -35,8 +38,10 @@ function HomeEditor() {
   // UI state
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [heroUploading, setHeroUploading] = useState(false)
   const [activeTab, setActiveTab] = useState('hero')
   const [toast, setToast] = useState(null)
+  const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, statId: null })
 
   // Fetch content on mount
   useEffect(() => {
@@ -56,6 +61,7 @@ function HomeEditor() {
           setBadge1(h.badge1?.en || '')
           setBadge2(h.badge2?.en || '')
           setBadge3(h.badge3?.en || '')
+          setHeroImageUrl(h.heroImage?.en || '')
         }
 
         // Parse mission section
@@ -145,12 +151,18 @@ function HomeEditor() {
     }
   }
 
-  async function deleteStat(id) {
-    if (!confirm('Delete this stat?')) return
+  const confirmDeleteStat = (statId) => {
+    setDeleteConfirm({ isOpen: true, statId })
+  }
+
+  async function deleteStat() {
+    const { statId } = deleteConfirm
+    if (!statId) return
 
     try {
-      await apiClient.delete(`/api/admin/stats/${id}`)
-      setStats(stats.filter(s => s.id !== id))
+      await apiClient.delete(`/api/admin/stats/${statId}`)
+      setStats(stats.filter(s => s.id !== statId))
+      setDeleteConfirm({ isOpen: false, statId: null })
       showToast('Stat deleted', 'success')
     } catch (error) {
       showToast('Failed to delete stat', 'error')
@@ -193,6 +205,44 @@ function HomeEditor() {
     }
   }
 
+  async function uploadHeroImage(file) {
+    setHeroUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'home')
+      formData.append('section', 'hero')
+
+      const response = await apiClient.post('/api/admin/media/hero', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      setHeroImageUrl(response.data?.data?.url || '')
+      showToast('Hero image updated', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to upload hero image'
+      showToast(msg, 'error')
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  async function deleteHeroImage() {
+    setHeroUploading(true)
+
+    try {
+      await apiClient.delete('/api/admin/media/hero/home/hero')
+      setHeroImageUrl('')
+      showToast('Hero image removed', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to remove hero image'
+      showToast(msg, 'error')
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
   if (loading) {
     return (
       <section>
@@ -208,6 +258,18 @@ function HomeEditor() {
         <h1 className="text-2xl font-bold mb-2">Home Page Editor</h1>
         <p className="text-gray-600">Edit hero, stats, mission section, and donation CTA.</p>
       </div>
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        title="Delete Stat?"
+        message="This stat will be permanently deleted. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        isDangerous
+        isLoading={saving}
+        onConfirm={deleteStat}
+        onCancel={() => setDeleteConfirm({ isOpen: false, statId: null })}
+      />
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-200">
@@ -234,6 +296,17 @@ function HomeEditor() {
       {/* Hero Section */}
       {activeTab === 'hero' && (
         <form onSubmit={saveHero} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
+          <MediaUploadField
+            label="Hero Photo"
+            helperText="This image appears in the main Home page hero panel."
+            currentUrl={heroImageUrl}
+            currentAlt="Home hero"
+            onUpload={uploadHeroImage}
+            onDelete={heroImageUrl ? deleteHeroImage : undefined}
+            uploading={heroUploading}
+            previewClassName="h-64 w-full object-cover"
+          />
+
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Eyebrow Label*</label>
             <input
@@ -247,22 +320,24 @@ function HomeEditor() {
           </div>
 
           <BilingualField
-            label="Hero Headline"
-            enValue={heroHeadlineEn}
-            bnValue={heroHeadlineBn}
-            onEnChange={setHeroHeadlineEn}
-            onBnChange={setHeroHeadlineBn}
-            type="textarea"
+            labelEn="Hero Headline"
+            labelBn="Hero Headline (Bangla)"
+            valueEn={heroHeadlineEn}
+            valueBn={heroHeadlineBn}
+            onChangeEn={setHeroHeadlineEn}
+            onChangeBn={setHeroHeadlineBn}
+            isTextArea
             required
           />
 
           <BilingualField
-            label="Hero Intro Paragraph"
-            enValue={heroIntroEn}
-            bnValue={heroIntroBn}
-            onEnChange={setHeroIntroEn}
-            onBnChange={setHeroIntroBn}
-            type="textarea"
+            labelEn="Hero Intro Paragraph"
+            labelBn="Hero Intro Paragraph (Bangla)"
+            valueEn={heroIntroEn}
+            valueBn={heroIntroBn}
+            onChangeEn={setHeroIntroEn}
+            onChangeBn={setHeroIntroBn}
+            isTextArea
           />
 
           <div className="border-t pt-6">
@@ -322,7 +397,7 @@ function HomeEditor() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => deleteStat(stat.id)}
+                      onClick={() => confirmDeleteStat(stat.id)}
                       className="px-3 py-1 text-red-600 hover:bg-red-50 rounded text-sm font-medium"
                     >
                       Delete
@@ -373,11 +448,12 @@ function HomeEditor() {
       {activeTab === 'mission' && (
         <form onSubmit={saveMission} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
           <BilingualField
-            label="Mission Section Heading"
-            enValue={missionHeadingEn}
-            bnValue={missionHeadingBn}
-            onEnChange={setMissionHeadingEn}
-            onBnChange={setMissionHeadingBn}
+            labelEn="Mission Section Heading"
+            labelBn="Mission Section Heading (Bangla)"
+            valueEn={missionHeadingEn}
+            valueBn={missionHeadingBn}
+            onChangeEn={setMissionHeadingEn}
+            onChangeBn={setMissionHeadingBn}
             required
           />
 
@@ -401,22 +477,24 @@ function HomeEditor() {
       {activeTab === 'cta' && (
         <form onSubmit={saveCTA} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
           <BilingualField
-            label="CTA Headline"
-            enValue={ctaHeadlineEn}
-            bnValue={ctaHeadlineBn}
-            onEnChange={setCtaHeadlineEn}
-            onBnChange={setCtaHeadlineBn}
+            labelEn="CTA Headline"
+            labelBn="CTA Headline (Bangla)"
+            valueEn={ctaHeadlineEn}
+            valueBn={ctaHeadlineBn}
+            onChangeEn={setCtaHeadlineEn}
+            onChangeBn={setCtaHeadlineBn}
             hint="Main call-to-action heading"
             required
           />
 
           <BilingualField
-            label="CTA Body Text"
-            enValue={ctaBodyEn}
-            bnValue={ctaBodyBn}
-            onEnChange={setCtaBodyEn}
-            onBnChange={setCtaBodyBn}
-            type="textarea"
+            labelEn="CTA Body Text"
+            labelBn="CTA Body Text (Bangla)"
+            valueEn={ctaBodyEn}
+            valueBn={ctaBodyBn}
+            onChangeEn={setCtaBodyEn}
+            onChangeBn={setCtaBodyBn}
+            isTextArea
             hint="Supporting text for the donation section"
           />
 

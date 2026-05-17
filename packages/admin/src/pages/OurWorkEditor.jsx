@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import BilingualField from '../components/BilingualField'
+import { ErrorMessage } from '../components/ErrorMessage'
+import { LoadingSpinner } from '../components/LoadingSpinner'
+import MediaUploadField from '../components/MediaUploadField'
+import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 
 const focusFields = ['tag1', 'tag2', 'tag3']
@@ -9,7 +13,10 @@ export default function OurWorkEditor() {
   const { request } = useApi()
   const [data, setData] = useState({})
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState('')
+  const [heroUploading, setHeroUploading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [statusMessage, setStatusMessage] = useState('')
 
   useEffect(() => {
     loadContent()
@@ -22,7 +29,69 @@ export default function OurWorkEditor() {
         setData(response.sections || {})
       }
     } catch (error) {
-      setMessage(`Error: ${error.message}`)
+      setError(error.message)
+    } finally {
+      setInitialLoading(false)
+    }
+  }
+
+  const heroImageUrl = data.hero?.heroImage?.en || ''
+
+  const uploadHeroImage = async (file) => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'our-work')
+      formData.append('section', 'hero')
+
+      const response = await apiClient.post('/api/admin/media/hero', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          hero: {
+            ...current.hero,
+            heroImage: {
+              en: response.data.data.url,
+              bn: response.data.data.publicId || response.data.data.url,
+            },
+          },
+        }))
+      }
+
+      setStatusMessage('Hero photo updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  const deleteHeroImage = async () => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/hero/our-work/hero')
+      setData((current) => ({
+        ...current,
+        hero: {
+          ...current.hero,
+          heroImage: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('Hero photo removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
     }
   }
 
@@ -38,6 +107,8 @@ export default function OurWorkEditor() {
 
   const saveSection = async (section) => {
     setSaving(true)
+    setError('')
+    setStatusMessage('')
     try {
       const updates = data[section] || {}
       await Promise.all(
@@ -48,10 +119,9 @@ export default function OurWorkEditor() {
           })
         )
       )
-      setMessage('✓ Saved successfully')
-      setTimeout(() => setMessage(''), 2000)
+      setStatusMessage('Saved successfully')
     } catch (error) {
-      setMessage(`✗ Error: ${error.message}`)
+      setError(error.message)
     } finally {
       setSaving(false)
     }
@@ -65,118 +135,135 @@ export default function OurWorkEditor() {
     hint: { marginTop: '-0.5rem', marginBottom: '1rem', color: '#64748b', fontSize: '0.92rem' },
   }
 
-  const messageStyle = {
-    marginTop: '1rem',
-    padding: '0.75rem',
-    borderRadius: '0.4rem',
-    fontSize: '0.9rem',
-    background: message.includes('✗') ? '#fee2e2' : '#dbeafe',
-    color: message.includes('✗') ? '#991b1b' : '#0c4a6e',
-  }
-
   return (
     <div style={styles.container}>
       <h1 style={{ marginBottom: '0.5rem', fontSize: '1.8rem' }}>Our Work Page Editor</h1>
       <p style={styles.hint}>This controls the public Our Work page text sections. Program cards still use the shared program content.</p>
 
-      <div style={styles.section}>
-        <div style={styles.title}>Intro Section</div>
-        <BilingualField
-          label="Page Title"
-          enValue={data.hero?.title?.en}
-          bnValue={data.hero?.title?.bn}
-          onEnChange={(val) => updateField('hero', 'title', 'en', val)}
-          onBnChange={(val) => updateField('hero', 'title', 'bn', val)}
-        />
-        <BilingualField
-          label="Page Intro"
-          enValue={data.hero?.intro?.en}
-          bnValue={data.hero?.intro?.bn}
-          onEnChange={(val) => updateField('hero', 'intro', 'en', val)}
-          onBnChange={(val) => updateField('hero', 'intro', 'bn', val)}
-          type="textarea"
-        />
-        <button onClick={() => saveSection('hero')} disabled={saving} style={styles.button}>
-          {saving ? 'Saving...' : 'Save Intro'}
-        </button>
-      </div>
+      {initialLoading ? (
+        <LoadingSpinner fullPage text="Loading our work content..." />
+      ) : (
+        <>
+          {error && <ErrorMessage error={error} onClose={() => setError('')} className="mb-4" />}
 
-      <div style={styles.section}>
-        <div style={styles.title}>Focus Tags</div>
-        <p style={styles.hint}>These appear as the summary line in the mini panel.</p>
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {focusFields.map((fieldKey, index) => (
-            <BilingualField
-              key={fieldKey}
-              label={`Tag ${index + 1}`}
-              enValue={data.focus?.[fieldKey]?.en}
-              bnValue={data.focus?.[fieldKey]?.bn}
-              onEnChange={(val) => updateField('focus', fieldKey, 'en', val)}
-              onBnChange={(val) => updateField('focus', fieldKey, 'bn', val)}
+          <div style={styles.section}>
+            <div style={styles.title}>Intro Section</div>
+            <MediaUploadField
+              label="Hero Photo"
+              helperText="This image appears in the public Our Work hero panel."
+              currentUrl={heroImageUrl}
+              currentAlt="Our Work hero"
+              onUpload={uploadHeroImage}
+              onDelete={heroImageUrl ? deleteHeroImage : undefined}
+              uploading={heroUploading}
+              previewClassName="h-64 w-full object-cover"
             />
-          ))}
-        </div>
-        <button onClick={() => saveSection('focus')} disabled={saving} style={styles.button}>
-          {saving ? 'Saving...' : 'Save Focus Tags'}
-        </button>
-      </div>
-
-      <div style={styles.section}>
-        <div style={styles.title}>Approach Section</div>
-        <BilingualField
-          label="Section Heading"
-          enValue={data.approach?.heading?.en}
-          bnValue={data.approach?.heading?.bn}
-          onEnChange={(val) => updateField('approach', 'heading', 'en', val)}
-          onBnChange={(val) => updateField('approach', 'heading', 'bn', val)}
-        />
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {stepFields.map((fieldKey, index) => (
             <BilingualField
-              key={fieldKey}
-              label={`Step ${index + 1}`}
-              enValue={data.approach?.[fieldKey]?.en}
-              bnValue={data.approach?.[fieldKey]?.bn}
-              onEnChange={(val) => updateField('approach', fieldKey, 'en', val)}
-              onBnChange={(val) => updateField('approach', fieldKey, 'bn', val)}
+              labelEn="Page Title"
+              labelBn="Page Title (Bangla)"
+              valueEn={data.hero?.title?.en}
+              valueBn={data.hero?.title?.bn}
+              onChangeEn={(val) => updateField('hero', 'title', 'en', val)}
+              onChangeBn={(val) => updateField('hero', 'title', 'bn', val)}
             />
-          ))}
-        </div>
-        <button onClick={() => saveSection('approach')} disabled={saving} style={styles.button}>
-          {saving ? 'Saving...' : 'Save Approach'}
-        </button>
-      </div>
+            <BilingualField
+              labelEn="Page Intro"
+              labelBn="Page Intro (Bangla)"
+              valueEn={data.hero?.intro?.en}
+              valueBn={data.hero?.intro?.bn}
+              onChangeEn={(val) => updateField('hero', 'intro', 'en', val)}
+              onChangeBn={(val) => updateField('hero', 'intro', 'bn', val)}
+              isTextArea
+            />
+            <button onClick={() => saveSection('hero')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Intro'}
+            </button>
+          </div>
 
-      <div style={styles.section}>
-        <div style={styles.title}>Join Mission Box</div>
-        <BilingualField
-          label="Small Label"
-          enValue={data.join?.meta?.en}
-          bnValue={data.join?.meta?.bn}
-          onEnChange={(val) => updateField('join', 'meta', 'en', val)}
-          onBnChange={(val) => updateField('join', 'meta', 'bn', val)}
-        />
-        <BilingualField
-          label="Body Text"
-          enValue={data.join?.body?.en}
-          bnValue={data.join?.body?.bn}
-          onEnChange={(val) => updateField('join', 'body', 'en', val)}
-          onBnChange={(val) => updateField('join', 'body', 'bn', val)}
-          type="textarea"
-        />
-        <BilingualField
-          label="Button Label"
-          enValue={data.join?.button?.en}
-          bnValue={data.join?.button?.bn}
-          onEnChange={(val) => updateField('join', 'button', 'en', val)}
-          onBnChange={(val) => updateField('join', 'button', 'bn', val)}
-        />
-        <button onClick={() => saveSection('join')} disabled={saving} style={styles.button}>
-          {saving ? 'Saving...' : 'Save Join Box'}
-        </button>
-      </div>
+          <div style={styles.section}>
+            <div style={styles.title}>Focus Tags</div>
+            <p style={styles.hint}>These appear as the summary line in the mini panel.</p>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {focusFields.map((fieldKey, index) => (
+                <BilingualField
+                  key={fieldKey}
+                  labelEn={`Tag ${index + 1}`}
+                  labelBn={`Tag ${index + 1} (Bangla)`}
+                  valueEn={data.focus?.[fieldKey]?.en}
+                  valueBn={data.focus?.[fieldKey]?.bn}
+                  onChangeEn={(val) => updateField('focus', fieldKey, 'en', val)}
+                  onChangeBn={(val) => updateField('focus', fieldKey, 'bn', val)}
+                />
+              ))}
+            </div>
+            <button onClick={() => saveSection('focus')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Focus Tags'}
+            </button>
+          </div>
 
-      {message && <div style={messageStyle}>{message}</div>}
+          <div style={styles.section}>
+            <div style={styles.title}>Approach Section</div>
+            <BilingualField
+              labelEn="Section Heading"
+              labelBn="Section Heading (Bangla)"
+              valueEn={data.approach?.heading?.en}
+              valueBn={data.approach?.heading?.bn}
+              onChangeEn={(val) => updateField('approach', 'heading', 'en', val)}
+              onChangeBn={(val) => updateField('approach', 'heading', 'bn', val)}
+            />
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {stepFields.map((fieldKey, index) => (
+                <BilingualField
+                  key={fieldKey}
+                  labelEn={`Step ${index + 1}`}
+                  labelBn={`Step ${index + 1} (Bangla)`}
+                  valueEn={data.approach?.[fieldKey]?.en}
+                  valueBn={data.approach?.[fieldKey]?.bn}
+                  onChangeEn={(val) => updateField('approach', fieldKey, 'en', val)}
+                  onChangeBn={(val) => updateField('approach', fieldKey, 'bn', val)}
+                />
+              ))}
+            </div>
+            <button onClick={() => saveSection('approach')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Approach'}
+            </button>
+          </div>
+
+          <div style={styles.section}>
+            <div style={styles.title}>Join Mission Box</div>
+            <BilingualField
+              labelEn="Small Label"
+              labelBn="Small Label (Bangla)"
+              valueEn={data.join?.meta?.en}
+              valueBn={data.join?.meta?.bn}
+              onChangeEn={(val) => updateField('join', 'meta', 'en', val)}
+              onChangeBn={(val) => updateField('join', 'meta', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Body Text"
+              labelBn="Body Text (Bangla)"
+              valueEn={data.join?.body?.en}
+              valueBn={data.join?.body?.bn}
+              onChangeEn={(val) => updateField('join', 'body', 'en', val)}
+              onChangeBn={(val) => updateField('join', 'body', 'bn', val)}
+              isTextArea
+            />
+            <BilingualField
+              labelEn="Button Label"
+              labelBn="Button Label (Bangla)"
+              valueEn={data.join?.button?.en}
+              valueBn={data.join?.button?.bn}
+              onChangeEn={(val) => updateField('join', 'button', 'en', val)}
+              onChangeBn={(val) => updateField('join', 'button', 'bn', val)}
+            />
+            <button onClick={() => saveSection('join')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Join Box'}
+            </button>
+          </div>
+
+          {statusMessage && <div style={successStyle}>{statusMessage}</div>}
+        </>
+      )}
     </div>
   )
 }

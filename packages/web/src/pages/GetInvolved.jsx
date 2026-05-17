@@ -8,6 +8,8 @@ function GetInvolved() {
   const { language, siteContent } = useOutletContext()
   const { getInvolved } = siteContent
   const page = getInvolved.pageContent || {}
+  const partnerPhoto = page.heroImage || '/assets/get_involved_partner.webp'
+  const upiQrImage = page.upiQrImage || page.upiQr || '/docs/upi-qr.jpeg'
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalDoc, setModalDoc] = useState(null)
@@ -63,7 +65,7 @@ function GetInvolved() {
           </div>
           <div className="qr-frame">
             <img
-              src={page.upiQr || '/docs/upi-qr.jpeg'}
+              src={upiQrImage}
               alt={resolve(language, page.upiQrAlt || text('Official UPI QR code for donations', 'দানের জন্য আনুষ্ঠানিক ইউপিআই কিউআর কোড'))}
               loading="lazy"
             />
@@ -199,7 +201,7 @@ function GetInvolved() {
           </p>
           <figure className="partner-photo-frame" data-reveal>
             <img
-              src="/assets/get_involved_partner.webp"
+              src={partnerPhoto}
               alt={resolve(
                 language,
                 text(

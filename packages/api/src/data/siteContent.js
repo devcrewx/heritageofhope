@@ -282,6 +282,9 @@ export async function getSiteContent() {
           badge2: homeMap.hero?.badge2,
           badge3: homeMap.hero?.badge3,
         },
+        pageContent: {
+          heroImage: homeMap.hero?.heroImage,
+        },
         mission: {
           heading: homeMap.mission?.heading,
         },
@@ -298,6 +301,7 @@ export async function getSiteContent() {
         pageContent: {
           title: aboutMap.intro?.title,
           intro: aboutMap.intro?.paragraph,
+          heroImage: aboutMap.hero?.heroImage,
           story: aboutMap.story?.body,
           mission: aboutMap.mission?.statement,
           vision: aboutMap.mission?.vision,
@@ -334,6 +338,7 @@ export async function getSiteContent() {
         pageContent: {
           title: getInvolvedMap.intro?.title,
           intro: getInvolvedMap.intro?.paragraph,
+          heroImage: getInvolvedMap.hero?.heroImage,
           bankLabel: getInvolvedMap.bank?.label,
           bank: {
             name: getInvolvedMap.bank?.name,
@@ -346,6 +351,7 @@ export async function getSiteContent() {
           qrTitle: getInvolvedMap.upi?.qrTitle,
           upiQrAlt: getInvolvedMap.upi?.qrAlt,
           upiQr: getInvolvedMap.upi?.qrUrl,
+          upiQrImage: getInvolvedMap.payment?.upiQrImage,
           upiIntentUrl: getInvolvedMap.upi?.intentUrl,
           upiCta: getInvolvedMap.upi?.ctaText,
           upiHint: getInvolvedMap.upi?.hint,
@@ -382,6 +388,7 @@ export async function getSiteContent() {
         pageContent: {
           title: ourWorkMap.hero?.title,
           intro: ourWorkMap.hero?.intro,
+          heroImage: ourWorkMap.hero?.heroImage,
           focusTags: [ourWorkMap.focus?.tag1, ourWorkMap.focus?.tag2, ourWorkMap.focus?.tag3].filter(Boolean),
           approachHeading: ourWorkMap.approach?.heading,
           approachSteps: [
