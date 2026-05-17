@@ -1064,11 +1064,11 @@ VITE_API_BASE="https://api.heritageofhopefoundation.org"
 
 | Service | What deploys | How |
 |---|---|---|
-| Railway | `packages/api` | Connect GitHub → auto-deploy on push to `main` |
+| Render | `packages/api` | Connect GitHub → auto-deploy on push to `main` (service deployed on Render) |
 | Netlify site 1 | `packages/web` | Existing — already live |
 | Netlify site 2 | `packages/admin` | New Netlify site, same repo, base dir = `packages/admin` |
 | Supabase | PostgreSQL | Hosted, connect via `DATABASE_URL` |
-| Cloudinary | Media storage | API credentials in Railway env vars |
+| Cloudinary | Media storage | API credentials in Render environment variables |
 
 ### Custom domains
 | Domain | Points to |
@@ -1094,7 +1094,7 @@ Before handing over to the NGO team:
 - [ ] Admin login credentials delivered securely (not over email) — PENDING
 - [ ] 1-page "How to update the website" PDF written for the client — PENDING
 - [x] All existing site content seeded into database correctly — seed.js run
-- [ ] All existing photos uploaded to Cloudinary and linked — PENDING
+- [x] All existing photos uploaded to Cloudinary and linked — completed via bulk Cloudinary relink on 2026-05-17
 - [ ] All 6 documents (trust cert, DARPAN, 12A, 80G, CSR, awards) uploaded as PDFs — PENDING
 - [ ] Client has tested: updating a stat, uploading a gallery photo, adding an activity post — PENDING
 - [ ] Client knows: change password on first login — PENDING (no docs yet)
@@ -1104,3 +1104,22 @@ Before handing over to the NGO team:
 
 *Document prepared for Heritage of Hope Foundation website project.*
 *Admin panel to be built as a companion to the existing public site.*
+
+## 16. Current project status (updated 2026-05-17)
+
+Summary: most feature work and deploys are complete. Remaining items below were verified against the repo and deployment actions performed on 2026-05-17.
+
+- [ ] Nodemailer email notification on new form submission — NOT VERIFIED (Web3Forms fallback currently in use)
+- [ ] Audit log: schema exists but full audit logging of all admin write operations not enabled/verified
+- [ ] 1-page "How to use the admin panel" guide for the client — NOT STARTED
+- [ ] Deliver admin login credentials to client securely — PENDING
+- [x] Ensure all existing photos uploaded to Cloudinary and linked in DB — completed via bulk upload and verification on 2026-05-17
+- [ ] Upload all 6 official documents (trust cert, DARPAN, 12A, 80G, CSR, awards) as PDFs — PENDING
+- [ ] Client verification: test updating a stat, uploading a gallery photo, adding an activity post — PENDING (recommended step)
+- [ ] Add developer contact & handoff notes for bug reports — PENDING
+- [ ] Post-deploy monitoring / regression sign-off (health endpoints, logs) — RECOMMENDED
+
+Notes:
+- API and static frontends deployed: API live on Render, public and admin sites deployed to Netlify (admin: rococo-sherbet-6244e2.netlify.app, web: cheery-praline-30b4a8.netlify.app).
+- Admin build issues in `ImpactEditor.jsx` and `ProgramsEditor.jsx` were fixed and committed (fix commit present).
+- Content wiring for `heroImage` and UPI QR has been added and is served by the API.
