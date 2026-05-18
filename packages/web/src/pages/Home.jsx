@@ -41,6 +41,7 @@ function Home() {
     },
   }
   const hero = home.hero || {}
+  const mission = home.mission || {}
   const cta = home.cta || {}
 
   return (
@@ -115,7 +116,7 @@ function Home() {
       <section className="panel" data-reveal>
         <div className="section-head">
           <p>{copy[language].pillarTitle}</p>
-          <h2>{resolve(language, text('What we do on the ground', 'মানুষের দোরগোড়ায় আমাদের কাজ'))}</h2>
+          <h2>{resolve(language, mission.heading || text('What we do on the ground', 'মানুষের দোরগোড়ায় আমাদের কাজ'))}</h2>
         </div>
         <div className="card-grid">
           {home.featuredPrograms && home.featuredPrograms.length > 0

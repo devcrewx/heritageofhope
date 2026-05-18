@@ -482,7 +482,8 @@ function HomeEditor() {
           />
 
           <div className="bg-blue-50 border border-blue-200 rounded px-4 py-3 text-sm text-blue-800">
-            <p>📸 Mission photos are managed in the Gallery section.</p>
+            <p>Mission cards and images are managed in the Featured Programs editor.</p>
+            <p className="mt-1">Go to Programs in admin to add, edit, reorder, or delete these items.</p>
           </div>
 
           <div className="flex gap-3 pt-6 border-t">
