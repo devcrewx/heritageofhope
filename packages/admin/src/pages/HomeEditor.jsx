@@ -360,6 +360,35 @@ function HomeEditor() {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Eyebrow Label*</label>
             <input
+              type="text"
+              value={heroEyebrow}
+              onChange={(e) => setHeroEyebrow(e.target.value)}
+              placeholder='e.g., "LIGHTING LIVES..."'
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <BilingualField
+            labelEn="Hero Footnote"
+            labelBn="Hero Footnote (Bangla)"
+            valueEn={heroFootnoteEn}
+            valueBn={heroFootnoteBn}
+            onChangeEn={setHeroFootnoteEn}
+            onChangeBn={setHeroFootnoteBn}
+            isTextArea={false}
+          />
+
+          <div className="flex gap-3 pt-6 border-t">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              Save Hero
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* Page Labels */}
       {activeTab === 'labels' && (
@@ -411,25 +440,10 @@ function HomeEditor() {
           </div>
         </form>
       )}
-              type="text"
-              value={heroEyebrow}
-              onChange={(e) => setHeroEyebrow(e.target.value)}
-              placeholder='e.g., "LIGHTING LIVES..."'
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
 
-          <BilingualField
-            labelEn="Hero Footnote"
-            labelBn="Hero Footnote (Bangla)"
-            valueEn={heroFootnoteEn}
-            valueBn={heroFootnoteBn}
-            onChangeEn={setHeroFootnoteEn}
-            onChangeBn={setHeroFootnoteBn}
-            isTextArea={false}
-          />
-
+      {/* Stats Section */}
+      {activeTab === 'stats' && (
+        <form onSubmit={saveStats} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
           <BilingualField
             labelEn="Hero Headline"
             labelBn="Hero Headline (Bangla)"
