@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.VITE_API_BASE || ''
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? ''
+    : 'https://heritageofhope-api.onrender.com')
 
 const apiClient = axios.create({
   baseURL: API_BASE,

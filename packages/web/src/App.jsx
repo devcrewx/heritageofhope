@@ -74,6 +74,11 @@ function RevealOnScroll({ language }) {
 function App() {
   const [language, setLanguage] = useState('en')
   const [siteContent, setSiteContent] = useState(fallbackSiteContent)
+  const apiBase =
+    import.meta.env.VITE_API_BASE_URL ||
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? ''
+      : 'https://heritageofhope-api.onrender.com')
 
   useEffect(() => {
     let cancelled = false
@@ -81,7 +86,6 @@ function App() {
 
     async function loadSiteContent() {
       try {
-        const apiBase = import.meta.env.VITE_API_BASE_URL ?? ''
         const response = await fetch(`${apiBase}/api/content`)
 
         if (!response.ok) {
