@@ -27,6 +27,7 @@ function buildFallbackSiteContent() {
       hero: {},
       mission: {},
       cta: {},
+      pageContent: {},
     },
     about: {
       teamMembers: [],
@@ -284,6 +285,10 @@ export async function getSiteContent() {
           heroFootnote: homeMap.hero?.heroFootnote,
         },
         pageContent: {
+          statsLabel: homeMap.pageContent?.statsLabel,
+          pillarLabel: homeMap.pageContent?.pillarLabel,
+          activityLabel: homeMap.pageContent?.activityLabel,
+          donationLabel: homeMap.pageContent?.donationLabel,
           heroImage: homeMap.hero?.heroImage,
         },
         mission: {
@@ -300,6 +305,8 @@ export async function getSiteContent() {
         documents: transformedDocuments,
         coreValues: transformedCoreValues,
         pageContent: {
+          documentsLabel: aboutMap.pageContent?.documentsLabel,
+          documentsHeading: aboutMap.pageContent?.documentsHeading,
           title: aboutMap.intro?.title,
           intro: aboutMap.intro?.paragraph,
           heroImage: aboutMap.hero?.heroImage,
@@ -340,6 +347,19 @@ export async function getSiteContent() {
           title: getInvolvedMap.intro?.title,
           intro: getInvolvedMap.intro?.paragraph,
           heroImage: getInvolvedMap.hero?.heroImage,
+          donationLabel: getInvolvedMap.pageContent?.donationLabel,
+          donationHeading: getInvolvedMap.pageContent?.donationHeading,
+          paymentLabel: getInvolvedMap.pageContent?.paymentLabel,
+          paymentHeading: getInvolvedMap.pageContent?.paymentHeading,
+          volunteerLabel: getInvolvedMap.pageContent?.volunteerLabel,
+          volunteerHeading: getInvolvedMap.pageContent?.volunteerHeading,
+          volunteerFormLabel: getInvolvedMap.pageContent?.volunteerFormLabel,
+          volunteerFormHeading: getInvolvedMap.pageContent?.volunteerFormHeading,
+          partnerLabel: getInvolvedMap.pageContent?.partnerLabel,
+          partnerHeading: getInvolvedMap.pageContent?.partnerHeading,
+          partnerSubtitle: getInvolvedMap.pageContent?.partnerSubtitle,
+          partnerFormLabel: getInvolvedMap.pageContent?.partnerFormLabel,
+          partnerFormHeading: getInvolvedMap.pageContent?.partnerFormHeading,
           bankLabel: getInvolvedMap.bank?.label,
           bank: {
             name: getInvolvedMap.bank?.name,
@@ -383,6 +403,14 @@ export async function getSiteContent() {
         contactDetails: contactDetailsFromSettings,
         facebookPosts,
         showcaseImages: showcaseImages.contact,
+        pageContent: {
+          title: settingsMap.contact_page_title,
+          intro: settingsMap.contact_page_intro,
+          responseTimeLabel: settingsMap.contact_response_label,
+          responseTimeValue: settingsMap.contact_response_value,
+          formLabel: settingsMap.contact_form_label,
+          formHeading: settingsMap.contact_form_heading,
+        },
       },
       ourWork: {
         featuredPrograms: transformedPrograms,

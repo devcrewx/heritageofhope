@@ -37,6 +37,16 @@ function HomeEditor() {
   const [ctaBodyEn, setCtaBodyEn] = useState('')
   const [ctaBodyBn, setCtaBodyBn] = useState('')
 
+  // Page labels
+  const [pageStatsLabelEn, setPageStatsLabelEn] = useState('')
+  const [pageStatsLabelBn, setPageStatsLabelBn] = useState('')
+  const [pagePillarLabelEn, setPagePillarLabelEn] = useState('')
+  const [pagePillarLabelBn, setPagePillarLabelBn] = useState('')
+  const [pageActivityLabelEn, setPageActivityLabelEn] = useState('')
+  const [pageActivityLabelBn, setPageActivityLabelBn] = useState('')
+  const [pageDonationLabelEn, setPageDonationLabelEn] = useState('')
+  const [pageDonationLabelBn, setPageDonationLabelBn] = useState('')
+
   // UI state
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -83,6 +93,18 @@ function HomeEditor() {
           setCtaHeadlineBn(c.headline?.bn || '')
           setCtaBodyEn(c.body?.en || '')
           setCtaBodyBn(c.body?.bn || '')
+        }
+
+        if (response.data.sections?.pageContent) {
+          const p = response.data.sections.pageContent
+          setPageStatsLabelEn(p.statsLabel?.en || '')
+          setPageStatsLabelBn(p.statsLabel?.bn || '')
+          setPagePillarLabelEn(p.pillarLabel?.en || '')
+          setPagePillarLabelBn(p.pillarLabel?.bn || '')
+          setPageActivityLabelEn(p.activityLabel?.en || '')
+          setPageActivityLabelBn(p.activityLabel?.bn || '')
+          setPageDonationLabelEn(p.donationLabel?.en || '')
+          setPageDonationLabelBn(p.donationLabel?.bn || '')
         }
 
         // Fetch stats separately
@@ -212,6 +234,26 @@ function HomeEditor() {
     }
   }
 
+  async function savePageLabels(e) {
+    e.preventDefault()
+    setSaving(true)
+
+    try {
+      await Promise.all([
+        apiClient.patch('/api/admin/content/home/pageContent/statsLabel', { valueEn: pageStatsLabelEn, valueBn: pageStatsLabelBn }),
+        apiClient.patch('/api/admin/content/home/pageContent/pillarLabel', { valueEn: pagePillarLabelEn, valueBn: pagePillarLabelBn }),
+        apiClient.patch('/api/admin/content/home/pageContent/activityLabel', { valueEn: pageActivityLabelEn, valueBn: pageActivityLabelBn }),
+        apiClient.patch('/api/admin/content/home/pageContent/donationLabel', { valueEn: pageDonationLabelEn, valueBn: pageDonationLabelBn }),
+      ])
+      showToast('Page labels saved', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to save page labels'
+      showToast(msg, 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   async function uploadHeroImage(file) {
     setHeroUploading(true)
 
@@ -285,6 +327,7 @@ function HomeEditor() {
           { id: 'stats', label: 'Impact Stats' },
           { id: 'mission', label: 'Mission Section' },
           { id: 'cta', label: 'Donation CTA' },
+          { id: 'labels', label: 'Page Labels' },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -317,6 +360,57 @@ function HomeEditor() {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Eyebrow Label*</label>
             <input
+
+      {/* Page Labels */}
+      {activeTab === 'labels' && (
+        <form onSubmit={savePageLabels} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
+          <BilingualField
+            labelEn="Stats Section Label"
+            labelBn="Stats Section Label (Bangla)"
+            valueEn={pageStatsLabelEn}
+            valueBn={pageStatsLabelBn}
+            onChangeEn={setPageStatsLabelEn}
+            onChangeBn={setPageStatsLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Mission Section Label"
+            labelBn="Mission Section Label (Bangla)"
+            valueEn={pagePillarLabelEn}
+            valueBn={pagePillarLabelBn}
+            onChangeEn={setPagePillarLabelEn}
+            onChangeBn={setPagePillarLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Activity Section Label"
+            labelBn="Activity Section Label (Bangla)"
+            valueEn={pageActivityLabelEn}
+            valueBn={pageActivityLabelBn}
+            onChangeEn={setPageActivityLabelEn}
+            onChangeBn={setPageActivityLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Donation Section Label"
+            labelBn="Donation Section Label (Bangla)"
+            valueEn={pageDonationLabelEn}
+            valueBn={pageDonationLabelBn}
+            onChangeEn={setPageDonationLabelEn}
+            onChangeBn={setPageDonationLabelBn}
+          />
+
+          <div className="flex gap-3 pt-6 border-t">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save Page Labels'}
+            </button>
+          </div>
+        </form>
+      )}
               type="text"
               value={heroEyebrow}
               onChange={(e) => setHeroEyebrow(e.target.value)}

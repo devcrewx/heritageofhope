@@ -46,8 +46,8 @@ function GetInvolved() {
       <section className="panel split-panel donation-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Donation ladder', 'অনুদানে কী বদলায়'))}</p>
-            <h2>{resolve(language, text('What your support can do', 'আপনার সাহায্যে কী করা যায়'))}</h2>
+            <p>{resolve(language, page.donationLabel || text('Donation ladder', 'অনুদানে কী বদলায়'))}</p>
+            <h2>{resolve(language, page.donationHeading || text('What your support can do', 'আপনার সাহায্যে কী করা যায়'))}</h2>
           </div>
           <div className="donation-ladder-list">
             {(page.donationSteps || getInvolved.donationSteps || []).map((step) => (
@@ -60,8 +60,8 @@ function GetInvolved() {
         </div>
         <aside className="mini-panel accent-panel qr-panel">
           <div className="section-head">
-            <p>{resolve(language, text('UPI payment', 'ইউপিআই পেমেন্ট'))}</p>
-            <h2>{resolve(language, page.qrTitle || text('Scan to donate', 'স্ক্যান করে অনুদান দিন'))}</h2>
+            <p>{resolve(language, page.paymentLabel || text('UPI payment', 'ইউপিআই পেমেন্ট'))}</p>
+            <h2>{resolve(language, page.paymentHeading || page.qrTitle || text('Scan to donate', 'স্ক্যান করে অনুদান দিন'))}</h2>
           </div>
           <div className="qr-frame">
             <img
@@ -84,8 +84,8 @@ function GetInvolved() {
       <section className="panel split-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Volunteer', 'স্বেচ্ছাসেবা'))}</p>
-            <h2>{resolve(language, text('People matter more than perfection', 'মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়'))}</h2>
+            <p>{resolve(language, page.volunteerLabel || text('Volunteer', 'স্বেচ্ছাসেবা'))}</p>
+            <h2>{resolve(language, page.volunteerHeading || text('People matter more than perfection', 'মানুষই আমাদের সবচেয়ে বড় শক্তি, দক্ষতা নয়'))}</h2>
           </div>
           <div className="card-grid two-up">
             {(page.volunteerRoles || getInvolved.volunteerRoles || []).map((role) => (
@@ -135,8 +135,8 @@ function GetInvolved() {
             </div>
           )}
           <div className="section-head">
-            <p>{resolve(language, text('Volunteer form', 'স্বেচ্ছাসেবক ফর্ম'))}</p>
-            <h2>{resolve(language, text('Join the team', 'দলে যোগ দিন'))}</h2>
+            <p>{resolve(language, page.volunteerFormLabel || text('Volunteer form', 'স্বেচ্ছাসেবক ফর্ম'))}</p>
+            <h2>{resolve(language, page.volunteerFormHeading || text('Join the team', 'দলে যোগ দিন'))}</h2>
           </div>
           <div className="field">
             <label htmlFor="volunteer-name">{resolve(language, text('Name', 'নাম'))}</label>
@@ -187,17 +187,11 @@ function GetInvolved() {
       <section className="panel split-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Partner with us', 'আমাদের সাথে কাজ করুন'))}</p>
-            <h2>{resolve(language, text('For CSR, hospitals and institutions', 'কর্পোরেট, হাসপাতাল ও অন্যান্য প্রতিষ্ঠানের জন্য'))}</h2>
+            <p>{resolve(language, page.partnerLabel || text('Partner with us', 'আমাদের সাথে কাজ করুন'))}</p>
+            <h2>{resolve(language, page.partnerHeading || text('For CSR, hospitals and institutions', 'কর্পোরেট, হাসপাতাল ও অন্যান্য প্রতিষ্ঠানের জন্য'))}</h2>
           </div>
           <p>
-            {resolve(
-              language,
-              text(
-                'Partnerships help scale learning spaces, health camps, and seasonal support.',
-                'একসাথে কাজ করলে আমরা আরও বেশি মানুষের কাছে পড়াশোনা আর স্বাস্থ্যসেবা পৌঁছে দিতে পারি।',
-              ),
-            )}
+            {resolve(language, page.partnerSubtitle || text('Partnerships help scale learning spaces, health camps, and seasonal support.', 'একসাথে কাজ করলে আমরা আরও বেশি মানুষের কাছে পড়াশোনা আর স্বাস্থ্যসেবা পৌঁছে দিতে পারি।'))}
           </p>
           <figure className="partner-photo-frame" data-reveal>
             <img
@@ -251,8 +245,8 @@ function GetInvolved() {
             </div>
           )}
           <div className="section-head">
-            <p>{resolve(language, text('Partner inquiry', 'পার্টনারশিপের কথা'))}</p>
-            <h2>{resolve(language, text('Start a collaboration', 'চলুন একসাথে কাজ করি'))}</h2>
+            <p>{resolve(language, page.partnerFormLabel || text('Partner inquiry', 'পার্টনারশিপের কথা'))}</p>
+            <h2>{resolve(language, page.partnerFormHeading || text('Start a collaboration', 'চলুন একসাথে কাজ করি'))}</h2>
           </div>
           <div className="field">
             <label htmlFor="org-name">{resolve(language, text('Organization name', 'সংস্থার নাম'))}</label>

@@ -164,6 +164,59 @@ export default function ContactEditor() {
               style={styles.input}
             />
             {formErrors.facebookUrl && <div style={styles.fieldError}>{formErrors.facebookUrl}</div>}
+
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
+              <div style={styles.title}>Contact Page Copy</div>
+              <label style={styles.label}>Page Title</label>
+              <input
+                type="text"
+                value={data.contact?.contact_page_title?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_page_title', e.target.value)}
+                placeholder="We’d love to hear from you."
+                style={styles.input}
+              />
+              <label style={styles.label}>Page Intro</label>
+              <input
+                type="text"
+                value={data.contact?.contact_page_intro?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_page_intro', e.target.value)}
+                placeholder="Reach out to us for inquiries, partnerships, or just to say hello."
+                style={styles.input}
+              />
+              <label style={styles.label}>Response Time Label</label>
+              <input
+                type="text"
+                value={data.contact?.contact_response_label?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_response_label', e.target.value)}
+                placeholder="Response time"
+                style={styles.input}
+              />
+              <label style={styles.label}>Response Time Value</label>
+              <input
+                type="text"
+                value={data.contact?.contact_response_value?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_response_value', e.target.value)}
+                placeholder="Usually within 2 business days"
+                style={styles.input}
+              />
+              <label style={styles.label}>Form Label</label>
+              <input
+                type="text"
+                value={data.contact?.contact_form_label?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_form_label', e.target.value)}
+                placeholder="Contact form"
+                style={styles.input}
+              />
+              <label style={styles.label}>Form Heading</label>
+              <input
+                type="text"
+                value={data.contact?.contact_form_heading?.en || ''}
+                onChange={(e) => updateField('contact', 'contact_form_heading', e.target.value)}
+                placeholder="Send us a direct message"
+                style={styles.input}
+              />
+            </div>
+
             <button onClick={() => saveSection('contact')} disabled={saving} style={styles.button}>
               {saving ? 'Saving...' : 'Save Contact Info'}
             </button>

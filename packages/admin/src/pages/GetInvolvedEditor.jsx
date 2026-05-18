@@ -13,6 +13,7 @@ const tabDefinitions = [
   { key: 'payment', label: 'UPI / Payment' },
   { key: 'volunteer', label: 'Volunteer Section' },
   { key: 'partner', label: 'Partner Section' },
+  { key: 'labels', label: 'Page Labels' },
 ]
 
 export default function GetInvolvedEditor() {
@@ -214,6 +215,22 @@ export default function GetInvolvedEditor() {
       setSaving(false)
     }
   }
+
+  const pageLabelFields = [
+    { fieldKey: 'donationLabel', labelEn: 'Donation Section Label', labelBn: 'Donation Section Label (Bangla)' },
+    { fieldKey: 'donationHeading', labelEn: 'Donation Section Heading', labelBn: 'Donation Section Heading (Bangla)' },
+    { fieldKey: 'paymentLabel', labelEn: 'Payment Section Label', labelBn: 'Payment Section Label (Bangla)' },
+    { fieldKey: 'paymentHeading', labelEn: 'Payment Section Heading', labelBn: 'Payment Section Heading (Bangla)' },
+    { fieldKey: 'volunteerLabel', labelEn: 'Volunteer Section Label', labelBn: 'Volunteer Section Label (Bangla)' },
+    { fieldKey: 'volunteerHeading', labelEn: 'Volunteer Section Heading', labelBn: 'Volunteer Section Heading (Bangla)' },
+    { fieldKey: 'volunteerFormLabel', labelEn: 'Volunteer Form Label', labelBn: 'Volunteer Form Label (Bangla)' },
+    { fieldKey: 'volunteerFormHeading', labelEn: 'Volunteer Form Heading', labelBn: 'Volunteer Form Heading (Bangla)' },
+    { fieldKey: 'partnerLabel', labelEn: 'Partner Section Label', labelBn: 'Partner Section Label (Bangla)' },
+    { fieldKey: 'partnerHeading', labelEn: 'Partner Section Heading', labelBn: 'Partner Section Heading (Bangla)' },
+    { fieldKey: 'partnerSubtitle', labelEn: 'Partner Section Subtitle', labelBn: 'Partner Section Subtitle (Bangla)' },
+    { fieldKey: 'partnerFormLabel', labelEn: 'Partner Form Label', labelBn: 'Partner Form Label (Bangla)' },
+    { fieldKey: 'partnerFormHeading', labelEn: 'Partner Form Heading', labelBn: 'Partner Form Heading (Bangla)' },
+  ]
 
   const saveDonationTiers = async () => {
     setSaving(true)
@@ -648,6 +665,29 @@ export default function GetInvolvedEditor() {
           />
           <button onClick={() => saveSection('partner')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Partner Section'}
+          </button>
+        </div>
+      )}
+
+      {activeTab === 'labels' && (
+        <div style={styles.section}>
+          <div style={styles.title}>Page Labels</div>
+          <p style={{ color: '#475569', marginBottom: '1rem' }}>These labels drive the public section headings on the Get Involved page.</p>
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            {pageLabelFields.map((field) => (
+              <BilingualField
+                key={field.fieldKey}
+                labelEn={field.labelEn}
+                labelBn={field.labelBn}
+                valueEn={data.pageContent?.[field.fieldKey]?.en}
+                valueBn={data.pageContent?.[field.fieldKey]?.bn}
+                onChangeEn={(val) => updateField('pageContent', field.fieldKey, 'en', val)}
+                onChangeBn={(val) => updateField('pageContent', field.fieldKey, 'bn', val)}
+              />
+            ))}
+          </div>
+          <button onClick={() => saveSection('pageContent')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save Page Labels'}
           </button>
         </div>
       )}

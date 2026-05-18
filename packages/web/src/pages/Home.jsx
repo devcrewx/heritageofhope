@@ -43,6 +43,7 @@ function Home() {
   const hero = home.hero || {}
   const mission = home.mission || {}
   const cta = home.cta || {}
+  const pageContent = home.pageContent || {}
 
   return (
     <main className="page-stack page-home">
@@ -98,7 +99,7 @@ function Home() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{copy[language].statsTitle}</p>
+          <p>{resolve(language, pageContent.statsLabel || text(copy.en.statsTitle, copy.bn.statsTitle))}</p>
           <h2>{resolve(language, text('Impact snapshot', 'এক নজরে আমাদের কাজ'))}</h2>
         </div>
         <div className="metric-grid">
@@ -115,7 +116,7 @@ function Home() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{copy[language].pillarTitle}</p>
+          <p>{resolve(language, pageContent.pillarLabel || text(copy.en.pillarTitle, copy.bn.pillarTitle))}</p>
           <h2>{resolve(language, mission.heading || text('What we do on the ground', 'মানুষের দোরগোড়ায় আমাদের কাজ'))}</h2>
         </div>
         <div className="card-grid">
@@ -136,7 +137,7 @@ function Home() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{copy[language].activityTitle}</p>
+          <p>{resolve(language, pageContent.activityLabel || text(copy.en.activityTitle, copy.bn.activityTitle))}</p>
           <h2>{resolve(language, text('Stories, updates and event photos', 'সাফল্যের গল্প, সংবাদ ও অনুষ্ঠানের ছবি'))}</h2>
         </div>
         <div className="story-layout">
@@ -169,7 +170,7 @@ function Home() {
 
       <section className="panel donation-cta" data-reveal>
         <div>
-          <p className="eyebrow">{resolve(language, text('Donate', 'সাহায্য করুন'))}</p>
+          <p className="eyebrow">{resolve(language, pageContent.donationLabel || text('Donate', 'সাহায্য করুন'))}</p>
           <h2>{resolve(language, cta.headline || text(copy.en.donationTitle, copy.bn.donationTitle))}</h2>
           <p>{resolve(language, cta.body || text(copy.en.donationBody, copy.bn.donationBody))}</p>
         </div>

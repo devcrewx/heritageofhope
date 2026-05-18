@@ -59,8 +59,8 @@ function About() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{resolve(language, text('Documents', 'দলিল'))}</p>
-          <h2>{resolve(language, text('Official documents', 'সরকারি কাগজপত্র'))}</h2>
+          <p>{resolve(language, page.documentsLabel || text('Documents', 'দলিল'))}</p>
+          <h2>{resolve(language, page.documentsHeading || text('Official documents', 'সরকারি কাগজপত্র'))}</h2>
         </div>
         <DocumentModal
           open={modalOpen}

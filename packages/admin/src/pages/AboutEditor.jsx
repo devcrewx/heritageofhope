@@ -130,6 +130,7 @@ export default function AboutEditor() {
 
   const tabs = [
     { key: 'intro', label: 'Page Intro' },
+    { key: 'pageContent', label: 'Page Labels' },
     { key: 'story', label: 'Our Story' },
     { key: 'mission', label: 'Mission & Vision' },
     { key: 'values', label: 'Core Values' },
@@ -167,6 +168,26 @@ export default function AboutEditor() {
             onChangeEn={(val) => updateField('intro', 'paragraph', 'en', val)}
             onChangeBn={(val) => updateField('intro', 'paragraph', 'bn', val)}
             isTextArea
+          />
+        </>
+      )}
+      {sectionKey === 'pageContent' && (
+        <>
+          <BilingualField
+            labelEn="Documents Section Label"
+            labelBn="Documents Section Label (Bangla)"
+            valueEn={data.pageContent?.documentsLabel?.en}
+            valueBn={data.pageContent?.documentsLabel?.bn}
+            onChangeEn={(val) => updateField('pageContent', 'documentsLabel', 'en', val)}
+            onChangeBn={(val) => updateField('pageContent', 'documentsLabel', 'bn', val)}
+          />
+          <BilingualField
+            labelEn="Documents Section Heading"
+            labelBn="Documents Section Heading (Bangla)"
+            valueEn={data.pageContent?.documentsHeading?.en}
+            valueBn={data.pageContent?.documentsHeading?.bn}
+            onChangeEn={(val) => updateField('pageContent', 'documentsHeading', 'en', val)}
+            onChangeBn={(val) => updateField('pageContent', 'documentsHeading', 'bn', val)}
           />
         </>
       )}
@@ -321,6 +342,7 @@ export default function AboutEditor() {
           </div>
 
           {activeSection === 'intro' && section('Page Intro', 'intro')}
+          {activeSection === 'pageContent' && section('Page Labels', 'pageContent')}
           {activeSection === 'story' && section('Our Story', 'story')}
           {activeSection === 'mission' && section('Mission & Vision', 'mission')}
           {activeSection === 'values' && section('Core Values', 'values')}

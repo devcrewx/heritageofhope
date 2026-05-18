@@ -6,6 +6,7 @@ import { submitFormWeb3 } from '../utils/web3forms'
 function Contact() {
   const { language, siteContent } = useOutletContext()
   const { contact } = siteContent
+  const page = contact.pageContent || {}
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
 
@@ -27,12 +28,12 @@ function Contact() {
       <section className="panel split-panel" data-reveal>
         <div>
           <p className="eyebrow">{resolve(language, text('Contact', 'যোগাযোগ'))}</p>
-          <h1 className="page-title">{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <h1 className="page-title">{resolve(language, page.title || text(copy.en.title, copy.bn.title))}</h1>
+          <p>{resolve(language, page.intro || text(copy.en.intro, copy.bn.intro))}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, text('Response time', 'কত তাড়াতাড়ি উত্তর পাবেন'))}</p>
-          <p>{resolve(language, text('Usually within 2 business days', 'সাধারণত ২ কর্মদিবসের মধ্যে'))}</p>
+          <p className="meta">{resolve(language, page.responseTimeLabel || text('Response time', 'কত তাড়াতাড়ি উত্তর পাবেন'))}</p>
+          <p>{resolve(language, page.responseTimeValue || text('Usually within 2 business days', 'সাধারণত ২ কর্মদিবসের মধ্যে'))}</p>
         </div>
       </section>
 
@@ -96,8 +97,8 @@ function Contact() {
             </div>
           )}
           <div className="section-head">
-            <p>{resolve(language, text('Contact form', 'যোগাযোগের ফর্ম'))}</p>
-            <h2>{resolve(language, text('Send us a direct message', 'সরাসরি একটা মেসেজ পাঠান'))}</h2>
+            <p>{resolve(language, page.formLabel || text('Contact form', 'যোগাযোগের ফর্ম'))}</p>
+            <h2>{resolve(language, page.formHeading || text('Send us a direct message', 'সরাসরি একটা মেসেজ পাঠান'))}</h2>
           </div>
           <div className="field">
             <label htmlFor="name">{resolve(language, text('Name', 'নাম'))}</label>
