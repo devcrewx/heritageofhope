@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = Router()
@@ -38,6 +39,9 @@ router.post('/', async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch {
     res.status(500).json({ error: 'Failed to create donation tier' })
@@ -61,6 +65,9 @@ router.patch('/reorder', async (req, res) => {
       )
     )
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, updated })
   } catch {
     res.status(500).json({ error: 'Failed to reorder donation tiers' })
@@ -82,6 +89,9 @@ router.patch('/:id', async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch {
     res.status(500).json({ error: 'Failed to update donation tier' })
@@ -92,6 +102,10 @@ router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
     await prisma.donationTier.delete({ where: { id: Number(id) } })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, message: 'Donation tier deleted' })
   } catch {
     res.status(500).json({ error: 'Failed to delete donation tier' })

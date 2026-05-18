@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 
 const router = Router()
 
@@ -73,6 +74,9 @@ router.patch('/:section/:fieldKey', async (req, res) => {
         },
       })
     }
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({
       success: true,

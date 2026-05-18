@@ -3,6 +3,7 @@ import multer from 'multer'
 import { body, param, validationResult } from 'express-validator'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 import {
   handleValidationErrors,
@@ -44,6 +45,9 @@ router.patch('/reorder', async (req, res) => {
         })
       )
     );
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache();
 
     res.json({ success: true, data: updated });
   } catch (error) {
@@ -94,6 +98,9 @@ router.post(
           sortOrder
         }
       })
+
+      // Invalidate cache so changes appear immediately
+      invalidateCache()
 
       res.status(201).json({ success: true, data: member })
     } catch (error) {
@@ -169,6 +176,9 @@ router.patch(
         }
       })
 
+      // Invalidate cache so changes appear immediately
+      invalidateCache()
+
       res.json({ success: true, data: member })
     } catch (error) {
       console.error('Error updating team member:', error)
@@ -206,6 +216,9 @@ router.delete(
       await prisma.teamMember.delete({
         where: { id: parseInt(id) }
       })
+
+      // Invalidate cache so changes appear immediately
+      invalidateCache()
 
       res.json({ success: true, message: 'Team member deleted' })
     } catch (error) {

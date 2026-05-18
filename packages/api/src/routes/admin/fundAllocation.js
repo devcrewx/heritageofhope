@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = Router()
@@ -35,6 +36,9 @@ router.post('/', async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (error) {
     res.status(500).json({ error: 'Failed to create fund allocation' })
@@ -63,6 +67,9 @@ router.patch('/batch', async (req, res) => {
       )
     )
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, updated })
   } catch (error) {
     res.status(500).json({ error: 'Failed to update fund allocation batch' })
@@ -84,6 +91,9 @@ router.patch('/:id', async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (error) {
     res.status(500).json({ error: 'Failed to update fund allocation' })
@@ -97,6 +107,9 @@ router.delete('/:id', async (req, res) => {
     await prisma.fundAllocation.delete({
       where: { id: Number(id) },
     })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({ success: true, message: 'Fund allocation deleted' })
   } catch (error) {

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { body, param, validationResult } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import { upload } from '../../middleware/uploadMiddleware.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
@@ -66,6 +67,9 @@ router.post('/', upload.array('files', 10), async (req, res) => {
       nextSortOrder += 1
     }
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, uploaded, count: uploaded.length })
   } catch (error) {
     console.error('Gallery upload error:', error)
@@ -90,6 +94,9 @@ router.patch('/reorder', async (req, res) => {
         })
       )
     )
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({ success: true, updated })
   } catch (error) {
@@ -119,6 +126,9 @@ router.patch(
           ...(altBn !== undefined && { altBn: altBn.trim() }),
         },
       })
+
+      // Invalidate cache so changes appear immediately
+      invalidateCache()
 
       res.json({ success: true, item })
     } catch (error) {
@@ -152,6 +162,10 @@ router.delete(
       }
 
       await prisma.galleryItem.delete({ where: { id: Number(id) } })
+
+      // Invalidate cache so changes appear immediately
+      invalidateCache()
+
       res.json({ success: true, message: 'Gallery item deleted' })
     } catch (error) {
       console.error('Gallery delete error:', error)

@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 
 const router = Router()
 
@@ -41,6 +42,9 @@ router.post('/', async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({
       success: true,
       data: stat,
@@ -67,6 +71,9 @@ router.patch('/:id', async (req, res) => {
         ...(labelEn !== undefined && { labelEn }),
         ...(labelBn !== undefined && { labelBn }),
         ...(sortOrder !== undefined && { sortOrder }),
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
       },
     })
 
@@ -89,6 +96,9 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     await prisma.impactStat.delete({
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
       where: { id: parseInt(id) },
     })
 

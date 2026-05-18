@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import fs from 'fs'
 import { upload } from '../../middleware/uploadMiddleware.js'
@@ -87,6 +88,9 @@ router.post('/', upload.single('image'), async (req, res) => {
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (err) {
     console.error('Failed creating program:', err)
@@ -106,6 +110,9 @@ router.patch('/reorder', async (req, res) => {
         prisma.program.update({ where: { id: Number(it.id) }, data: { sortOrder: Number(it.sortOrder) } })
       )
     )
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({ success: true, updated })
   } catch (err) {
@@ -152,6 +159,10 @@ router.patch('/:id', upload.single('image'), async (req, res) => {
     }
 
     const item = await prisma.program.update({ where: { id: Number(id) }, data })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (err) {
     console.error('Failed updating program:', err)
@@ -174,6 +185,10 @@ router.delete('/:id', async (req, res) => {
     }
 
     await prisma.program.delete({ where: { id: Number(id) } })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, message: 'Program deleted' })
   } catch (err) {
     console.error('Failed deleting program:', err)

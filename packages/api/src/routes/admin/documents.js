@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import multer from 'multer'
 import { prisma } from '../../lib/prisma.js'
+import { invalidateCache } from '../../lib/contentCache.js'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
@@ -83,6 +84,9 @@ router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview',
       },
     })
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (err) {
     console.error('Failed creating document:', err)
@@ -105,6 +109,9 @@ router.patch('/reorder', async (req, res) => {
         })
       )
     )
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({ success: true, updated })
   } catch (err) {
@@ -152,6 +159,10 @@ router.patch('/:id', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'previ
     }
 
     const item = await prisma.document.update({ where: { id: Number(id) }, data })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true, data: item })
   } catch (err) {
     console.error('Failed updating document:', err)
@@ -173,6 +184,10 @@ router.delete('/:id', async (req, res) => {
     }
 
     await prisma.document.delete({ where: { id: Number(id) } })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
+
     res.json({ success: true })
   } catch (err) {
     console.error('Failed deleting document:', err)

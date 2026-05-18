@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js';
 import { prisma } from '../../lib/prisma.js';
+import { invalidateCache } from '../../lib/contentCache.js';
 import { verifyJWT } from '../../middleware/verifyJWT.js';
 
 const router = express.Router();
@@ -37,6 +38,9 @@ router.patch('/reorder', async (req, res) => {
         })
       )
     );
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache();
 
     res.json({ success: true, data: updated });
   } catch (error) {
@@ -95,6 +99,9 @@ router.post('/', upload.single('file'), async (req, res) => {
       }
     });
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache();
+
     res.status(201).json({ success: true, data: partner });
   } catch (error) {
     console.error('Error creating partner:', error);
@@ -145,6 +152,9 @@ router.patch('/:id', upload.single('file'), async (req, res) => {
       }
     });
 
+    // Invalidate cache so changes appear immediately
+    invalidateCache();
+
     res.json({ success: true, data: partner });
   } catch (error) {
     console.error('Error updating partner:', error);
@@ -173,6 +183,9 @@ router.delete('/:id', async (req, res) => {
     await prisma.partner.delete({
       where: { id: parseInt(id) }
     });
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache();
 
     res.json({ success: true });
   } catch (error) {
