@@ -69,17 +69,19 @@ function OurWork() {
 
       <section className="panel">
         <div className="card-grid program-grid">
-          {ourWork.featuredPrograms.map((program) => (
-            <article key={program.slug} className="card program-card">
-              <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
-              <div className="card-body">
-                <span className="pill">{resolve(language, program.category)}</span>
-                <h3>{resolve(language, program.title)}</h3>
-                <p>{resolve(language, program.description)}</p>
-                <p className="meta">{resolve(language, program.highlight)}</p>
-              </div>
-            </article>
-          ))}
+          {ourWork.featuredPrograms && ourWork.featuredPrograms.length > 0
+            ? ourWork.featuredPrograms.map((program) => (
+                <article key={program.slug} className="card program-card">
+                  <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
+                  <div className="card-body">
+                    <span className="pill">{resolve(language, program.category)}</span>
+                    <h3>{resolve(language, program.title)}</h3>
+                    <p>{resolve(language, program.description)}</p>
+                    <p className="meta">{resolve(language, program.highlight)}</p>
+                  </div>
+                </article>
+              ))
+            : null}
         </div>
       </section>
 

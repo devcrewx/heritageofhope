@@ -95,52 +95,7 @@ export const documents = [
 ]
 
 export const featuredPrograms = [
-  {
-    slug: 'kishalaya-pathsala',
-    image: '/assets/pathsala.webp',
-    category: { en: 'Education', bn: 'শিক্ষা' },
-    title: { en: 'Kishalaya Pathsala', bn: 'কিশলয় পাঠশালা' },
-    description: { en: 'Community learning classes and study support for children in Kankandighi.', bn: 'কঙ্কনদীঘির বাচ্চাদের জন্য পাড়ার পড়াশোনার ক্লাস আর সাহায্য।' },
-    highlight: { en: 'Foundational learning', bn: 'শুরু থেকে শেখা' },
-  },
-  {
-    slug: 'health-camps',
-    image: '/assets/health_camp.webp',
-    category: { en: 'Healthcare', bn: 'স্বাস্থ্য' },
-    title: { en: 'Free Health Camps', bn: 'বিনামূল্যের স্বাস্থ্য শিবির' },
-    description: { en: 'Basic checkups, consultations, and referral help for families and children.', bn: 'পরিবার আর বাচ্চাদের জন্য বেসিক চেকআপ, পরামর্শ আর দরকার হলে অন্য জায়গায় পাঠানোর ব্যবস্থা।' },
-    highlight: { en: 'Community first aid', bn: 'প্রাথমিক স্বাস্থ্যসেবা' },
-  },
-  {
-    slug: 'blood-donation',
-    image: '/assets/blood_donation.webp',
-    category: { en: 'Healthcare', bn: 'স্বাস্থ্য' },
-    title: { en: 'Blood Donation Drives', bn: 'রক্তদান উদ্যোগ' },
-    description: { en: 'Volunteer blood donation for thalassemia support and emergency care.', bn: 'থ্যালাসেমিয়ার বাচ্চা আর জরুরি চিকিৎসার কাজে স্বেচ্ছায় রক্তদান।' },
-    highlight: { en: 'Life-saving action', bn: 'জীবন বাঁচানোর উদ্যোগ' },
-  },
-  {
-    slug: 'winter-programme',
-    image: '/assets/winter_prog.webp',
-    category: { en: 'Welfare', bn: 'কল্যাণ' },
-    title: { en: 'Winter Programme', bn: 'শীতকালীন কর্মসূচি' },
-    description: { en: 'Winter clothing, sweaters, and school bags for children in need.', bn: 'যেসব শিশুদের প্রয়োজন, তাদের জন্য শীতের পোশাক, সোয়েটার ও স্কুলব্যাগ।' },
-    highlight: { en: 'Seasonal support', bn: 'মৌসুমি সহায়তা' },
-  },
-  {
-    slug: 'monsoon-relief',
-    image: '/assets/monsoon.webp',
-    category: { en: 'Welfare', bn: 'কল্যাণ' },
-    title: { en: 'Monsoon Relief', bn: 'বর্ষাকালীন সহায়তা' },
-    description: { en: 'Raincoats, umbrellas, and essentials to keep school access steady.', bn: 'স্কুলে আসা-যাওয়া সহজ রাখতে রেনকোট, ছাতা আর দরকারি জিনিস দেওয়া।' },
-    highlight: { en: 'Education without interruption', bn: 'বিঘ্নহীন শিক্ষা' },
-  },
-  {
-    slug: 'bornporichoy',
-    image: '/assets/bornporichoy.webp',
-    category: { en: 'Education', bn: 'শিক্ষা' },
-    title: { en: 'Bornporichoy', bn: 'বর্ণপরিচয়' },
-    description: { en: 'Early literacy sessions for children who need extra learning support.', bn: 'যাদের একটু বেশি সাহায্য লাগে, তাদের জন্য পড়া-লেখা শেখার ক্লাস।' },
-    highlight: { en: 'Reading support', bn: 'পড়তে সাহায্য করা' },
-  },
+  // Note: Programs are loaded from database at runtime
+  // This empty array prevents legacy/ghost images from appearing as fallback
+  // The actual programs are fetched and transformed from the database
 ]
