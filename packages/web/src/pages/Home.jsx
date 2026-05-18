@@ -120,7 +120,7 @@ function Home() {
         </div>
         <div className="card-grid">
           {home.featuredPrograms && home.featuredPrograms.length > 0
-            ? home.featuredPrograms.slice(0, 3).map((program) => (
+            ? home.featuredPrograms.map((program) => (
                 <article key={program.slug} className="card program-card" data-reveal>
                   <img loading="lazy" src={program.image} alt={resolve(language, program.title)} />
                   <div className="card-body">

@@ -32,72 +32,9 @@ export const navItems = [
 ]
 
 export const featuredPrograms = [
-  {
-    slug: 'kishalaya-pathsala',
-    image: '/assets/pathsala.webp',
-    category: text('Education', 'শিক্ষা'),
-    title: text('Kishalaya Pathsala', 'কিশলয় পাঠশালা'),
-    description: text(
-      'Community learning classes and study support for children in Kankandighi.',
-      'কঙ্কনদীঘির বাচ্চাদের জন্য পাড়ার পড়াশোনার ক্লাস আর সাহায্য।',
-    ),
-    highlight: text('Foundational learning', 'শুরু থেকে শেখা'),
-  },
-  {
-    slug: 'health-camps',
-    image: '/assets/health_camp.webp',
-    category: text('Healthcare', 'স্বাস্থ্য'),
-    title: text('Free Health Camps', 'বিনামূল্যের স্বাস্থ্য শিবির'),
-    description: text(
-      'Basic checkups, consultations, and referral help for families and children.',
-      'পরিবার আর বাচ্চাদের জন্য বেসিক চেকআপ, পরামর্শ আর দরকার হলে অন্য জায়গায় পাঠানোর ব্যবস্থা।',
-    ),
-    highlight: text('Community first aid', 'প্রাথমিক স্বাস্থ্যসেবা'),
-  },
-  {
-    slug: 'blood-donation',
-    image: '/assets/blood_donation.webp',
-    category: text('Healthcare', 'স্বাস্থ্য'),
-    title: text('Blood Donation Drives', 'রক্তদান উদ্যোগ'),
-    description: text(
-      'Volunteer blood donation for thalassemia support and emergency care.',
-      'থ্যালাসেমিয়ার বাচ্চা আর জরুরি চিকিৎসার কাজে স্বেচ্ছায় রক্তদান।',
-    ),
-    highlight: text('Life-saving action', 'জীবন বাঁচানোর উদ্যোগ'),
-  },
-  {
-    slug: 'winter-programme',
-    image: '/assets/winter_prog.webp',
-    category: text('Welfare', 'কল্যাণ'),
-    title: text('Winter Programme', 'শীতকালীন কর্মসূচি'),
-    description: text(
-      'Winter clothing, sweaters, and school bags for children in need.',
-      'যেসব শিশুদের প্রয়োজন, তাদের জন্য শীতের পোশাক, সোয়েটার ও স্কুলব্যাগ।',
-    ),
-    highlight: text('Seasonal support', 'মৌসুমি সহায়তা'),
-  },
-  {
-    slug: 'monsoon-relief',
-    image: '/assets/monsoon.webp',
-    category: text('Welfare', 'কল্যাণ'),
-    title: text('Monsoon Relief', 'বর্ষাকালীন সহায়তা'),
-    description: text(
-      'Raincoats, umbrellas, and essentials to keep school access steady.',
-      'স্কুলে আসা-যাওয়া সহজ রাখতে রেনকোট, ছাতা আর দরকারি জিনিস দেওয়া।',
-    ),
-    highlight: text('Education without interruption', 'বিঘ্নহীন শিক্ষা'),
-  },
-  {
-    slug: 'bornporichoy',
-    image: '/assets/bornporichoy.webp',
-    category: text('Education', 'শিক্ষা'),
-    title: text('Bornporichoy', 'বর্ণপরিচয়'),
-    description: text(
-      'Early literacy sessions for children who need extra learning support.',
-      'যাদের একটু বেশি সাহায্য লাগে, তাদের জন্য পড়া-লেখা শেখার ক্লাস।',
-    ),
-    highlight: text('Reading support', 'পড়তে সাহায্য করা'),
-  },
+  // Note: Programs are loaded from API at runtime
+  // This empty array prevents "ghost images" from showing before API data arrives
+  // The actual programs are populated from the backend via /api/content
 ]
 
 export const activityPosts = [
