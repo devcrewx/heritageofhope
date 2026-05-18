@@ -11,10 +11,10 @@ function Home() {
   const copy = {
     en: {
       eyebrow: 'Lighting lives, one step at a time',
+      heroFootnote: 'Empowering Communities | Registered NGO',
       title: 'Education, healthcare and dignity for underserved communities.',
       intro:
         'Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.',
-      heroTagline: 'Empowering Communities | Registered NGO',
       primary: 'Support a Program',
       secondary: 'Explore Our Work',
       statsTitle: 'Our footprint so far',
@@ -26,10 +26,10 @@ function Home() {
     },
     bn: {
       eyebrow: 'ছোট ছোট কাজ, বড় ভরসা',
+      heroFootnote: 'মানুষের পাশে | নিবন্ধিত সংস্থা',
       title: 'প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।',
       intro:
         'হেরিটেজ অফ হোপ ফাউন্ডেশন দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি সহায়তার মাধ্যমে কাজ করে.',
-      heroTagline: 'মানুষের পাশে | নিবন্ধিত সংস্থা',
       primary: 'আমাদের কর্মসূচিতে সাহায্য করুন',
       secondary: 'আমাদের কাজ দেখুন',
       statsTitle: 'আমাদের কাজের পরিধি',
@@ -63,7 +63,7 @@ function Home() {
             <span>{resolve(language, hero.badge2 || text(siteMeta.estYear || 'Est. 2024', 'প্রতিষ্ঠিত ২০২৪'))}</span>
             <span>{resolve(language, hero.badge3 || text('Govt. of West Bengal', 'পশ্চিমবঙ্গ সরকার'))}</span>
           </div>
-          <p className="hero-footnote">{resolve(language, hero.eyebrow ? (hero.eyebrow) : (siteMeta.navbarSubtitle || text(copy.en.heroTagline, copy.bn.heroTagline)))}</p>
+          <p className="hero-footnote">{resolve(language, hero.heroFootnote || text(copy.en.heroFootnote, copy.bn.heroFootnote))}</p>
         </div>
 
         <aside className="hero-media editorial-hero">

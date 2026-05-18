@@ -8,6 +8,8 @@ import apiClient from '../lib/api'
 function HomeEditor() {
   // Hero section
   const [heroEyebrow, setHeroEyebrow] = useState('')
+  const [heroFootnoteEn, setHeroFootnoteEn] = useState('')
+  const [heroFootnoteBn, setHeroFootnoteBn] = useState('')
   const [heroHeadlineEn, setHeroHeadlineEn] = useState('')
   const [heroHeadlineBn, setHeroHeadlineBn] = useState('')
   const [heroIntroEn, setHeroIntroEn] = useState('')
@@ -55,6 +57,8 @@ function HomeEditor() {
         if (response.data.sections?.hero) {
           const h = response.data.sections.hero
           setHeroEyebrow(h.eyebrow?.en || '')
+          setHeroFootnoteEn(h.heroFootnote?.en || '')
+          setHeroFootnoteBn(h.heroFootnote?.bn || '')
           setHeroHeadlineEn(h.headline?.en || '')
           setHeroHeadlineBn(h.headline?.bn || '')
           setHeroIntroEn(h.intro?.en || '')
@@ -105,6 +109,7 @@ function HomeEditor() {
     try {
       await Promise.all([
         apiClient.patch('/api/admin/content/home/hero/eyebrow', { valueEn: heroEyebrow }),
+        apiClient.patch('/api/admin/content/home/hero/heroFootnote', { valueEn: heroFootnoteEn, valueBn: heroFootnoteBn }),
         apiClient.patch('/api/admin/content/home/hero/headline', { valueEn: heroHeadlineEn, valueBn: heroHeadlineBn }),
         apiClient.patch('/api/admin/content/home/hero/intro', { valueEn: heroIntroEn, valueBn: heroIntroBn }),
         apiClient.patch('/api/admin/content/home/hero/badge1', { valueEn: badge1 }),
@@ -320,6 +325,16 @@ function HomeEditor() {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
+          <BilingualField
+            labelEn="Hero Footnote"
+            labelBn="Hero Footnote (Bangla)"
+            valueEn={heroFootnoteEn}
+            valueBn={heroFootnoteBn}
+            onChangeEn={setHeroFootnoteEn}
+            onChangeBn={setHeroFootnoteBn}
+            isTextArea={false}
+          />
 
           <BilingualField
             labelEn="Hero Headline"

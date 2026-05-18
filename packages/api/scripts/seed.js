@@ -50,6 +50,7 @@ async function main() {
         { page: 'settings', section: 'general', fieldKey: 'facebook_url', valueEn: 'https://www.facebook.com/profile.php?id=61559891799273', valueBn: null },
         // Home
         { page: 'home', section: 'hero', fieldKey: 'eyebrow', valueEn: 'Lighting lives, one step at a time', valueBn: 'ছোট ছোট কাজ, বড় ভরসা' },
+        { page: 'home', section: 'hero', fieldKey: 'heroFootnote', valueEn: 'Empowering Communities | Registered NGO', valueBn: 'মানুষের পাশে | নিবন্ধিত সংস্থা' },
         { page: 'home', section: 'hero', fieldKey: 'headline', valueEn: 'Education, healthcare and dignity for underserved communities.', valueBn: 'প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।' },
         { page: 'home', section: 'hero', fieldKey: 'intro', valueEn: 'Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.', valueBn: 'হেরিটেজ অফ হোপ ফাউন্ডেশন দক্ষিণ ২৪ পরগণায় শিক্ষাকেন্দ্র, স্বাস্থ্যসেবা ও মৌসুমি সহায়তার মাধ্যমে কাজ করে.' },
         // About

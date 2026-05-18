@@ -281,6 +281,7 @@ export async function getSiteContent() {
           badge1: homeMap.hero?.badge1,
           badge2: homeMap.hero?.badge2,
           badge3: homeMap.hero?.badge3,
+          heroFootnote: homeMap.hero?.heroFootnote,
         },
         pageContent: {
           heroImage: homeMap.hero?.heroImage,
