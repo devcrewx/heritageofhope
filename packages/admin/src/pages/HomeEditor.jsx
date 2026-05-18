@@ -42,6 +42,7 @@ function HomeEditor() {
   const [activeTab, setActiveTab] = useState('hero')
   const [toast, setToast] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, statId: null })
+  const [lastSavedTime, setLastSavedTime] = useState(null)
 
   // Fetch content on mount
   useEffect(() => {
@@ -110,7 +111,8 @@ function HomeEditor() {
         apiClient.patch('/api/admin/content/home/hero/badge2', { valueEn: badge2 }),
         apiClient.patch('/api/admin/content/home/hero/badge3', { valueEn: badge3 }),
       ])
-      showToast('Hero section saved', 'success')
+      setLastSavedTime(new Date())
+      showToast('✓ Saved to API', 'success')
     } catch (error) {
       const msg = error.response?.data?.error || 'Failed to save hero section'
       showToast(msg, 'error')
@@ -367,14 +369,21 @@ function HomeEditor() {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-6 border-t">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
-            >
-              {saving ? 'Saving...' : 'Save Hero Section'}
-            </button>
+          <div className="space-y-3 pt-6 border-t">
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                {saving ? 'Saving...' : 'Save Hero Section'}
+              </button>
+            </div>
+            {lastSavedTime && (
+              <p className="text-sm text-green-600 font-medium">
+                ✓ Saved to API at {lastSavedTime.toLocaleTimeString()}
+              </p>
+            )}
           </div>
         </form>
       )}

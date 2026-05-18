@@ -77,6 +77,7 @@ function App() {
 
   useEffect(() => {
     let cancelled = false
+    let pollInterval = null
 
     async function loadSiteContent() {
       try {
@@ -98,10 +99,17 @@ function App() {
       }
     }
 
+    // Load content on mount
     loadSiteContent()
+
+    // Poll for content updates every 30 seconds
+    pollInterval = setInterval(loadSiteContent, 30000)
 
     return () => {
       cancelled = true
+      if (pollInterval) {
+        clearInterval(pollInterval)
+      }
     }
   }, [])
 
