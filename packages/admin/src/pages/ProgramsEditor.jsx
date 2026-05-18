@@ -92,6 +92,10 @@ export default function ProgramsEditor() {
       errors.descriptionBn = 'Bengali description must be at most 500 characters'
     }
 
+    if (!editingId && !formData.image) {
+      errors.image = 'Program image is required'
+    }
+
     return errors
   }
 
@@ -418,10 +422,13 @@ export default function ProgramsEditor() {
                 </div>
               )}
               <ImageUploader
-                onSelect={(file) => handleInputChange('image', file)}
-                accept="image/*"
-                maxSizeMB={8}
+                onFilesSelected={(files) => handleInputChange('image', files[0] || null)}
               />
+              {formErrors.image && (
+                <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                  <AlertCircle size={14} /> {formErrors.image}
+                </p>
+              )}
             </div>
 
             {/* Form actions */}
