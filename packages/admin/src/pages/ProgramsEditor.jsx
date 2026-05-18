@@ -2,10 +2,7 @@ import { useState, useEffect } from 'react'
 import { request } from '../lib/api'
 import BilingualField from '../components/BilingualField'
 import ImageUploader from '../components/ImageUploader'
-import { Trash2, Plus, GripVertical, AlertCircle } from 'lucide-react'
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import SortableItem from '../components/SortableItem'
+import { Trash2, Plus, GripVertical, ArrowUp, ArrowDown, AlertCircle } from 'lucide-react'
 import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
@@ -36,11 +33,6 @@ export default function ProgramsEditor() {
   })
   const [formErrors, setFormErrors] = useState({})
   const [reordering, setReordering] = useState(false)
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, { distance: 8 }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  )
 
   useEffect(() => {
     fetchPrograms()
@@ -230,16 +222,20 @@ export default function ProgramsEditor() {
     }
   }
 
-  function handleDragEnd(event) {
-    const { active, over } = event
-    if (!over || active.id === over.id) return
+  function moveProgram(programId, direction) {
+    const currentIndex = programs.findIndex((item) => item.id === programId)
+    const targetIndex = currentIndex + direction
 
-    const oldIndex = programs.findIndex((p) => p.id === active.id)
-    const newIndex = programs.findIndex((p) => p.id === over.id)
-    const newList = arrayMove(programs, oldIndex, newIndex)
+    if (currentIndex < 0 || targetIndex < 0 || targetIndex >= programs.length) {
+      return
+    }
 
-    setPrograms(newList)
-    saveOrder(newList)
+    const updated = [...programs]
+    const [moved] = updated.splice(currentIndex, 1)
+    updated.splice(targetIndex, 0, moved)
+
+    setPrograms(updated)
+    saveOrder(updated)
   }
 
   async function saveOrder(newList) {
@@ -459,44 +455,58 @@ export default function ProgramsEditor() {
       ) : (
         <>
           <p className="text-sm text-gray-600">Total: {programs.length} programs</p>
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={programs.map((p) => p.id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-3">
-                {programs.map((prog) => (
-                  <SortableItem key={prog.id} id={prog.id}>
-                    <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg bg-white hover:shadow-md transition cursor-grab active:cursor-grabbing">
-                      <GripVertical size={18} className="text-gray-400" />
-                      {prog.imageUrl && (
-                        <img src={prog.imageUrl} alt={prog.titleEn} className="w-24 h-20 object-cover rounded" />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-800 truncate">{prog.titleEn}</p>
-                        <p className="text-sm text-gray-600 truncate">{prog.titleBn}</p>
-                        {prog.categoryEn && <p className="text-xs text-blue-600">{prog.categoryEn}</p>}
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => editProgram(prog)}
-                          disabled={loading || reordering}
-                          className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm disabled:opacity-50 transition"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => confirmDelete(prog.id)}
-                          disabled={loading || reordering}
-                          className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50 transition"
-                          title="Delete"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </div>
-                  </SortableItem>
-                ))}
+          <div className="space-y-3">
+            {programs.map((prog, index) => (
+              <div key={prog.id} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg bg-white hover:shadow-md transition">
+                <GripVertical size={18} className="text-gray-400" />
+                {prog.imageUrl && (
+                  <img src={prog.imageUrl} alt={prog.titleEn} className="w-24 h-20 object-cover rounded" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-800 truncate">{prog.titleEn}</p>
+                  <p className="text-sm text-gray-600 truncate">{prog.titleBn}</p>
+                  {prog.categoryEn && <p className="text-xs text-blue-600">{prog.categoryEn}</p>}
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => moveProgram(prog.id, -1)}
+                    disabled={loading || reordering || index === 0}
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm disabled:opacity-50 transition inline-flex items-center gap-1"
+                    title="Move up"
+                  >
+                    <ArrowUp size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveProgram(prog.id, 1)}
+                    disabled={loading || reordering || index === programs.length - 1}
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm disabled:opacity-50 transition inline-flex items-center gap-1"
+                    title="Move down"
+                  >
+                    <ArrowDown size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => editProgram(prog)}
+                    disabled={loading || reordering}
+                    className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm disabled:opacity-50 transition"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => confirmDelete(prog.id)}
+                    disabled={loading || reordering}
+                    className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-50 transition"
+                    title="Delete"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
-            </SortableContext>
-          </DndContext>
+            ))}
+          </div>
         </>
       )}
 
