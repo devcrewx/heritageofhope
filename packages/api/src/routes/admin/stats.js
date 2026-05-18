@@ -71,11 +71,11 @@ router.patch('/:id', async (req, res) => {
         ...(labelEn !== undefined && { labelEn }),
         ...(labelBn !== undefined && { labelBn }),
         ...(sortOrder !== undefined && { sortOrder }),
-    // Invalidate cache so changes appear immediately
-    invalidateCache()
-
       },
     })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({
       success: true,
@@ -96,11 +96,11 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params
 
     await prisma.impactStat.delete({
-    // Invalidate cache so changes appear immediately
-    invalidateCache()
-
       where: { id: parseInt(id) },
     })
+
+    // Invalidate cache so changes appear immediately
+    invalidateCache()
 
     res.json({
       success: true,
