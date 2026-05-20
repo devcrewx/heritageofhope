@@ -23,22 +23,40 @@ export const contactDetails = {
 
 export const facebookPosts = [
   {
-    date: '15 May 2026',
-    title: { en: 'Community Learning', bn: 'সম্প্রদায়ের শিক্ষা' },
-    excerpt: { en: 'Supporting educational initiatives in underserved areas.', bn: 'প্রান্তিক এলাকায় শিক্ষা কর্মসূচি চালু করছি।' },
-    image: '/assets/pathsala.webp',
+    date: '04 Jan 2026',
+    title: { en: 'Winter Program 2026', bn: 'শীতকালীন কর্মসূচি ২০২৬' },
+    excerpt: { en: 'Warm clothes and school bags were distributed before the new term began.', bn: 'নতুন সেশন শুরুর আগে শিশুদের গরম জামা ও স্কুল ব্যাগ দেওয়া হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210214/heritage-of-hope/heroes/winter_prog.webp',
   },
   {
-    date: '10 May 2026',
-    title: { en: 'Health Camps', bn: 'স্বাস্থ্য শিবির' },
-    excerpt: { en: 'Free health checkups in local communities.', bn: 'স্থানীয় সম্প্রদায়ে স্বাস্থ্য পরীক্ষা।' },
-    image: '/assets/health_camp.webp',
+    date: '14 Sep 2025',
+    title: { en: 'Durga Puja Gift Drive', bn: 'দুর্গাপূজা উপহার উদ্যোগ' },
+    excerpt: { en: 'With OCWE we distributed clothes, sarees, and sheets before Durga Puja.', bn: 'OCWE-এর সহযোগিতায় দুর্গাপূজার আগে জামা, শাড়ি ও চাদর বিতরণ করা হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210242/heritage-of-hope/gallery/gallery_puja.webp',
   },
   {
-    date: '05 May 2026',
-    title: { en: 'Winter Relief', bn: 'শীতকালীন সহায়তা' },
-    excerpt: { en: 'Distributing warm clothes and essentials.', bn: 'শীতের পোশাক ও দৈনন্দিন জিনিস বিতরণ।' },
-    image: '/assets/winter_prog.webp',
+    date: '13 Jul 2025',
+    title: { en: 'Monsoon Relief Support', bn: 'বর্ষার সহায়তা' },
+    excerpt: { en: 'Raincoats and umbrellas helped children and families reach class in rain.', bn: 'বৃষ্টিতেও ক্লাসে আসতে শিশু ও পরিবারকে রেনকোট ও ছাতা দেওয়া হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210216/heritage-of-hope/heroes/monsoon.webp',
+  },
+  {
+    date: '13 Apr 2025',
+    title: { en: 'Free Health Camp', bn: 'বিনামূল্যের স্বাস্থ্য শিবির' },
+    excerpt: { en: 'Free heart and sugar checkups were held with medical guidance support.', bn: 'বিনামূল্যে হার্ট ও সুগার পরীক্ষা এবং চিকিৎসা পরামর্শ দেওয়া হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210211/heritage-of-hope/heroes/health_camp.webp',
+  },
+  {
+    date: '22 Dec 2024',
+    title: { en: 'Winter Clothing Distribution', bn: 'শীতবস্ত্র বিতরণ' },
+    excerpt: { en: 'Sweaters and warm shawls were shared with children and mothers.', bn: 'শিশু ও মায়েদের মধ্যে সোয়েটার ও গরম শাল বিতরণ করা হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210229/heritage-of-hope/gallery/gallery_winter.webp',
+  },
+  {
+    date: '01 Sep 2024',
+    title: { en: 'Kishalaya Pathsala Launch', bn: 'কিশলয় পাঠশালার সূচনা' },
+    excerpt: { en: 'Our new learning space launched in Kankandighi with local support.', bn: 'স্থানীয় সহযোগিতায় কঙ্কনদীঘিতে নতুন পাঠশালার সূচনা হয়।' },
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210209/heritage-of-hope/heroes/pathsala.webp',
   },
 ]
 
@@ -51,25 +69,26 @@ export const impactMetrics = [
 
 export const showcaseImages = {
   home: [
-    { image: '/assets/pathsala.webp', label: { en: 'Learning Space', bn: 'শিক্ষা কেন্দ্র' } },
-    { image: '/assets/health_camp.webp', label: { en: 'Health Camp', bn: 'স্বাস্থ্য শিবির' } },
-    { image: '/assets/blood_donation.webp', label: { en: 'Blood Donation', bn: 'রক্তদান' } },
-    { image: '/assets/winter_prog.webp', label: { en: 'Winter Program', bn: 'শীতকালীন কর্মসূচি' } },
-    { image: '/assets/monsoon.webp', label: { en: 'Monsoon Relief', bn: 'বর্ষা সহায়তা' } },
-    { image: '/assets/bornporichoy.webp', label: { en: 'Literacy Sessions', bn: 'সাক্ষরতা কর্মসূচি' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210209/heritage-of-hope/heroes/pathsala.webp', label: { en: 'Learning Space', bn: 'শিক্ষা কেন্দ্র' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210211/heritage-of-hope/heroes/health_camp.webp', label: { en: 'Health Camp', bn: 'স্বাস্থ্য শিবির' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210213/heritage-of-hope/heroes/blood_donation.webp', label: { en: 'Blood Donation', bn: 'রক্তদান' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210214/heritage-of-hope/heroes/winter_prog.webp', label: { en: 'Winter Program', bn: 'শীতকালীন কর্মসূচি' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210216/heritage-of-hope/heroes/monsoon.webp', label: { en: 'Monsoon Relief', bn: 'বর্ষা সহায়তা' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210217/heritage-of-hope/heroes/bornporichoy.webp', label: { en: 'Literacy Sessions', bn: 'সাক্ষরতা কর্মসূচি' } },
   ],
   about: [
-    { image: '/assets/team_photo.webp', label: { en: 'Our Team', bn: 'আমাদের দল' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210247/heritage-of-hope/team/team_member.webp', label: { en: 'Our Team', bn: 'আমাদের দল' } },
   ],
   gallery: [
-    { image: '/assets/pathsala.webp', label: { en: 'Learning Centers', bn: 'শিক্ষা কেন্দ্র' } },
-    { image: '/assets/health_camp.webp', label: { en: 'Health Initiatives', bn: 'স্বাস্থ্য কর্মসূচি' } },
-    { image: '/assets/blood_donation.webp', label: { en: 'Community Support', bn: 'সম্প্রদায় সেবা' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210209/heritage-of-hope/heroes/pathsala.webp', label: { en: 'Learning Centers', bn: 'শিক্ষা কেন্দ্র' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210211/heritage-of-hope/heroes/health_camp.webp', label: { en: 'Health Initiatives', bn: 'স্বাস্থ্য কর্মসূচি' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210213/heritage-of-hope/heroes/blood_donation.webp', label: { en: 'Community Support', bn: 'সম্প্রদায় সেবা' } },
   ],
   contact: [
-    { image: '/assets/pathsala.webp', label: { en: 'In Action', bn: 'সক্রিয় অবস্থায়' } },
-    { image: '/assets/health_camp.webp', label: { en: 'Together', bn: 'একসাথে' } },
-    { image: '/assets/winter_prog.webp', label: { en: 'Making a Difference', bn: 'পরিবর্তন আনছি' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210229/heritage-of-hope/gallery/gallery_winter.webp', label: { en: 'Children receiving winter support', bn: 'শিশুদের হাতে শীতের পোশাক' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210228/heritage-of-hope/gallery/gallery_health.webp', label: { en: 'Health camp participation', bn: 'স্বাস্থ্য শিবিরে অংশগ্রহণ' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210235/heritage-of-hope/gallery/gallery_mothers.webp', label: { en: 'Community registration and outreach', bn: 'মানুষের পাশে, মানুষের সাথে' } },
+    { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210220/heritage-of-hope/registration/reg_cert.webp', label: { en: 'Registration certificate', bn: 'নিবন্ধন সনদ' } },
   ],
 }
 
@@ -81,7 +100,7 @@ export const documents = [
     descriptionEn: 'Tax exemption certificate under section 12A',
     descriptionBn: 'ধারা ১২এ অনুযায়ী ট্যাক্স ছাড় সার্টিফিকেট',
     pdfUrl: '#',
-    previewImgUrl: '/assets/documents/12a_preview.jpg',
+    previewImgUrl: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210274/heritage-of-hope/docs/thumbs/hhp-12a.png',
   },
   {
     titleEn: '80G Certificate',
@@ -90,12 +109,72 @@ export const documents = [
     descriptionEn: 'Donation deduction certificate under section 80G',
     descriptionBn: 'ধারা ৮০জি অনুযায়ী দান ছাড়ের শংসাপত্র',
     pdfUrl: '#',
-    previewImgUrl: '/assets/documents/80g_preview.jpg',
+    previewImgUrl: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210275/heritage-of-hope/docs/thumbs/hhp-80g.png',
   },
 ]
 
+export const ourWorkShowcase = [
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210209/heritage-of-hope/heroes/pathsala.webp', label: { en: 'Kishalaya Pathsala', bn: 'কিশলয় পাঠশালা' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210211/heritage-of-hope/heroes/health_camp.webp', label: { en: 'Free Health Camps', bn: 'বিনামূল্যের স্বাস্থ্য শিবির' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210213/heritage-of-hope/heroes/blood_donation.webp', label: { en: 'Blood Donation Drives', bn: 'রক্তদান উদ্যোগ' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210214/heritage-of-hope/heroes/winter_prog.webp', label: { en: 'Winter Programme', bn: 'শীতকালীন কর্মসূচি' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210216/heritage-of-hope/heroes/monsoon.webp', label: { en: 'Monsoon Relief', bn: 'বর্ষাকালীন সহায়তা' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210217/heritage-of-hope/heroes/bornporichoy.webp', label: { en: 'Bornporichoy', bn: 'বর্ণপরিচয়' } },
+]
+
+export const teamMembers = [
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210247/heritage-of-hope/team/team_member.webp', name: { en: 'Founder Team', bn: 'প্রতিষ্ঠাতা সদস্য' }, role: { en: 'Community coordination and field programs', bn: 'জনসংযোগ ও মানুষের কাছে গিয়ে কাজ' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210251/heritage-of-hope/team/team_member_2.webp', name: { en: 'Program Support', bn: 'কর্মসূচি সহায়তা' }, role: { en: 'Planning, logistics and volunteer support', bn: 'পরিকল্পনা ও স্বেচ্ছাসেবকদের সামলানো' } },
+  { image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210255/heritage-of-hope/team/team_member_3.webp', name: { en: 'Field Volunteers', bn: 'সরাসরি সেবার স্বেচ্ছাসেবক' }, role: { en: 'Direct service delivery and follow-up', bn: 'সরাসরি সেবা পৌঁছে দেওয়া ও খোঁজখবর রাখা' } },
+]
+
 export const featuredPrograms = [
-  // Note: Programs are loaded from database at runtime
-  // This empty array prevents legacy/ghost images from appearing as fallback
-  // The actual programs are fetched and transformed from the database
+  {
+    slug: 'kishalaya-pathsala',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210209/heritage-of-hope/heroes/pathsala.webp',
+    category: { en: 'Education', bn: 'শিক্ষা' },
+    title: { en: 'Kishalaya Pathsala', bn: 'কিশলয় পাঠশালা' },
+    description: { en: 'Community learning classes and study support for children in Kankandighi.', bn: 'কঙ্কনদীঘির বাচ্চাদের জন্য পাড়ার পড়াশোনার ক্লাস আর সাহায্য।' },
+    highlight: { en: 'Foundational learning', bn: 'শুরু থেকে শেখা' },
+  },
+  {
+    slug: 'health-camps',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210211/heritage-of-hope/heroes/health_camp.webp',
+    category: { en: 'Healthcare', bn: 'স্বাস্থ্য' },
+    title: { en: 'Free Health Camps', bn: 'বিনামূল্যের স্বাস্থ্য শিবির' },
+    description: { en: 'Basic checkups, consultations, and referral help for families and children.', bn: 'পরিবার আর বাচ্চাদের জন্য বেসিক চেকআপ, পরামর্শ আর রেফারেল হেল্প।' },
+    highlight: { en: 'Community first aid', bn: 'প্রাথমিক স্বাস্থ্যসেবা' },
+  },
+  {
+    slug: 'blood-donation',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210213/heritage-of-hope/heroes/blood_donation.webp',
+    category: { en: 'Healthcare', bn: 'স্বাস্থ্য' },
+    title: { en: 'Blood Donation Drives', bn: 'রক্তদান উদ্যোগ' },
+    description: { en: 'Volunteer blood donation for thalassemia support and emergency care.', bn: 'থ্যালাসেমিয়ার বাচ্চা আর জরুরি চিকিৎসার কাজে স্বেচ্ছায় রক্তদান।' },
+    highlight: { en: 'Life-saving action', bn: 'জীবন বাঁচানোর উদ্যোগ' },
+  },
+  {
+    slug: 'winter-programme',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210214/heritage-of-hope/heroes/winter_prog.webp',
+    category: { en: 'Welfare', bn: 'কল্যাণ' },
+    title: { en: 'Winter Programme', bn: 'শীতকালীন কর্মসূচি' },
+    description: { en: 'Winter clothing, sweaters, and school bags for children in need.', bn: 'যেসব শিশুদের প্রয়োজন, তাদের জন্য শীতের পোশাক, সোয়েটার ও স্কুলব্যাগ।' },
+    highlight: { en: 'Seasonal support', bn: 'মৌসুমি সহায়তা' },
+  },
+  {
+    slug: 'monsoon-relief',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210216/heritage-of-hope/heroes/monsoon.webp',
+    category: { en: 'Welfare', bn: 'কল্যাণ' },
+    title: { en: 'Monsoon Relief', bn: 'বর্ষাকালীন সহায়তা' },
+    description: { en: 'Raincoats, umbrellas, and essentials to keep school access steady.', bn: 'স্কুলে আসা-যাওয়া সহজ রাখতে রেনকোট, ছাতা আর দরকারি জিনিস দেওয়া।' },
+    highlight: { en: 'Education without interruption', bn: 'বিঘ্নহীন শিক্ষা' },
+  },
+  {
+    slug: 'bornporichoy',
+    image: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210217/heritage-of-hope/heroes/bornporichoy.webp',
+    category: { en: 'Education', bn: 'শিক্ষা' },
+    title: { en: 'Bornoporichoy', bn: 'বর্ণপরিচয়' },
+    description: { en: 'Reading and writing sessions for young learners to build foundational literacy.', bn: 'ছোটদের জন্য পড়া-লেখার ক্লাস, ভিত্তি গড়ে তোলার জন্য।' },
+    highlight: { en: 'Early literacy', bn: 'শিক্ষার শুরু' },
+  },
 ]

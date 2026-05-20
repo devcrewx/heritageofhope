@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { prisma } from '../../lib/prisma.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 
 const router = Router()
 router.use(verifyJWT)

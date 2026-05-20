@@ -29,12 +29,15 @@ router.patch('/reorder', async (req, res) => {
     if (!Array.isArray(partnerUpdates)) {
       return res.status(400).json({ error: 'Invalid reorder data' });
     }
+    if (!partnerUpdates.every((p) => Number.isInteger(Number(p.id)) && Number(p.id) > 0 && Number.isInteger(Number(p.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
+    }
 
     const updated = await Promise.all(
       partnerUpdates.map(p =>
         prisma.partner.update({
-          where: { id: p.id },
-          data: { sortOrder: p.sortOrder }
+          where: { id: Number(p.id) },
+          data: { sortOrder: Number(p.sortOrder) }
         })
       )
     );
@@ -46,18 +49,6 @@ router.patch('/reorder', async (req, res) => {
   } catch (error) {
     console.error('Error reordering partners:', error);
     res.status(500).json({ error: 'Failed to reorder partners' });
-  }
-});
-
-// GET all partners
-router.get('/', async (req, res) => {
-  try {
-    const partners = await prisma.partner.findMany({
-      orderBy: { sortOrder: 'asc' }
-    });
-    res.json(partners);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch partners' });
   }
 });
 
@@ -74,6 +65,9 @@ router.post('/', upload.single('file'), async (req, res) => {
     let logoPublicId = null;
 
     if (req.file) {
+      if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME) {
+        return res.status(500).json({ error: 'Cloudinary not configured on server' })
+      }
       const result = await uploadToCloudinary(
         req.file.buffer,
         `heritage-of-hope/partners/${Date.now()}`,

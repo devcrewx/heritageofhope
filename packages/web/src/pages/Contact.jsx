@@ -1,59 +1,47 @@
-import { useOutletContext } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useState } from 'react'
-import { resolve, text } from '../content'
+import { resolve } from '../utils/i18n'
 import { submitFormWeb3 } from '../utils/web3forms'
 
 function Contact() {
   const { language, siteContent } = useOutletContext()
-  const { contact } = siteContent
+  const navigate = useNavigate()
+  const { contact, home, siteMeta } = siteContent
   const page = contact.pageContent || {}
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
-
-  const copy = {
-    en: {
-      title: 'We’d love to hear from you.',
-      intro:
-        'Reach out to us for inquiries, partnerships, or just to say hello.',
-    },
-    bn: {
-      title: 'আমরা আপনার কথা শুনতে চাই।',
-      intro:
-        'কিছু জানতে চাইলে বা আমাদের সঙ্গে কাজ করতে চাইলে সহজেই যোগাযোগ করুন।',
-    },
-  }
 
   return (
     <main className="page-stack page-contact">
       <section className="panel split-panel" data-reveal>
         <div>
-          <p className="eyebrow">{resolve(language, text('Contact', 'যোগাযোগ'))}</p>
-          <h1 className="page-title">{resolve(language, page.title || text(copy.en.title, copy.bn.title))}</h1>
-          <p>{resolve(language, page.intro || text(copy.en.intro, copy.bn.intro))}</p>
+          <p className="eyebrow">{resolve(language, page.eyebrow)}</p>
+          <h1 className="page-title">{resolve(language, contact.pageTitle)}</h1>
+          <p>{resolve(language, contact.intro)}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, page.responseTimeLabel || text('Response time', 'কত তাড়াতাড়ি উত্তর পাবেন'))}</p>
-          <p>{resolve(language, page.responseTimeValue || text('Usually within 2 business days', 'সাধারণত ২ কর্মদিবসের মধ্যে'))}</p>
+          <p className="meta">{resolve(language, contact.responseLabel)}</p>
+          <p>{resolve(language, contact.responseValue)}</p>
         </div>
       </section>
 
       <section className="panel card-grid two-up" data-reveal>
         <article className="card value-card" data-reveal>
           <div className="card-body">
-            <p className="meta">{resolve(language, text('Phone', 'ফোন নম্বর'))}</p>
-            <h3>{contact.contactDetails.phone}</h3>
+            <p className="meta">Phone</p>
+            <h3>{siteMeta.phone}</h3>
           </div>
         </article>
         <article className="card value-card" data-reveal>
           <div className="card-body">
-            <p className="meta">{resolve(language, text('Email', 'ইমেল'))}</p>
-            <h3>{contact.contactDetails.email}</h3>
+            <p className="meta">Email</p>
+            <h3>{siteMeta.email}</h3>
           </div>
         </article>
         <article className="card value-card wide-card" data-reveal>
           <div className="card-body">
-            <p className="meta">{resolve(language, text('Address', 'ঠিকানা'))}</p>
-            <h3>{contact.contactDetails.address}</h3>
+            <p className="meta">Address</p>
+            <h3>{resolve(language, siteMeta.address)}</h3>
           </div>
         </article>
       </section>
@@ -61,8 +49,8 @@ function Contact() {
       <section className="panel split-panel" data-reveal>
         <div className="map-frame" data-reveal>
           <iframe
-            title={resolve(language, text('Heritage of Hope Foundation location', 'Heritage of Hope Foundation-এর মানচিত্র'))}
-            src="https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed"
+            title="Heritage of Hope Foundation location"
+            src={contact.mapEmbedUrl || "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed"}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
@@ -80,7 +68,7 @@ function Contact() {
               if (result.success) {
                 setSubmitStatus({ type: 'success', message: result.message })
                 e.target.reset()
-                window.location.href = '/thank-you'
+                navigate('/thank-you')
               } else {
                 setSubmitStatus({ type: 'error', message: result.message })
               }
@@ -97,34 +85,34 @@ function Contact() {
             </div>
           )}
           <div className="section-head">
-            <p>{resolve(language, page.formLabel || text('Contact form', 'যোগাযোগের ফর্ম'))}</p>
-            <h2>{resolve(language, page.formHeading || text('Send us a direct message', 'সরাসরি একটা মেসেজ পাঠান'))}</h2>
+            <p>{resolve(language, contact.formLabel)}</p>
+            <h2>{resolve(language, contact.formHeading)}</h2>
           </div>
           <div className="field">
-            <label htmlFor="name">{resolve(language, text('Name', 'নাম'))}</label>
-            <input id="name" name="name" type="text" required placeholder={resolve(language, text('Your name', 'আপনার নাম'))} />
+            <label htmlFor="name">Name</label>
+            <input id="name" name="name" type="text" required placeholder="Your name" />
           </div>
           <div className="form-grid two-col">
             <div className="field">
-              <label htmlFor="email">{resolve(language, text('Email', 'ইমেল'))}</label>
-              <input id="email" name="email" type="email" required placeholder={resolve(language, text('you@example.com', 'আপনার ইমেল'))} />
+              <label htmlFor="email">Email</label>
+              <input id="email" name="email" type="email" required placeholder="you@example.com" />
             </div>
             <div className="field">
-              <label htmlFor="subject">{resolve(language, text('Subject', 'বিষয়'))}</label>
+              <label htmlFor="subject">Subject</label>
               <input id="subject" name="subject" type="text" required />
             </div>
           </div>
           <div className="field">
-            <label htmlFor="message">{resolve(language, text('Message', 'বার্তা'))}</label>
+            <label htmlFor="message">Message</label>
             <textarea
               id="message"
               name="message"
               rows="6"
-              placeholder={resolve(language, text('Tell us how you want to help', 'আপনার কথা এখানে লিখুন'))}
+              placeholder="Tell us how you want to help"
             />
           </div>
           <button type="submit" className="btn btn-solid" disabled={isSubmitting}>
-            {isSubmitting ? resolve(language, text('Sending...', 'পাঠাচ্ছি...')) : resolve(language, text('Send message', 'বার্তা পাঠান'))}
+            {isSubmitting ? 'Sending...' : 'Send message'}
           </button>
         </form>
       </section>
@@ -132,17 +120,16 @@ function Contact() {
       <section className="panel" data-reveal>
         <div className="section-head" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1rem' }}>
           <div>
-            <p>{resolve(language, text('Featured from Facebook', 'ফেসবুকের কিছু ঝলক'))}</p>
-            <h2>{resolve(language, text('Recent moments from the page', 'পেজের সাম্প্রতিক কিছু ছবি'))}</h2>
+            <p>{resolve(language, page.facebookLabel)}</p>
+            <h2>{resolve(language, page.facebookHeading)}</h2>
           </div>
-
-          <a href={contact.contactDetails.facebookUrl || 'https://www.facebook.com/profile.php?id=61559891799273'} target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
-            {resolve(language, text('Visit Official Facebook Page', 'অফিসিয়াল ফেসবুক পেজে যান'))} &rarr;
+          <a href={siteMeta.facebookUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
+            Visit Official Facebook Page &rarr;
           </a>
         </div>
         <div className="story-layout contact-story-layout">
           <div className="stack-list">
-            {contact.facebookPosts && contact.facebookPosts.length > 0 
+            {contact.facebookPosts && contact.facebookPosts.length > 0
               ? contact.facebookPosts.slice(3, 6).map((post) => (
                   <article key={post.date} className="post-card compact-post" data-reveal>
                     <img loading="lazy" src={post.image} alt={resolve(language, post.title)} />
@@ -156,8 +143,8 @@ function Contact() {
               : null}
           </div>
           <div className="photo-mosaic">
-            {contact.showcaseImages && contact.showcaseImages.length > 0
-              ? contact.showcaseImages.map((photo) => (
+            {contact.mosaicImages && contact.mosaicImages.length > 0
+              ? contact.mosaicImages.map((photo) => (
                   <figure key={resolve(language, photo.label)} className="mosaic-tile" data-reveal>
                     <img loading="lazy" src={photo.image} alt={resolve(language, photo.label)} />
                     <figcaption>{resolve(language, photo.label)}</figcaption>

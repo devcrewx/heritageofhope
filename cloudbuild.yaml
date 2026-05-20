@@ -1,0 +1,116 @@
+steps:
+  - id: api-build
+    name: gcr.io/k8s-skaffold/pack
+    entrypoint: pack
+    args:
+      - build
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/api:$SHORT_SHA
+      - --builder=gcr.io/buildpacks/builder:latest
+
+  - id: api-push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/api:$SHORT_SHA
+
+  - id: admin-build
+    name: gcr.io/k8s-skaffold/pack
+    entrypoint: pack
+    args:
+      - build
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/admin:$SHORT_SHA
+      - --builder=gcr.io/buildpacks/builder:latest
+      - --env=VITE_API_BASE=https://api.heritageofhopefoundation.org
+
+  - id: admin-push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/admin:$SHORT_SHA
+
+  - id: web-build
+    name: gcr.io/k8s-skaffold/pack
+    entrypoint: pack
+    args:
+      - build
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/web:$SHORT_SHA
+      - --builder=gcr.io/buildpacks/builder:latest
+      - --env=VITE_API_BASE_URL=https://api.heritageofhopefoundation.org
+
+  - id: web-push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/web:$SHORT_SHA
+
+  - id: api-deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - heritageofhope-api
+      - --image=asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/api:$SHORT_SHA
+      - --region=asia-south1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --cpu=1
+      - --memory=512Mi
+      - --min-instances=0
+      - --max-instances=3
+      - --concurrency=80
+      - --timeout=300
+      - --set-secrets=DATABASE_URL=database-url:latest
+      - --set-secrets=JWT_SECRET=jwt-secret:latest
+      - --set-env-vars=JWT_EXPIRY=7d,NODE_ENV=production,PORT=4010
+      - --set-env-vars=ALLOWED_ORIGINS=https://admin.heritageofhopefoundation.org,https://heritageofhopefoundation.org
+      - --set-secrets=CLOUDINARY_CLOUD_NAME=cloudinary-cloud-name:latest
+      - --set-secrets=CLOUDINARY_API_KEY=cloudinary-api-key:latest
+      - --set-secrets=CLOUDINARY_API_SECRET=cloudinary-api-secret:latest
+      - --set-secrets=SMTP_HOST=smtp-host:latest
+      - --set-secrets=SMTP_PORT=smtp-port:latest
+      - --set-secrets=SMTP_USER=smtp-user:latest
+      - --set-secrets=SMTP_PASS=smtp-pass:latest
+      - --set-secrets=WEB3FORMS_ACCESS_KEY=web3forms-key:latest
+      - --set-secrets=NOTIFY_EMAIL=notify-email:latest
+
+  - id: admin-deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - heritageofhope-admin
+      - --image=asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/admin:$SHORT_SHA
+      - --region=asia-south1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --cpu=1
+      - --memory=256Mi
+      - --min-instances=0
+      - --max-instances=3
+      - --concurrency=80
+      - --timeout=60
+
+  - id: web-deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - heritageofhope-web
+      - --image=asia-south1-docker.pkg.dev/$PROJECT_ID/heritageofhope/web:$SHORT_SHA
+      - --region=asia-south1
+      - --platform=managed
+      - --allow-unauthenticated
+      - --cpu=1
+      - --memory=256Mi
+      - --min-instances=0
+      - --max-instances=3
+      - --concurrency=80
+      - --timeout=60
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 1800s

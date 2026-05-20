@@ -28,7 +28,7 @@ router.get('/', async (_req, res) => {
 
 // POST /api/admin/gallery
 // Supports the current admin UI contract: multipart/form-data with `files`
-router.post('/', upload.array('files', 10), async (req, res) => {
+router.post('/', upload.array('files', 5), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No files provided' })
@@ -41,7 +41,11 @@ router.post('/', upload.array('files', 10), async (req, res) => {
     const highestSort = await prisma.galleryItem.aggregate({ _max: { sortOrder: true } })
     let nextSortOrder = (highestSort._max.sortOrder ?? -1) + 1
 
+    const VALID_CATEGORIES = ['gallery', 'team', 'events', 'programs']
     const category = req.body.category || 'gallery'
+    if (!VALID_CATEGORIES.includes(category)) {
+      return res.status(400).json({ error: `Invalid category. Must be one of: ${VALID_CATEGORIES.join(', ')}` })
+    }
     const altEn = req.body.altEn || ''
     const altBn = req.body.altBn || ''
     const uploaded = []
@@ -84,6 +88,9 @@ router.patch('/reorder', async (req, res) => {
 
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'No reorder items provided' })
+    }
+    if (!items.every((item) => Number.isInteger(Number(item.id)) && Number(item.id) > 0 && Number.isInteger(Number(item.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
     }
 
     const updated = await Promise.all(

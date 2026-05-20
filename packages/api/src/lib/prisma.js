@@ -13,17 +13,23 @@ if (!process.env.DATABASE_URL) {
       if (parsed.DATABASE_URL) process.env.DATABASE_URL = parsed.DATABASE_URL
     }
   } catch (e) {
-    // swallow – Prisma will still surface a clear error if DB URL absent
+    console.warn('Failed to parse .env file:', e.message)
   }
 }
 
 const globalForPrisma = globalThis
 
+function buildDbUrl(base) {
+  if (!base) return undefined
+  const sep = base.includes('?') ? '&' : '?'
+  return `${base}${sep}connection_limit=5&pool_timeout=10`
+}
+
 export const prisma =
   globalForPrisma.prisma ||
   new PrismaClient({
-    datasources: process.env.DATABASE_URL ? { db: { url: process.env.DATABASE_URL } } : undefined,
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    datasources: process.env.DATABASE_URL ? { db: { url: buildDbUrl(process.env.DATABASE_URL) } } : undefined,
+    log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   })
 
 if (process.env.NODE_ENV !== 'production') {

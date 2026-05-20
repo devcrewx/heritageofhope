@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: heritageofhope-api
-    env: node
-    plan: free
-    buildCommand: npm install && npx prisma generate --schema packages/api/prisma/schema.prisma
-    startCommand: npm run start
-    autoDeploy: true

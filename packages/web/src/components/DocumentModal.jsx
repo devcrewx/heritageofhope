@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
-export default function DocumentModal({ open, onClose, title, src, type = 'pdf', onNext, onPrev, hasNext, hasPrev }) {
+export default function DocumentModal({ open, onClose, title, type = 'pdf', onNext, onPrev, hasNext, hasPrev, thumbUrl, downloadUrl, onDownload }) {
   const overlayRef = useRef(null)
   const contentRef = useRef(null)
 
@@ -51,15 +51,17 @@ export default function DocumentModal({ open, onClose, title, src, type = 'pdf',
           <h3 className="doc-modal-title">{title}</h3>
           <div className="doc-modal-inner">
             {type === 'image' ? (
-              <img src={src} alt={title} />
+              <img src={downloadUrl} alt={title} />
             ) : (
-              <object data={src} type="application/pdf" width="100%" height="100%">
-                <p>Cannot display this document in the browser. <a href={src} target="_blank" rel="noopener noreferrer">Open in a new tab</a>.</p>
-              </object>
+              <div className="doc-pdf-placeholder">
+                {thumbUrl && <img className="doc-pdf-thumb" src={thumbUrl} alt={title} />}
+                <div className="doc-pdf-actions">
+                  <button className="btn" onClick={onDownload}>Download</button>
+                </div>
+              </div>
             )}
           </div>
           <div className="doc-modal-actions">
-            <a className="btn" href={src} download target="_blank" rel="noopener noreferrer">Download</a>
             <button className="btn btn-ghost" onClick={onClose}>Close</button>
           </div>
         </div>

@@ -16,6 +16,8 @@ const links = [
   { to: '/get-involved', label: 'Get Involved' },
   { to: '/contact', label: 'Contact Page' },
   { to: '/submissions', label: 'Form Submissions' },
+  { to: '/thank-you', label: 'Thank You Page' },
+  { to: '/not-found', label: 'Not Found Page' },
   { to: '/change-password', label: 'Change Password' },
 ]
 

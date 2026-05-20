@@ -14,9 +14,10 @@ model SiteContent {
   fieldKey  String   @map("field_key")
   valueEn   String?  @map("value_en") @db.Text
   valueBn   String?  @map("value_bn") @db.Text
-  updatedAt DateTime @default(now()) @map("updated_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@unique([page, section, fieldKey])
+  @@index([section])
   @@map("site_content")
 }
 
@@ -27,6 +28,7 @@ model ImpactStat {
   labelBn   String? @map("label_bn")
   sortOrder Int    @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("impact_stats")
 }
 
@@ -40,6 +42,8 @@ model GalleryItem {
   sortOrder Int      @default(0) @map("sort_order")
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@index([category])
+  @@index([sortOrder])
   @@map("gallery_items")
 }
 
@@ -56,6 +60,7 @@ model Document {
   previewImgPublicId String? @map("preview_img_public_id") @db.Text
   sortOrder     Int      @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("documents")
 }
 
@@ -68,6 +73,7 @@ model TeamMember {
   photoPublicId String? @map("photo_public_id") @db.Text
   sortOrder     Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("team_members")
 }
 
@@ -79,6 +85,7 @@ model CoreValue {
   descriptionBn String? @map("description_bn") @db.Text
   sortOrder     Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("core_values")
 }
 
@@ -90,6 +97,8 @@ model Partner {
   isActive     Boolean @default(true) @map("is_active")
   sortOrder    Int     @default(0) @map("sort_order")
 
+  @@index([isActive])
+  @@index([sortOrder])
   @@map("partners")
 }
 
@@ -100,6 +109,7 @@ model DonationTier {
   labelBn   String? @map("label_bn")
   sortOrder Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("donation_tiers")
 }
 
@@ -110,6 +120,7 @@ model FundAllocation {
   percentage Int
   sortOrder  Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("fund_allocation")
 }
 
@@ -121,6 +132,7 @@ model VolunteerRole {
   descriptionBn String? @map("description_bn") @db.Text
   sortOrder     Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("volunteer_roles")
 }
 
@@ -137,6 +149,9 @@ model ActivityPost {
   sortOrder   Int      @default(0) @map("sort_order")
   createdAt   DateTime @default(now()) @map("created_at")
 
+  @@index([isPublished])
+  @@index([sortOrder])
+  @@index([isPublished, sortOrder])
   @@map("activity_posts")
 }
 
@@ -149,6 +164,7 @@ model AdminUser {
   lastLogin    DateTime?  @map("last_login")
   auditLogs    AuditLog[]
 
+  @@index([email])
   @@map("admin_users")
 }
 
@@ -167,6 +183,7 @@ model Program {
   highlightBn   String? @map("highlight_bn")
   sortOrder     Int     @default(0) @map("sort_order")
 
+  @@index([sortOrder])
   @@map("programs")
 }
 
@@ -180,6 +197,8 @@ model AuditLog {
   createdAt DateTime  @default(now()) @map("created_at")
   admin     AdminUser? @relation(fields: [adminId], references: [id])
 
+  @@index([adminId])
+  @@index([tableName])
   @@map("audit_log")
 }
 

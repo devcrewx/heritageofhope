@@ -10,10 +10,11 @@ const WEB3FORMS_TO = process.env.WEB3FORMS_TO_EMAIL || NOTIFY_EMAIL
 
 let transporter = null
 if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
+  const smtpPort = parseInt(SMTP_PORT || '587', 10)
   transporter = nodemailer.createTransport({
     host: SMTP_HOST,
-    port: parseInt(SMTP_PORT || '587', 10),
-    secure: false,
+    port: smtpPort,
+    secure: smtpPort === 465,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,

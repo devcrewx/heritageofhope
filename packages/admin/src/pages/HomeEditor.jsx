@@ -36,21 +36,41 @@ function HomeEditor() {
   const [ctaHeadlineBn, setCtaHeadlineBn] = useState('')
   const [ctaBodyEn, setCtaBodyEn] = useState('')
   const [ctaBodyBn, setCtaBodyBn] = useState('')
+  const [ctaButtonLabelEn, setCtaButtonLabelEn] = useState('')
+  const [ctaButtonLabelBn, setCtaButtonLabelBn] = useState('')
 
   // Page labels
   const [pageStatsLabelEn, setPageStatsLabelEn] = useState('')
   const [pageStatsLabelBn, setPageStatsLabelBn] = useState('')
+  const [pageStatsHeadingEn, setPageStatsHeadingEn] = useState('')
+  const [pageStatsHeadingBn, setPageStatsHeadingBn] = useState('')
   const [pagePillarLabelEn, setPagePillarLabelEn] = useState('')
   const [pagePillarLabelBn, setPagePillarLabelBn] = useState('')
   const [pageActivityLabelEn, setPageActivityLabelEn] = useState('')
   const [pageActivityLabelBn, setPageActivityLabelBn] = useState('')
+  const [pageActivityHeadingEn, setPageActivityHeadingEn] = useState('')
+  const [pageActivityHeadingBn, setPageActivityHeadingBn] = useState('')
   const [pageDonationLabelEn, setPageDonationLabelEn] = useState('')
   const [pageDonationLabelBn, setPageDonationLabelBn] = useState('')
+
+  // Figcaption
+  const [figcaptionEn, setFigcaptionEn] = useState('')
+  const [figcaptionBn, setFigcaptionBn] = useState('')
+
+  // Reg cert thumb
+  const [regCertThumbUrl, setRegCertThumbUrl] = useState('')
+
+  // Showcase images
+  const [showcaseSlots, setShowcaseSlots] = useState(
+    Array.from({ length: 6 }, () => ({ url: '', labelEn: '', labelBn: '' }))
+  )
+  const [showcaseUploading, setShowcaseUploading] = useState(Array(6).fill(false))
 
   // UI state
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [heroUploading, setHeroUploading] = useState(false)
+  const [certUploading, setCertUploading] = useState(false)
   const [activeTab, setActiveTab] = useState('hero')
   const [toast, setToast] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, statId: null })
@@ -77,6 +97,19 @@ function HomeEditor() {
           setBadge2(h.badge2?.en || '')
           setBadge3(h.badge3?.en || '')
           setHeroImageUrl(h.heroImage?.en || '')
+          setFigcaptionEn(h.figcaption?.en || '')
+          setFigcaptionBn(h.figcaption?.bn || '')
+          setRegCertThumbUrl(h.regCertThumb?.en || '')
+        }
+
+        // Parse showcase images
+        if (response.data.sections?.showcase) {
+          const sc = response.data.sections.showcase
+          setShowcaseSlots((prev) => prev.map((slot, i) => ({
+            url: sc[`img${i + 1}_url`]?.en || '',
+            labelEn: sc[`img${i + 1}_labelEn`]?.en || '',
+            labelBn: sc[`img${i + 1}_labelBn`]?.en || '',
+          })))
         }
 
         // Parse mission section
@@ -93,16 +126,22 @@ function HomeEditor() {
           setCtaHeadlineBn(c.headline?.bn || '')
           setCtaBodyEn(c.body?.en || '')
           setCtaBodyBn(c.body?.bn || '')
+          setCtaButtonLabelEn(c.buttonLabel?.en || '')
+          setCtaButtonLabelBn(c.buttonLabel?.bn || '')
         }
 
         if (response.data.sections?.pageContent) {
           const p = response.data.sections.pageContent
           setPageStatsLabelEn(p.statsLabel?.en || '')
           setPageStatsLabelBn(p.statsLabel?.bn || '')
+          setPageStatsHeadingEn(p.statsHeading?.en || '')
+          setPageStatsHeadingBn(p.statsHeading?.bn || '')
           setPagePillarLabelEn(p.pillarLabel?.en || '')
           setPagePillarLabelBn(p.pillarLabel?.bn || '')
           setPageActivityLabelEn(p.activityLabel?.en || '')
           setPageActivityLabelBn(p.activityLabel?.bn || '')
+          setPageActivityHeadingEn(p.activityHeading?.en || '')
+          setPageActivityHeadingBn(p.activityHeading?.bn || '')
           setPageDonationLabelEn(p.donationLabel?.en || '')
           setPageDonationLabelBn(p.donationLabel?.bn || '')
         }
@@ -131,12 +170,13 @@ function HomeEditor() {
     try {
       await Promise.all([
         apiClient.patch('/api/admin/content/home/hero/eyebrow', { valueEn: heroEyebrow }),
-        apiClient.patch('/api/admin/content/home/hero/heroFootnote', { valueEn: heroFootnoteEn, valueBn: heroFootnoteBn }),
         apiClient.patch('/api/admin/content/home/hero/headline', { valueEn: heroHeadlineEn, valueBn: heroHeadlineBn }),
         apiClient.patch('/api/admin/content/home/hero/intro', { valueEn: heroIntroEn, valueBn: heroIntroBn }),
+        apiClient.patch('/api/admin/content/home/hero/heroFootnote', { valueEn: heroFootnoteEn, valueBn: heroFootnoteBn }),
         apiClient.patch('/api/admin/content/home/hero/badge1', { valueEn: badge1 }),
         apiClient.patch('/api/admin/content/home/hero/badge2', { valueEn: badge2 }),
         apiClient.patch('/api/admin/content/home/hero/badge3', { valueEn: badge3 }),
+        apiClient.patch('/api/admin/content/home/hero/figcaption', { valueEn: figcaptionEn, valueBn: figcaptionBn }),
       ])
       setLastSavedTime(new Date())
       showToast('✓ Saved to API', 'success')
@@ -224,6 +264,7 @@ function HomeEditor() {
       await Promise.all([
         apiClient.patch('/api/admin/content/home/cta/headline', { valueEn: ctaHeadlineEn, valueBn: ctaHeadlineBn }),
         apiClient.patch('/api/admin/content/home/cta/body', { valueEn: ctaBodyEn, valueBn: ctaBodyBn }),
+        apiClient.patch('/api/admin/content/home/cta/buttonLabel', { valueEn: ctaButtonLabelEn, valueBn: ctaButtonLabelBn }),
       ])
       showToast('Donation CTA saved', 'success')
     } catch (error) {
@@ -241,8 +282,10 @@ function HomeEditor() {
     try {
       await Promise.all([
         apiClient.patch('/api/admin/content/home/pageContent/statsLabel', { valueEn: pageStatsLabelEn, valueBn: pageStatsLabelBn }),
+        apiClient.patch('/api/admin/content/home/pageContent/statsHeading', { valueEn: pageStatsHeadingEn, valueBn: pageStatsHeadingBn }),
         apiClient.patch('/api/admin/content/home/pageContent/pillarLabel', { valueEn: pagePillarLabelEn, valueBn: pagePillarLabelBn }),
         apiClient.patch('/api/admin/content/home/pageContent/activityLabel', { valueEn: pageActivityLabelEn, valueBn: pageActivityLabelBn }),
+        apiClient.patch('/api/admin/content/home/pageContent/activityHeading', { valueEn: pageActivityHeadingEn, valueBn: pageActivityHeadingBn }),
         apiClient.patch('/api/admin/content/home/pageContent/donationLabel', { valueEn: pageDonationLabelEn, valueBn: pageDonationLabelBn }),
       ])
       showToast('Page labels saved', 'success')
@@ -292,6 +335,103 @@ function HomeEditor() {
     }
   }
 
+  async function uploadRegCertThumb(file) {
+    setCertUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'home')
+      formData.append('section', 'hero')
+      formData.append('fieldKey', 'regCertThumb')
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setRegCertThumbUrl(response.data?.data?.url || '')
+      showToast('Certificate thumbnail updated', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to upload certificate image'
+      showToast(msg, 'error')
+    } finally {
+      setCertUploading(false)
+    }
+  }
+
+  async function deleteRegCertThumb() {
+    setCertUploading(true)
+    try {
+      await apiClient.delete('/api/admin/media/home/hero/regCertThumb')
+      setRegCertThumbUrl('')
+      showToast('Certificate thumbnail removed', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to remove certificate image'
+      showToast(msg, 'error')
+    } finally {
+      setCertUploading(false)
+    }
+  }
+
+  async function uploadShowcaseImage(file, index) {
+    setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? true : v)))
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'home')
+      formData.append('section', 'showcase')
+      formData.append('fieldKey', `img${index + 1}_url`)
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setShowcaseSlots((prev) => prev.map((slot, i) =>
+        i === index ? { ...slot, url: response.data?.data?.url || '' } : slot
+      ))
+      showToast(`Showcase image ${index + 1} updated`, 'success')
+    } catch (error) {
+      showToast('Failed to upload showcase image', 'error')
+    } finally {
+      setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
+    }
+  }
+
+  async function deleteShowcaseImage(index) {
+    setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? true : v)))
+    try {
+      await apiClient.delete(`/api/admin/media/home/showcase/img${index + 1}_url`)
+      setShowcaseSlots((prev) => prev.map((slot, i) =>
+        i === index ? { url: '', labelEn: slot.labelEn, labelBn: slot.labelBn } : slot
+      ))
+      showToast(`Showcase image ${index + 1} removed`, 'success')
+    } catch (error) {
+      showToast('Failed to remove showcase image', 'error')
+    } finally {
+      setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
+    }
+  }
+
+  function updateShowcaseLabel(index, field, value) {
+    setShowcaseSlots((prev) => prev.map((slot, i) =>
+      i === index ? { ...slot, [field]: value } : slot
+    ))
+  }
+
+  async function saveShowcaseLabels() {
+    setSaving(true)
+    try {
+      await Promise.all(
+        showcaseSlots.flatMap((slot, i) => [
+          apiClient.patch(`/api/admin/content/home/showcase/img${i + 1}_labelEn`, { valueEn: slot.labelEn }),
+          apiClient.patch(`/api/admin/content/home/showcase/img${i + 1}_labelBn`, { valueEn: slot.labelBn }),
+        ])
+      )
+      showToast('Showcase labels saved', 'success')
+    } catch (error) {
+      showToast('Failed to save showcase labels', 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   if (loading) {
     return (
       <section>
@@ -327,6 +467,7 @@ function HomeEditor() {
           { id: 'stats', label: 'Impact Stats' },
           { id: 'mission', label: 'Mission Section' },
           { id: 'cta', label: 'Donation CTA' },
+          { id: 'showcase', label: 'Showcase Images' },
           { id: 'labels', label: 'Page Labels' },
         ].map((tab) => (
           <button
@@ -369,81 +510,6 @@ function HomeEditor() {
             />
           </div>
 
-          <BilingualField
-            labelEn="Hero Footnote"
-            labelBn="Hero Footnote (Bangla)"
-            valueEn={heroFootnoteEn}
-            valueBn={heroFootnoteBn}
-            onChangeEn={setHeroFootnoteEn}
-            onChangeBn={setHeroFootnoteBn}
-            isTextArea={false}
-          />
-
-          <div className="flex gap-3 pt-6 border-t">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            >
-              Save Hero
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Page Labels */}
-      {activeTab === 'labels' && (
-        <form onSubmit={savePageLabels} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
-          <BilingualField
-            labelEn="Stats Section Label"
-            labelBn="Stats Section Label (Bangla)"
-            valueEn={pageStatsLabelEn}
-            valueBn={pageStatsLabelBn}
-            onChangeEn={setPageStatsLabelEn}
-            onChangeBn={setPageStatsLabelBn}
-          />
-
-          <BilingualField
-            labelEn="Mission Section Label"
-            labelBn="Mission Section Label (Bangla)"
-            valueEn={pagePillarLabelEn}
-            valueBn={pagePillarLabelBn}
-            onChangeEn={setPagePillarLabelEn}
-            onChangeBn={setPagePillarLabelBn}
-          />
-
-          <BilingualField
-            labelEn="Activity Section Label"
-            labelBn="Activity Section Label (Bangla)"
-            valueEn={pageActivityLabelEn}
-            valueBn={pageActivityLabelBn}
-            onChangeEn={setPageActivityLabelEn}
-            onChangeBn={setPageActivityLabelBn}
-          />
-
-          <BilingualField
-            labelEn="Donation Section Label"
-            labelBn="Donation Section Label (Bangla)"
-            valueEn={pageDonationLabelEn}
-            valueBn={pageDonationLabelBn}
-            onChangeEn={setPageDonationLabelEn}
-            onChangeBn={setPageDonationLabelBn}
-          />
-
-          <div className="flex gap-3 pt-6 border-t">
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
-            >
-              {saving ? 'Saving...' : 'Save Page Labels'}
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Stats Section */}
-      {activeTab === 'stats' && (
-        <form onSubmit={saveStats} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
           <BilingualField
             labelEn="Hero Headline"
             labelBn="Hero Headline (Bangla)"
@@ -492,21 +558,167 @@ function HomeEditor() {
             </div>
           </div>
 
-          <div className="space-y-3 pt-6 border-t">
-            <div className="flex gap-3">
-              <button
-                type="submit"
-                disabled={saving}
-                className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              >
-                {saving ? 'Saving...' : 'Save Hero Section'}
-              </button>
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">Hero Image Details</h3>
+            <BilingualField
+              labelEn="Photo Caption (figcaption)"
+              labelBn="Photo Caption (Bangla)"
+              valueEn={figcaptionEn}
+              valueBn={figcaptionBn}
+              onChangeEn={setFigcaptionEn}
+              onChangeBn={setFigcaptionBn}
+              hint="Text displayed below the hero photo"
+            />
+
+            <div className="mt-4">
+              <MediaUploadField
+                label="Registration Certificate Thumbnail"
+                helperText="Small thumbnail shown in the hero area linking to the certificate."
+                currentUrl={regCertThumbUrl}
+                currentAlt="Registration certificate"
+                onUpload={uploadRegCertThumb}
+                onDelete={regCertThumbUrl ? deleteRegCertThumb : undefined}
+                uploading={certUploading}
+                previewClassName="h-32 w-48 object-contain"
+              />
             </div>
-            {lastSavedTime && (
-              <p className="text-sm text-green-600 font-medium">
-                ✓ Saved to API at {lastSavedTime.toLocaleTimeString()}
-              </p>
-            )}
+          </div>
+
+          <div className="flex gap-3 pt-6 border-t">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              Save Hero
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Showcase Images */}
+      {activeTab === 'showcase' && (
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
+          <h2 className="text-lg font-semibold">Showcase Images</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            These images appear in the photo mosaic on the Home page. Upload up to 6 images with bilingual labels.
+          </p>
+          <div className="grid gap-6">
+            {showcaseSlots.map((slot, i) => (
+              <div key={i} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                <h3 className="font-medium text-gray-800">Image {i + 1}</h3>
+                <MediaUploadField
+                  label={`Image ${i + 1}`}
+                  helperText="Upload an image for this showcase slot."
+                  currentUrl={slot.url}
+                  currentAlt={slot.labelEn || `Showcase ${i + 1}`}
+                  onUpload={(file) => uploadShowcaseImage(file, i)}
+                  onDelete={slot.url ? () => deleteShowcaseImage(i) : undefined}
+                  uploading={showcaseUploading[i]}
+                  previewClassName="h-40 w-full object-cover"
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Label (English)</label>
+                    <input
+                      type="text"
+                      value={slot.labelEn}
+                      onChange={(e) => updateShowcaseLabel(i, 'labelEn', e.target.value)}
+                      placeholder="e.g., Learning Space"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Label (Bangla)</label>
+                    <input
+                      type="text"
+                      value={slot.labelBn}
+                      onChange={(e) => updateShowcaseLabel(i, 'labelBn', e.target.value)}
+                      placeholder="e.g., শিক্ষা কেন্দ্র"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-3 pt-6 border-t">
+            <button
+              type="button"
+              onClick={saveShowcaseLabels}
+              disabled={saving}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save Showcase Labels'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Page Labels */}
+      {activeTab === 'labels' && (
+        <form onSubmit={savePageLabels} className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-6">
+          <BilingualField
+            labelEn="Stats Section Eyebrow"
+            labelBn="Stats Section Eyebrow (Bangla)"
+            valueEn={pageStatsLabelEn}
+            valueBn={pageStatsLabelBn}
+            onChangeEn={setPageStatsLabelEn}
+            onChangeBn={setPageStatsLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Stats Section Heading"
+            labelBn="Stats Section Heading (Bangla)"
+            valueEn={pageStatsHeadingEn}
+            valueBn={pageStatsHeadingBn}
+            onChangeEn={setPageStatsHeadingEn}
+            onChangeBn={setPageStatsHeadingBn}
+          />
+
+          <BilingualField
+            labelEn="Pillar Section Eyebrow"
+            labelBn="Pillar Section Eyebrow (Bangla)"
+            valueEn={pagePillarLabelEn}
+            valueBn={pagePillarLabelBn}
+            onChangeEn={setPagePillarLabelEn}
+            onChangeBn={setPagePillarLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Activity Section Eyebrow"
+            labelBn="Activity Section Eyebrow (Bangla)"
+            valueEn={pageActivityLabelEn}
+            valueBn={pageActivityLabelBn}
+            onChangeEn={setPageActivityLabelEn}
+            onChangeBn={setPageActivityLabelBn}
+          />
+
+          <BilingualField
+            labelEn="Activity Section Heading"
+            labelBn="Activity Section Heading (Bangla)"
+            valueEn={pageActivityHeadingEn}
+            valueBn={pageActivityHeadingBn}
+            onChangeEn={setPageActivityHeadingEn}
+            onChangeBn={setPageActivityHeadingBn}
+          />
+
+          <BilingualField
+            labelEn="Donation Section Eyebrow"
+            labelBn="Donation Section Eyebrow (Bangla)"
+            valueEn={pageDonationLabelEn}
+            valueBn={pageDonationLabelBn}
+            onChangeEn={setPageDonationLabelEn}
+            onChangeBn={setPageDonationLabelBn}
+          />
+
+          <div className="flex gap-3 pt-6 border-t">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 disabled:opacity-50"
+            >
+              {saving ? 'Saving...' : 'Save Page Labels'}
+            </button>
           </div>
         </form>
       )}
@@ -629,6 +841,16 @@ function HomeEditor() {
             onChangeBn={setCtaBodyBn}
             isTextArea
             hint="Supporting text for the donation section"
+          />
+
+          <BilingualField
+            labelEn="CTA Button Label"
+            labelBn="CTA Button Label (Bangla)"
+            valueEn={ctaButtonLabelEn}
+            valueBn={ctaButtonLabelBn}
+            onChangeEn={setCtaButtonLabelEn}
+            onChangeBn={setCtaButtonLabelBn}
+            hint="Text for the 'Donate now' button"
           />
 
           <div className="flex gap-3 pt-6 border-t">

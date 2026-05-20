@@ -25,8 +25,9 @@ export default function GetInvolvedEditor() {
   const [newRole, setNewRole] = useState({ titleEn: '', titleBn: '', descriptionEn: '', descriptionBn: '' })
   const [activeTab, setActiveTab] = useState('tiers')
   const [saving, setSaving] = useState(false)
-  const [heroUploading, setHeroUploading] = useState(false)
   const [paymentUploading, setPaymentUploading] = useState(false)
+  const [chequeUploading, setChequeUploading] = useState(false)
+  const [partnerUploading, setPartnerUploading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
@@ -57,66 +58,9 @@ export default function GetInvolvedEditor() {
     }
   }
 
-  const heroImageUrl = data.hero?.heroImage?.en || ''
   const upiQrImageUrl = data.payment?.upiQrImage?.en || ''
-
-  const uploadHeroImage = async (file) => {
-    setHeroUploading(true)
-    setError('')
-    setStatusMessage('')
-
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('page', 'getInvolved')
-      formData.append('section', 'hero')
-
-      const response = await apiClient.post('/api/admin/media/hero', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-
-      if (response.data?.data?.url) {
-        setData((current) => ({
-          ...current,
-          hero: {
-            ...current.hero,
-            heroImage: {
-              en: response.data.data.url,
-              bn: response.data.data.publicId || response.data.data.url,
-            },
-          },
-        }))
-      }
-
-      setStatusMessage('Partnership photo updated')
-    } catch (error) {
-      setError(error.response?.data?.error || error.message)
-    } finally {
-      setHeroUploading(false)
-    }
-  }
-
-  const deleteHeroImage = async () => {
-    setHeroUploading(true)
-    setError('')
-    setStatusMessage('')
-
-    try {
-      await apiClient.delete('/api/admin/media/hero/getInvolved/hero')
-      setData((current) => ({
-        ...current,
-        hero: {
-          ...current.hero,
-          heroImage: { en: '', bn: '' },
-        },
-      }))
-      setStatusMessage('Partnership photo removed')
-    } catch (error) {
-      setError(error.response?.data?.error || error.message)
-    } finally {
-      setHeroUploading(false)
-    }
-  }
+  const specimenChequeUrl = data.bank?.chequeUrl?.en || ''
+  const partnerImageUrl = data.partner?.image?.en || ''
 
   const uploadUpiQrImage = async (file) => {
     setPaymentUploading(true)
@@ -176,22 +120,134 @@ export default function GetInvolvedEditor() {
     }
   }
 
+  const uploadSpecimenCheque = async (file) => {
+    setChequeUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'getInvolved')
+      formData.append('section', 'bank')
+      formData.append('fieldKey', 'chequeUrl')
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          bank: {
+            ...current.bank,
+            chequeUrl: { en: response.data.data.url, bn: response.data.data.publicId || '' },
+          },
+        }))
+      }
+
+      setStatusMessage('Specimen cheque updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setChequeUploading(false)
+    }
+  }
+
+  const deleteSpecimenCheque = async () => {
+    setChequeUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/getInvolved/bank/chequeUrl')
+      setData((current) => ({
+        ...current,
+        bank: {
+          ...current.bank,
+          chequeUrl: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('Specimen cheque removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setChequeUploading(false)
+    }
+  }
+
+  const uploadPartnerImage = async (file) => {
+    setPartnerUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'getInvolved')
+      formData.append('section', 'partner')
+      formData.append('fieldKey', 'image')
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          partner: {
+            ...current.partner,
+            image: { en: response.data.data.url, bn: response.data.data.publicId || '' },
+          },
+        }))
+      }
+
+      setStatusMessage('Partner image updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setPartnerUploading(false)
+    }
+  }
+
+  const deletePartnerImage = async () => {
+    setPartnerUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/getInvolved/partner/image')
+      setData((current) => ({
+        ...current,
+        partner: {
+          ...current.partner,
+          image: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('Partner image removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setPartnerUploading(false)
+    }
+  }
+
   const updateField = (section, fieldKey, lang, value) => {
-    setData({
-      ...data,
+    setData((current) => ({
+      ...current,
       [section]: {
-        ...data[section],
-        [fieldKey]: { ...data[section]?.[fieldKey], [lang]: value },
+        ...current[section],
+        [fieldKey]: { ...current[section]?.[fieldKey], [lang]: value },
       },
-    })
+    }))
   }
 
   const updateTier = (id, field, value) => {
-    setDonationTiers(donationTiers.map((tier) => (tier.id === id ? { ...tier, [field]: value } : tier)))
+    setDonationTiers((current) => current.map((tier) => (tier.id === id ? { ...tier, [field]: value } : tier)))
   }
 
   const updateRole = (id, field, value) => {
-    setVolunteerRoles(volunteerRoles.map((role) => (role.id === id ? { ...role, [field]: value } : role)))
+    setVolunteerRoles((current) => current.map((role) => (role.id === id ? { ...role, [field]: value } : role)))
   }
 
   const saveSection = async (section) => {
@@ -217,6 +273,7 @@ export default function GetInvolvedEditor() {
   }
 
   const pageLabelFields = [
+    { fieldKey: 'eyebrow', labelEn: 'Page Eyebrow', labelBn: 'Page Eyebrow (Bangla)' },
     { fieldKey: 'donationLabel', labelEn: 'Donation Section Label', labelBn: 'Donation Section Label (Bangla)' },
     { fieldKey: 'donationHeading', labelEn: 'Donation Section Heading', labelBn: 'Donation Section Heading (Bangla)' },
     { fieldKey: 'paymentLabel', labelEn: 'Payment Section Label', labelBn: 'Payment Section Label (Bangla)' },
@@ -517,6 +574,18 @@ export default function GetInvolvedEditor() {
             placeholder="SBIN0008438"
             style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem', width: '100%', marginBottom: '1rem' }}
           />
+          <div className="mt-6">
+            <MediaUploadField
+              label="Specimen Cheque Image"
+              helperText="Shows a sample cheque with account details for reference."
+              currentUrl={specimenChequeUrl}
+              currentAlt="Specimen cheque"
+              onUpload={uploadSpecimenCheque}
+              onDelete={specimenChequeUrl ? deleteSpecimenCheque : undefined}
+              uploading={chequeUploading}
+              previewClassName="h-48 w-full object-contain bg-white"
+            />
+          </div>
           <button onClick={() => saveSection('bank')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Bank Details'}
           </button>
@@ -639,11 +708,11 @@ export default function GetInvolvedEditor() {
           <MediaUploadField
             label="Partnership Photo"
             helperText="This image appears in the public Get Involved partnership section."
-            currentUrl={heroImageUrl}
+            currentUrl={partnerImageUrl}
             currentAlt="Get involved partnership photo"
-            onUpload={uploadHeroImage}
-            onDelete={heroImageUrl ? deleteHeroImage : undefined}
-            uploading={heroUploading}
+            onUpload={uploadPartnerImage}
+            onDelete={partnerImageUrl ? deletePartnerImage : undefined}
+            uploading={partnerUploading}
             previewClassName="h-72 w-full object-cover"
           />
           <BilingualField

@@ -1,7 +1,9 @@
 import { Router } from 'express'
+import { body } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
+import { handleValidationErrors } from '../../middleware/validation.js'
 
 const router = Router()
 
@@ -19,35 +21,40 @@ router.get('/', async (_req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
-  try {
-    const { titleEn, titleBn, descriptionEn, descriptionBn, sortOrder } = req.body
+router.post(
+  '/',
+  [
+    body('titleEn').trim().notEmpty().isLength({ min: 2, max: 200 }).withMessage('titleEn is required and must be 2-200 characters'),
+    body('titleBn').if(body('titleBn').notEmpty()).trim().isLength({ max: 200 }),
+    body('descriptionEn').if(body('descriptionEn').notEmpty()).trim().isLength({ max: 2000 }),
+    body('descriptionBn').if(body('descriptionBn').notEmpty()).trim().isLength({ max: 2000 }),
+  ],
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { titleEn, titleBn, descriptionEn, descriptionBn, sortOrder } = req.body
 
-    if (!titleEn) {
-      return res.status(400).json({ error: 'titleEn is required' })
+      const maxResult = await prisma.volunteerRole.aggregate({ _max: { sortOrder: true } })
+      const nextSortOrder = sortOrder !== undefined ? Number(sortOrder) : (maxResult._max.sortOrder ?? -1) + 1
+
+      const item = await prisma.volunteerRole.create({
+        data: {
+          titleEn,
+          titleBn,
+          descriptionEn,
+          descriptionBn,
+          sortOrder: Number.isNaN(nextSortOrder) ? 0 : nextSortOrder,
+        },
+      })
+
+      invalidateCache()
+
+      res.json({ success: true, data: item })
+    } catch {
+      res.status(500).json({ error: 'Failed to create volunteer role' })
     }
-
-    const maxResult = await prisma.volunteerRole.aggregate({ _max: { sortOrder: true } })
-    const nextSortOrder = sortOrder !== undefined ? Number(sortOrder) : (maxResult._max.sortOrder ?? -1) + 1
-
-    const item = await prisma.volunteerRole.create({
-      data: {
-        titleEn,
-        titleBn,
-        descriptionEn,
-        descriptionBn,
-        sortOrder: Number.isNaN(nextSortOrder) ? 0 : nextSortOrder,
-      },
-    })
-
-    // Invalidate cache so changes appear immediately
-    invalidateCache()
-
-    res.json({ success: true, data: item })
-  } catch {
-    res.status(500).json({ error: 'Failed to create volunteer role' })
   }
-})
+)
 
 router.patch('/reorder', async (req, res) => {
   try {
@@ -55,6 +62,9 @@ router.patch('/reorder', async (req, res) => {
 
     if (!Array.isArray(items)) {
       return res.status(400).json({ error: 'items must be an array' })
+    }
+    if (!items.every((item) => Number.isInteger(Number(item.id)) && Number(item.id) > 0 && Number.isInteger(Number(item.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
     }
 
     const updated = await Promise.all(
@@ -66,7 +76,6 @@ router.patch('/reorder', async (req, res) => {
       )
     )
 
-    // Invalidate cache so changes appear immediately
     invalidateCache()
 
     res.json({ success: true, updated })
@@ -103,9 +112,11 @@ router.patch('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
+    const existing = await prisma.volunteerRole.findUnique({ where: { id: Number(id) } })
+    if (!existing) return res.status(404).json({ error: 'Volunteer role not found' })
+
     await prisma.volunteerRole.delete({ where: { id: Number(id) } })
 
-    // Invalidate cache so changes appear immediately
     invalidateCache()
 
     res.json({ success: true, message: 'Volunteer role deleted' })

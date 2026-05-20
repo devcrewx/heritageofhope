@@ -240,6 +240,108 @@ router.delete('/upi-qr', async (req, res) => {
 })
 
 /**
+ * POST /api/admin/media/upload
+ * Generic image upload — stores URL in SiteContent at (page, section, fieldKey)
+ * Body: multipart with file + page + section + fieldKey
+ */
+router.post('/upload', upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file provided' })
+    }
+
+    const { page, section, fieldKey } = req.body
+    if (!page || !section || !fieldKey) {
+      return res.status(400).json({ error: 'page, section, and fieldKey are required' })
+    }
+
+    if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME) {
+      return res.status(500).json({ error: 'Cloudinary not configured' })
+    }
+
+    const folder = `heritage-of-hope/${page}/${section}`
+    const cloudinaryData = await uploadToCloudinary(req.file.buffer, folder, {
+      resourceType: 'image',
+      transformation: [{ width: 1920, crop: 'limit', quality: 'auto:good' }],
+    })
+
+    const existing = await prisma.siteContent.findFirst({
+      where: { page, section, fieldKey },
+    })
+
+    let content
+    if (existing) {
+      if (existing.valueBn) {
+        try {
+          await deleteFromCloudinary(existing.valueBn)
+        } catch (err) {
+          console.warn('Could not delete old Cloudinary asset:', err)
+        }
+      }
+      content = await prisma.siteContent.update({
+        where: { id: existing.id },
+        data: {
+          valueEn: cloudinaryData.secure_url,
+          valueBn: cloudinaryData.public_id,
+          updatedAt: new Date(),
+        },
+      })
+    } else {
+      content = await prisma.siteContent.create({
+        data: { page, section, fieldKey, valueEn: cloudinaryData.secure_url, valueBn: cloudinaryData.public_id },
+      })
+    }
+
+    await logAudit(req.user.sub, 'UPLOAD_IMAGE', 'site_content', content.id, `Image for ${page}/${section}/${fieldKey}`)
+    invalidateCache()
+
+    res.json({
+      success: true,
+      data: { id: content.id, page, section, fieldKey, url: cloudinaryData.secure_url, publicId: cloudinaryData.public_id },
+    })
+  } catch (error) {
+    console.error('Image upload error:', error)
+    res.status(500).json({ error: `Upload failed: ${error.message}` })
+  }
+})
+
+/**
+ * DELETE /api/admin/media/:page/:section/:fieldKey
+ * Delete any image stored in SiteContent
+ */
+router.delete('/:page/:section/:fieldKey', async (req, res) => {
+  try {
+    const { page, section, fieldKey } = req.params
+
+    const content = await prisma.siteContent.findFirst({
+      where: { page, section, fieldKey },
+    })
+
+    if (!content) {
+      return res.status(404).json({ error: 'Image not found' })
+    }
+
+    if (content.valueBn) {
+      try {
+        await deleteFromCloudinary(content.valueBn)
+      } catch (err) {
+        console.warn('Could not delete Cloudinary asset:', err)
+      }
+    }
+
+    await prisma.siteContent.delete({ where: { id: content.id } })
+
+    await logAudit(req.user.sub, 'DELETE_IMAGE', 'site_content', content.id, `Deleted image for ${page}/${section}/${fieldKey}`)
+    invalidateCache()
+
+    res.json({ success: true, message: 'Image deleted' })
+  } catch (error) {
+    console.error('Image delete error:', error)
+    res.status(500).json({ error: 'Failed to delete image' })
+  }
+})
+
+/**
  * Helper: Log audit trail
  */
 async function logAudit(adminId, action, tableName, recordId, note = '') {

@@ -1,28 +1,46 @@
 import { useOutletContext } from 'react-router-dom'
 import { useState } from 'react'
-import { resolve, text } from '../content'
+import { resolve } from '../utils/i18n'
 import DocumentModal from '../components/DocumentModal'
 
 function About() {
   const { language, siteContent } = useOutletContext()
   const { about } = siteContent
-  const documents = about.documents || []
   const page = about.pageContent || {}
-
-  const values = (page.values && page.values.length > 0) ? page.values : [
-    text('Compassion', 'সহানুভূতি'),
-    text('Transparency', 'স্বচ্ছতা'),
-    text('Community', 'সম্প্রদায়'),
-    text('Empowerment', 'স্বনির্ভরতা'),
-  ]
+  const documents = about.documents || []
+  const hero = about.hero
+  const story = about.story
+  const registration = about.registration
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalDocIndex, setModalDocIndex] = useState(null)
 
   const modalDoc = modalDocIndex !== null ? documents[modalDocIndex] : null
 
+  const isPdfUrl = (url) => url && url !== '#' && (url.endsWith('.pdf') || url.includes('/raw/upload/'))
+
+  const handleDownload = async (doc) => {
+    if (!doc?.pdfUrl || doc.pdfUrl === '#') return
+    const title = resolve(language, doc.title) || 'document'
+    try {
+      const resp = await fetch(doc.pdfUrl)
+      if (!resp.ok) throw new Error('Fetch failed')
+      const blob = await resp.blob()
+      const blobUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = blobUrl
+      a.download = title + '.pdf'
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000)
+    } catch {
+      window.open(doc.pdfUrl, '_blank')
+    }
+  }
+
   const openDoc = (d) => {
-    const index = documents.findIndex((doc) => doc.href === d.href)
+    const index = documents.findIndex((doc) => doc.pdfUrl === d.pdfUrl)
     setModalDocIndex(index)
     setModalOpen(true)
   }
@@ -48,26 +66,28 @@ function About() {
     <main className="page-stack page-about">
       <section className="panel split-panel" data-reveal>
         <div>
-          <p className="eyebrow">{resolve(language, text('About', 'আমাদের কথা'))}</p>
-          <h1 className="page-title">{resolve(language, page.title || text('Rooted in community. Driven by impact.', 'মানুষের মধ্যেই আমাদের শিকড়। কাজের ফলই আমাদের পথ দেখায়।'))}</h1>
-          <p>{resolve(language, page.intro || text('We work directly with the people we serve, ensuring every initiative brings lasting, positive change.', 'আমরা সরাসরি মানুষের পাশে দাঁড়াই — যাতে প্রতিটি উদ্যোগ সত্যিকারের ও দীর্ঘস্থায়ী পরিবর্তন আনে।'))}</p>
+          <p className="eyebrow">{resolve(language, page.eyebrow)}</p>
+          <h1 className="page-title">{resolve(language, hero.pageTitle)}</h1>
+          <p>{resolve(language, hero.intro)}</p>
         </div>
         <div className="image-frame framed">
-          <img loading="lazy" src={page.heroImage || '/assets/foundation.webp'} alt={resolve(language, text('Heritage of Hope Foundation', 'Heritage of Hope Foundation'))} />
+          <img loading="lazy" src={hero.heroImage} alt="Heritage of Hope Foundation" />
         </div>
       </section>
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{resolve(language, page.documentsLabel || text('Documents', 'দলিল'))}</p>
-          <h2>{resolve(language, page.documentsHeading || text('Official documents', 'সরকারি কাগজপত্র'))}</h2>
+          <p>{resolve(language, page.documentsLabel)}</p>
+          <h2>{resolve(language, page.documentsHeading)}</h2>
         </div>
         <DocumentModal
           open={modalOpen}
           onClose={closeDoc}
           title={resolve(language, modalDoc?.title || '')}
-          src={modalDoc?.href || ''}
-          type={modalDoc && modalDoc.href.match(/\.pdf$/i) ? 'pdf' : 'image'}
+          thumbUrl={modalDoc?.thumbUrl || ''}
+          downloadUrl={modalDoc?.pdfUrl || ''}
+          onDownload={() => handleDownload(modalDoc)}
+          type={isPdfUrl(modalDoc?.pdfUrl) ? 'pdf' : 'image'}
           onNext={nextDoc}
           onPrev={prevDoc}
           hasNext={modalDocIndex !== null && modalDocIndex < documents.length - 1}
@@ -76,12 +96,12 @@ function About() {
         <div className="card-grid docs-grid">
           {documents && documents.length > 0 ? documents.map((doc, idx) => {
             const titleText = resolve(language, doc?.title)
-            const metaText = resolve(language, doc?.meta)
-            const captionText = resolve(language, doc?.caption)
+            const descText = resolve(language, doc?.description)
+            const dateText = doc?.date || ''
 
             return (
             <article
-              key={`${doc?.id || 'doc'}-${doc?.href || 'href'}-${idx}`}
+              key={`${doc?.pdfUrl || 'doc'}-${idx}`}
               className="card doc-card"
               data-reveal
               role="button"
@@ -92,20 +112,20 @@ function About() {
               }}
             >
               <div className="doc-thumb-wrap">
-                <img className="doc-thumb" src={doc?.thumb || '/docs/thumbs/pdf-thumb.svg'} alt={titleText} />
+                <img className="doc-thumb" src={doc?.thumbUrl || 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210277/heritage-of-hope/docs/thumbs/pdf-thumb.svg'} alt={titleText} />
               </div>
               <div className="card-body">
                 <h3>{titleText}</h3>
-                {metaText ? <p className="muted">{metaText}</p> : null}
-                {captionText ? <p className="muted small">{captionText}</p> : null}
+                {dateText ? <p className="muted">{dateText}</p> : null}
+                {descText ? <p className="muted small">{descText}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
                   <button type="button" className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
-                    {resolve(language, text('View', 'দেখুন'))}
+                    View
                   </button>
-                  {doc?.href && doc.href.endsWith('.pdf') ? (
-                    <a className="btn" style={{ marginLeft: '0.5rem' }} href={doc.href} download onClick={(e) => e.stopPropagation()}>
-                      {resolve(language, text('Download', 'ডাউনলোড'))}
-                    </a>
+                  {isPdfUrl(doc?.pdfUrl) ? (
+                    <button type="button" className="btn" style={{ marginLeft: '0.5rem' }} onClick={(e) => { e.stopPropagation(); handleDownload(doc); }}>
+                      Download
+                    </button>
                   ) : null}
                 </div>
               </div>
@@ -118,76 +138,62 @@ function About() {
       <section className="panel split-panel" data-reveal>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Our story', 'আমাদের গল্প'))}</p>
-            <h2>{resolve(language, text('Grounded in field realities', 'মানুষের মাঝ থেকে'))}</h2>
+            <p>{resolve(language, page.storyLabel)}</p>
+            <h2>{resolve(language, story.heading)}</h2>
           </div>
-          <p>{resolve(language, page.story || text('The foundation began from direct work with children and women in underserved areas.', 'শিশু আর নারীদের সঙ্গে কাজ করতে করতেই ফাউন্ডেশনের শুরু।'))}</p>
+          <p>{resolve(language, story.body)}</p>
         </div>
         <div className="dual-card">
           <article>
-            <p className="meta">{resolve(language, text('Mission', 'আমাদের লক্ষ্য'))}</p>
-            <p>{resolve(language, page.mission || text('To create lasting, positive change in the lives of children, women, and communities in South 24 Parganas.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের জীবনে স্থায়ী, ইতিবাচক পরিবর্তন আনা।'))}</p>
+            <p className="meta">{resolve(language, page.missionLabel)}</p>
+            <p>{resolve(language, about.mission)}</p>
           </article>
           <article>
-            <p className="meta">{resolve(language, text('Vision', 'আমাদের দৃষ্টিভঙ্গি'))}</p>
-            <p>{resolve(language, page.vision || text('A community where every child has access to quality education, healthcare, and dignity.', 'এমন এক সম্প্রদায় যেখানে প্রতিটি শিশু মানসম্পন্ন শিক্ষা, স্বাস্থ্যসেবা ও মর্যাদা পায়।'))}</p>
+            <p className="meta">{resolve(language, page.visionLabel)}</p>
+            <p>{resolve(language, about.vision)}</p>
           </article>
         </div>
       </section>
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{resolve(language, text('Guided by shared principles', 'আমাদের ভাগ করা নীতিগুলি আমাদের পথ দেখায়'))}</p>
-          <h2>{resolve(language, text('How we work', 'আমাদের কাজের ধরন'))}</h2>
+          <p>{resolve(language, page.valuesLabel)}</p>
+          <h2>{resolve(language, page.valuesHeading)}</h2>
         </div>
         <div className="card-grid four-up">
-          {(page.values && page.values.length ? page.values : values).map((value, idx) => (
-            <article key={idx} className="card value-card" data-reveal>
-              <div className="card-body">
-                <h3>{resolve(language, value)}</h3>
-                <p>
-                  {resolve(
-                    language,
-                    text(
-                      'Each program is built on local trust and measurable impact.',
-                      'আমাদের প্রতিটি কাজ এলাকার মানুষের ভরসা আর খোলামেলা কাজের ওপর দাঁড়িয়ে আছে।',
-                    ),
-                  )}
-                </p>
-              </div>
-            </article>
-          ))}
+          {about.values && about.values.length > 0
+            ? about.values.map((value, idx) => (
+                <article key={idx} className="card value-card" data-reveal>
+                  <div className="card-body">
+                    <h3>{resolve(language, value.title)}</h3>
+                    <p>{resolve(language, value.description)}</p>
+                  </div>
+                </article>
+              ))
+            : null}
         </div>
       </section>
 
       <section className="panel split-panel" data-reveal>
         <div className="image-frame framed">
           <img
-            src="/assets/reg_cert.webp"
-            alt={resolve(language, text('Registration certificate', 'নিবন্ধনের কাগজ'))}
+            src={registration.certImage}
+            alt="Registration certificate"
           />
         </div>
         <div>
           <div className="section-head">
-            <p>{resolve(language, text('Legally registered and transparent', 'আইনগতভাবে নিবন্ধিত আর খোলামেলা'))}</p>
-            <h2>{resolve(language, text('Registration and accountability', 'নিবন্ধন ও স্বচ্ছতা'))}</h2>
+            <p>{resolve(language, page.regLabel)}</p>
+            <h2>{resolve(language, page.regHeading)}</h2>
           </div>
           <div className="stack-list">
             <article className="stack-card">
-              <p className="meta">{resolve(language, text('Registration certificate', 'নিবন্ধনের কাগজ'))}</p>
-              <p>
-                {resolve(
-                  language,
-                  text(
-                    'Heritage of Hope Foundation is a registered NGO committed to transparency and dedicated service in West Bengal.',
-                    'হেরিটেজ অফ হোপ ফাউন্ডেশন একটি নিবন্ধিত এনজিও, যা পশ্চিমবঙ্গে নিয়ম মেনে আর খোলামেলা ভাবে কাজ করছে।',
-                  ),
-                )}
-              </p>
+              <p className="meta">{resolve(language, page.certLabel)}</p>
+              <p>{resolve(language, registration.body)}</p>
             </article>
             <article className="stack-card">
-              <p className="meta">{resolve(language, text('Partners', 'সহযোগীরা'))}</p>
-              <div className="partner-list" role="list" aria-label={resolve(language, text('Partners', 'সহযোগীরা'))}>
+              <p className="meta">{resolve(language, page.partnersLabel)}</p>
+              <div className="partner-list" role="list" aria-label="Partners">
                 {about.partners && about.partners.length > 0
                   ? about.partners.map((partner) => (
                       <span key={resolve(language, partner)} className="pill partner-pill" role="listitem">
@@ -203,8 +209,8 @@ function About() {
 
       <section className="panel" data-reveal>
         <div className="section-head">
-          <p>{resolve(language, text('Dedicated people, doing important work', 'নিবেদিতপ্রাণ মানুষ, গুরুত্বপূর্ণ কাজ করছেন'))}</p>
-          <h2>{resolve(language, text('Team snapshot', 'আমাদের দলের এক ঝলক'))}</h2>
+          <p>{resolve(language, page.teamLabel)}</p>
+          <h2>{resolve(language, page.teamHeading)}</h2>
         </div>
         <div className="card-grid">
           {about.teamMembers && about.teamMembers.length > 0

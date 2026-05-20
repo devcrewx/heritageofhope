@@ -18,6 +18,8 @@ import ContactEditor from './pages/ContactEditor'
 import ProgramsEditor from './pages/ProgramsEditor'
 import SubmissionsInbox from './pages/SubmissionsInbox'
 import ChangePassword from './pages/ChangePassword'
+import ThankYouEditor from './pages/ThankYouEditor'
+import NotFoundEditor from './pages/NotFoundEditor'
 
 function RequireAuth({ isAuthenticated, ready, children }) {
   if (!ready) {
@@ -66,6 +68,8 @@ function App() {
           <Route path="contact" element={<ContactEditor />} />
           <Route path="submissions" element={<SubmissionsInbox />} />
           <Route path="change-password" element={<ChangePassword />} />
+          <Route path="thank-you" element={<ThankYouEditor />} />
+          <Route path="not-found" element={<NotFoundEditor />} />
         </Route>
         <Route path="*" element={<Navigate to={isAuthenticated ? '/' : '/login'} replace />} />
       </Routes>

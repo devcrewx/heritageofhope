@@ -16,10 +16,12 @@ import usersRouter from './users.js'
 import submissionsRouter from './submissions.js'
 import mediaRouter from './media.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
+import { adminRateLimiter } from '../../middleware/rateLimiter.js'
 
 const router = Router()
 
 router.use(authRouter)
+router.use(adminRateLimiter)
 router.use('/content/home', homeRouter)
 router.use('/stats', statsRouter)
 router.use('/content', contentRouter)

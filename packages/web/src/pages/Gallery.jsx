@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { resolve, text } from '../content'
+import { resolve, text } from '../utils/i18n'
 
 function Gallery() {
   const { language, siteContent } = useOutletContext()
   const { gallery } = siteContent
+  const page = gallery.pageContent || {}
   const [activeCategory, setActiveCategory] = useState('all')
 
   const categories = [
@@ -15,40 +16,29 @@ function Gallery() {
   ]
 
   const visibleItems = useMemo(() => {
+    if (!gallery.items) return []
+
     if (activeCategory === 'all') {
-      return gallery.galleryItems
+      return gallery.items
     }
 
-    return gallery.galleryItems.filter((item) => {
-      const itemCategory = resolve('en', item.category).toLowerCase()
+    return gallery.items.filter((item) => {
+      const itemCategory = (item.category || '').toLowerCase()
       return itemCategory === activeCategory
     })
-  }, [activeCategory, gallery.galleryItems])
-
-  const copy = {
-    en: {
-      title: 'Moments of hope and action.',
-      intro:
-        'A visual journey through our health camps, learning centers, and community outreach events.',
-    },
-    bn: {
-      title: 'আমাদের সমাজসেবামূলক কাজের কিছু বিশেষ মুহূর্ত।',
-      intro:
-        'আমাদের স্বাস্থ্য শিবির, শিক্ষাকেন্দ্র এবং বিভিন্ন সামাজিক অনুষ্ঠানের কিছু খণ্ডচিত্র।',
-    },
-  }
+  }, [activeCategory, gallery.items])
 
   return (
     <main className="page-stack">
       <section className="panel split-panel">
         <div>
-          <p className="eyebrow">{resolve(language, text('Gallery', 'ছবিঘর'))}</p>
-          <h1 className="page-title">{copy[language].title}</h1>
-          <p>{copy[language].intro}</p>
+          <p className="eyebrow">{resolve(language, page.eyebrow)}</p>
+          <h1 className="page-title">{resolve(language, page.heading)}</h1>
+          <p>{resolve(language, page.intro)}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">{resolve(language, text('Explore', 'ঘুরে দেখুন'))}</p>
-          <p>{resolve(language, text('Filter photos by our core impact areas.', 'কোন কাজের ছবি দেখতে চান, সেটা বেছে নিন।'))}</p>
+          <p className="meta">{resolve(language, page.filterLabel)}</p>
+          <p>{resolve(language, page.filterText)}</p>
         </div>
       </section>
 
@@ -68,11 +58,11 @@ function Gallery() {
 
         <div className="gallery-grid">
           {visibleItems.map((item) => (
-            <article key={resolve(language, item.title)} className="gallery-card">
-              <img loading="lazy" src={item.image} alt={resolve(language, item.title)} />
+            <article key={item.id || item.url} className="gallery-card">
+              <img loading="lazy" src={item.url} alt={item.altEn || ''} />
               <div>
-                <span className="pill">{resolve(language, item.category)}</span>
-                <h3>{resolve(language, item.title)}</h3>
+                <span className="pill">{item.category || ''}</span>
+                <h3>{resolve(language, { en: item.altEn, bn: item.altBn })}</h3>
               </div>
             </article>
           ))}

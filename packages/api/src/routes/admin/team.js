@@ -36,12 +36,15 @@ router.patch('/reorder', async (req, res) => {
     if (!Array.isArray(memberUpdates)) {
       return res.status(400).json({ error: 'Invalid reorder data' });
     }
+    if (!memberUpdates.every((m) => Number.isInteger(Number(m.id)) && Number(m.id) > 0 && Number.isInteger(Number(m.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
+    }
 
     const updated = await Promise.all(
       memberUpdates.map(m =>
         prisma.teamMember.update({
-          where: { id: m.id },
-          data: { sortOrder: m.sortOrder }
+          where: { id: Number(m.id) },
+          data: { sortOrder: Number(m.sortOrder) }
         })
       )
     );
@@ -73,6 +76,9 @@ router.post(
       let photoPublicId = null
 
       if (req.file) {
+        if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME) {
+          return res.status(500).json({ error: 'Cloudinary not configured on server' })
+        }
         const result = await uploadToCloudinary(
           req.file.buffer,
           `heritage-of-hope/team/${Date.now()}`,

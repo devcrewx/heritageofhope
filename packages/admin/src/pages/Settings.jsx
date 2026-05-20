@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import BilingualField from '../components/BilingualField'
+import MediaUploadField from '../components/MediaUploadField'
 import { Toast } from '../components/Toast'
 import apiClient from '../lib/api'
 
@@ -19,13 +20,14 @@ function Settings() {
   const [form, setForm] = useState({})
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [logoUploading, setLogoUploading] = useState(false)
   const [toast, setToast] = useState(null)
 
   useEffect(() => {
     async function fetchSettings() {
       try {
         setLoading(true)
-        const response = await apiClient.get('/api/content/settings')
+        const response = await apiClient.get('/api/admin/content/settings')
         const nextForm = response.data.reduce((accumulator, item) => {
           accumulator[item.fieldKey] = { en: item.valueEn ?? '', bn: item.valueBn ?? '' }
           return accumulator
@@ -53,6 +55,50 @@ function Settings() {
         [language]: value,
       },
     }))
+  }
+
+  async function uploadLogo(file) {
+    setLogoUploading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'settings')
+      formData.append('section', 'general')
+      formData.append('fieldKey', 'logo_url')
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      if (response.data?.data?.url) {
+        setForm((current) => ({
+          ...current,
+          logo_url: { en: response.data.data.url, bn: '' },
+        }))
+      }
+      showToast('Logo updated', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to upload logo'
+      showToast(msg, 'error')
+    } finally {
+      setLogoUploading(false)
+    }
+  }
+
+  async function deleteLogo() {
+    setLogoUploading(true)
+    try {
+      await apiClient.delete('/api/admin/media/settings/general/logo_url')
+      setForm((current) => ({
+        ...current,
+        logo_url: { en: '', bn: '' },
+      }))
+      showToast('Logo removed', 'success')
+    } catch (error) {
+      const msg = error.response?.data?.error || 'Failed to remove logo'
+      showToast(msg, 'error')
+    } finally {
+      setLogoUploading(false)
+    }
   }
 
   async function handleSave(e) {
@@ -99,6 +145,17 @@ function Settings() {
             <p className="text-sm font-semibold text-gray-900 mb-1">Brand Identity</p>
             <p className="text-sm text-gray-500">These values drive the header subtitle, trust badges, and footer line.</p>
           </div>
+
+          <MediaUploadField
+            label="NGO Logo"
+            helperText="Upload the organization logo. Shown in the public header and footer."
+            currentUrl={form.logo_url?.en || ''}
+            currentAlt="NGO logo"
+            onUpload={uploadLogo}
+            onDelete={form.logo_url?.en ? deleteLogo : undefined}
+            uploading={logoUploading}
+            previewClassName="h-24 w-auto object-contain"
+          />
 
           {fieldConfig.slice(0, 5).map((field) => (
             <div key={field.fieldKey}>

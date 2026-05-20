@@ -8,6 +8,7 @@ export default function ImpactEditor() {
   const [stats, setStats] = useState([])
   const [allocation, setAllocation] = useState([])
   const [newStat, setNewStat] = useState({ value: '', labelEn: '', labelBn: '' })
+  const [newAllocation, setNewAllocation] = useState({ categoryEn: '', categoryBn: '', percentage: 0, sortOrder: 0 })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [activeSection, setActiveSection] = useState('stats')
@@ -39,18 +40,18 @@ export default function ImpactEditor() {
   }
 
   const updateField = (section, fieldKey, lang, value) => {
-    setData({
-      ...data,
+    setData((current) => ({
+      ...current,
       [section]: {
-        ...data[section],
-        [fieldKey]: { ...data[section]?.[fieldKey], [lang]: value },
+        ...current[section],
+        [fieldKey]: { ...current[section]?.[fieldKey], [lang]: value },
       },
-    })
+    }))
   }
 
   const updateAllocation = (id, field, value) => {
-    setAllocation(
-      allocation.map((item) =>
+    setAllocation((current) =>
+      current.map((item) =>
         item.id === id ? { ...item, [field]: value } : item
       )
     )
@@ -159,6 +160,43 @@ export default function ImpactEditor() {
     }
   }
 
+  const addAllocation = async () => {
+    if (!newAllocation.categoryEn) {
+      setMessage('✗ English category name is required')
+      return
+    }
+    setSaving(true)
+    try {
+      await request('/api/admin/fund-allocation', {
+        method: 'POST',
+        body: JSON.stringify(newAllocation),
+      })
+      setNewAllocation({ categoryEn: '', categoryBn: '', percentage: 0, sortOrder: 0 })
+      await loadContent()
+      setMessage('✓ Allocation added')
+      setTimeout(() => setMessage(''), 2000)
+    } catch (error) {
+      setMessage(`✗ Error: ${error.message}`)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const deleteAllocation = async (id) => {
+    if (!window.confirm('Delete this allocation?')) return
+    setSaving(true)
+    try {
+      await request(`/api/admin/fund-allocation/${id}`, { method: 'DELETE' })
+      await loadContent()
+      setMessage('✓ Allocation deleted')
+      setTimeout(() => setMessage(''), 2000)
+    } catch (error) {
+      setMessage(`✗ Error: ${error.message}`)
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const totalAllocation = allocation.reduce((sum, item) => sum + Number(item.percentage || 0), 0)
 
   const styles = {
@@ -185,10 +223,12 @@ export default function ImpactEditor() {
 
       <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
         {[
+          { key: 'hero', label: 'Page Hero' },
           { key: 'stats', label: 'Impact Stats' },
           { key: 'allocation', label: 'Fund Allocation' },
           { key: 'feedback', label: 'Community Feedback' },
           { key: 'report', label: 'Annual Report' },
+          { key: 'pageContent', label: 'Page Labels' },
         ].map((tab) => (
           <button
             key={tab.key}
@@ -205,6 +245,42 @@ export default function ImpactEditor() {
         ))}
       </div>
 
+      {activeSection === 'hero' && (
+        <div style={styles.section}>
+          <div style={styles.title}>Page Hero</div>
+          <BilingualField
+            labelEn="Page Title"
+            labelBn="Page Title (Bangla)"
+            valueEn={data.intro?.title?.en}
+            valueBn={data.intro?.title?.bn}
+            onChangeEn={(val) => updateField('intro', 'title', 'en', val)}
+            onChangeBn={(val) => updateField('intro', 'title', 'bn', val)}
+            required
+          />
+          <BilingualField
+            labelEn="Sub-headline"
+            labelBn="Sub-headline (Bangla)"
+            valueEn={data.intro?.paragraph?.en}
+            valueBn={data.intro?.paragraph?.bn}
+            onChangeEn={(val) => updateField('intro', 'paragraph', 'en', val)}
+            onChangeBn={(val) => updateField('intro', 'paragraph', 'bn', val)}
+            isTextArea
+          />
+          <BilingualField
+            labelEn="Hero Promise"
+            labelBn="Hero Promise (Bangla)"
+            valueEn={data.hero?.promise?.en}
+            valueBn={data.hero?.promise?.bn}
+            onChangeEn={(val) => updateField('hero', 'promise', 'en', val)}
+            onChangeBn={(val) => updateField('hero', 'promise', 'bn', val)}
+            isTextArea
+          />
+          <button onClick={() => saveSection('intro')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save Page Hero'}
+          </button>
+        </div>
+      )}
+
       {activeSection === 'stats' && (
         <div style={styles.section}>
           <div style={styles.title}>Shared Impact Stats</div>
@@ -216,19 +292,19 @@ export default function ImpactEditor() {
                 <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr auto', gap: '0.75rem', alignItems: 'start' }}>
                   <input
                     value={stat.value}
-                    onChange={(e) => setStats(stats.map((item) => item.id === stat.id ? { ...item, value: e.target.value } : item))}
+                    onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, value: e.target.value } : item))}
                     placeholder="200+"
                     style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={stat.labelEn || ''}
-                    onChange={(e) => setStats(stats.map((item) => item.id === stat.id ? { ...item, labelEn: e.target.value } : item))}
+                    onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, labelEn: e.target.value } : item))}
                     placeholder="children supported"
                     style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={stat.labelBn || ''}
-                    onChange={(e) => setStats(stats.map((item) => item.id === stat.id ? { ...item, labelBn: e.target.value } : item))}
+                    onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, labelBn: e.target.value } : item))}
                     placeholder="সাহায্যপ্রাপ্ত শিশু"
                     style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
@@ -273,11 +349,12 @@ export default function ImpactEditor() {
           <div style={{ display: 'grid', gap: '0.85rem' }}>
             {allocation.map((item) => (
               <div key={item.id} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px auto', gap: '0.75rem', alignItems: 'start' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 100px 80px auto', gap: '0.75rem', alignItems: 'start' }}>
                   <input value={item.categoryEn || ''} onChange={(e) => updateAllocation(item.id, 'categoryEn', e.target.value)} placeholder="Education" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
                   <input value={item.categoryBn || ''} onChange={(e) => updateAllocation(item.id, 'categoryBn', e.target.value)} placeholder="শিক্ষা" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
                   <input value={item.percentage} type="number" min="0" max="100" onChange={(e) => updateAllocation(item.id, 'percentage', Number(e.target.value))} placeholder="25" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
                   <input value={item.sortOrder ?? 0} type="number" onChange={(e) => updateAllocation(item.id, 'sortOrder', Number(e.target.value))} style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+                  <button type="button" onClick={() => deleteAllocation(item.id)} disabled={saving} style={{ padding: '0.5rem 0.8rem', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer' }}>Delete</button>
                 </div>
               </div>
             ))}
@@ -286,6 +363,17 @@ export default function ImpactEditor() {
           <button onClick={saveAllocation} disabled={saving || totalAllocation !== 100} style={{ ...styles.button, opacity: totalAllocation === 100 ? 1 : 0.5 }}>
             {saving ? 'Saving...' : 'Save Allocation'}
           </button>
+
+          <div style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.25rem' }}>
+            <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Add Allocation</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 100px 80px auto', gap: '0.75rem', alignItems: 'start' }}>
+              <input value={newAllocation.categoryEn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryEn: e.target.value })} placeholder="Education" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.categoryBn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryBn: e.target.value })} placeholder="শিক্ষা" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.percentage} type="number" min="0" max="100" onChange={(e) => setNewAllocation({ ...newAllocation, percentage: Number(e.target.value) })} placeholder="25" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.sortOrder} type="number" onChange={(e) => setNewAllocation({ ...newAllocation, sortOrder: Number(e.target.value) })} placeholder="Sort" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <button type="button" onClick={addAllocation} disabled={saving} style={{ ...styles.button, marginTop: 0 }}>Add</button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -293,12 +381,13 @@ export default function ImpactEditor() {
         <div style={styles.section}>
           <div style={styles.title}>Community Feedback</div>
           <BilingualField
-            label="Testimonial Quote"
-            enValue={data.feedback?.quote?.en}
-            bnValue={data.feedback?.quote?.bn}
-            onEnChange={(val) => updateField('feedback', 'quote', 'en', val)}
-            onBnChange={(val) => updateField('feedback', 'quote', 'bn', val)}
-            type="textarea"
+            labelEn="Testimonial Quote"
+            labelBn="Testimonial Quote (Bangla)"
+            valueEn={data.feedback?.quote?.en}
+            valueBn={data.feedback?.quote?.bn}
+            onChangeEn={(val) => updateField('feedback', 'quote', 'en', val)}
+            onChangeBn={(val) => updateField('feedback', 'quote', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('feedback')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Feedback'}
@@ -310,15 +399,31 @@ export default function ImpactEditor() {
         <div style={styles.section}>
           <div style={styles.title}>Annual Report</div>
           <BilingualField
-            label="Report Status"
-            enValue={data.report?.status?.en}
-            bnValue={data.report?.status?.bn}
-            onEnChange={(val) => updateField('report', 'status', 'en', val)}
-            onBnChange={(val) => updateField('report', 'status', 'bn', val)}
-            type="textarea"
+            labelEn="Annual Report Body"
+            labelBn="Annual Report Body (Bangla)"
+            valueEn={data.report?.status?.en}
+            valueBn={data.report?.status?.bn}
+            onChangeEn={(val) => updateField('report', 'status', 'en', val)}
+            onChangeBn={(val) => updateField('report', 'status', 'bn', val)}
+            isTextArea
           />
           <button onClick={() => saveSection('report')} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Report'}
+          </button>
+        </div>
+      )}
+
+      {activeSection === 'pageContent' && (
+        <div style={styles.section}>
+          <div style={styles.title}>Page Labels</div>
+          <BilingualField labelEn="Page Eyebrow" labelBn="Page Eyebrow (Bangla)" valueEn={data.pageContent?.eyebrow?.en} valueBn={data.pageContent?.eyebrow?.bn} onChangeEn={(val) => updateField('pageContent', 'eyebrow', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'eyebrow', 'bn', val)} />
+          <BilingualField labelEn="Promise Label" labelBn="Promise Label (Bangla)" valueEn={data.pageContent?.promiseLabel?.en} valueBn={data.pageContent?.promiseLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'promiseLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'promiseLabel', 'bn', val)} />
+          <BilingualField labelEn="Fund Section Eyebrow" labelBn="Fund Section Eyebrow (Bangla)" valueEn={data.pageContent?.fundLabel?.en} valueBn={data.pageContent?.fundLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'fundLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'fundLabel', 'bn', val)} />
+          <BilingualField labelEn="Fund Section Heading" labelBn="Fund Section Heading (Bangla)" valueEn={data.pageContent?.fundHeading?.en} valueBn={data.pageContent?.fundHeading?.bn} onChangeEn={(val) => updateField('pageContent', 'fundHeading', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'fundHeading', 'bn', val)} />
+          <BilingualField labelEn="Feedback Label" labelBn="Feedback Label (Bangla)" valueEn={data.pageContent?.feedbackLabel?.en} valueBn={data.pageContent?.feedbackLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'feedbackLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'feedbackLabel', 'bn', val)} />
+          <BilingualField labelEn="Report Label" labelBn="Report Label (Bangla)" valueEn={data.pageContent?.reportLabel?.en} valueBn={data.pageContent?.reportLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'reportLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'reportLabel', 'bn', val)} />
+          <button onClick={() => saveSection('pageContent')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save Page Labels'}
           </button>
         </div>
       )}

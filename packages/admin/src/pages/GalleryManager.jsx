@@ -9,6 +9,14 @@ import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 
 export function GalleryManager() {
+  const [pageContent, setPageContent] = useState({
+    eyebrow: { en: '', bn: '' },
+    heading: { en: '', bn: '' },
+    intro: { en: '', bn: '' },
+    filterLabel: { en: '', bn: '' },
+    filterText: { en: '', bn: '' },
+  })
+  const [pageContentLoading, setPageContentLoading] = useState(true)
   const [galleryItems, setGalleryItems] = useState([])
   const [files, setFiles] = useState([])
   const [uploadCategory, setUploadCategory] = useState('gallery')
@@ -31,12 +39,26 @@ export function GalleryManager() {
   useEffect(() => {
     async function loadGallery() {
       try {
-        const response = await apiClient.get('/api/admin/gallery')
-        setGalleryItems(response.data.items || [])
+        const [galleryResponse, contentResponse] = await Promise.all([
+          apiClient.get('/api/admin/gallery'),
+          apiClient.get('/api/admin/content/gallery'),
+        ])
+        setGalleryItems(galleryResponse.data.items || [])
+        if (contentResponse.data?.sections?.pageContent) {
+          const p = contentResponse.data.sections.pageContent
+          setPageContent({
+            eyebrow: p.eyebrow || { en: '', bn: '' },
+            heading: p.heading || { en: '', bn: '' },
+            intro: p.intro || { en: '', bn: '' },
+            filterLabel: p.filterLabel || { en: '', bn: '' },
+            filterText: p.filterText || { en: '', bn: '' },
+          })
+        }
       } catch (error) {
         showToast('Failed to load gallery', 'error')
       } finally {
         setLoading(false)
+        setPageContentLoading(false)
       }
     }
     loadGallery()
@@ -222,7 +244,41 @@ export function GalleryManager() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Gallery Manager</h1>
-      <p className="text-gray-600 mb-6">Upload and manage gallery photos</p>
+      <p className="text-gray-600 mb-4">Upload and manage gallery photos</p>
+
+      {/* Page Content Section */}
+      {!pageContentLoading && (
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Page Content</h2>
+          <p className="text-sm text-gray-500 mb-4">Edit the Gallery page text content. These fields replace the hardcoded text on the public page.</p>
+          <div className="space-y-4">
+            <BilingualField labelEn="Page Eyebrow" labelBn="Page Eyebrow (Bangla)" valueEn={pageContent.eyebrow.en} valueBn={pageContent.eyebrow.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, eyebrow: { ...p.eyebrow, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, eyebrow: { ...p.eyebrow, bn: v } }))} />
+            <BilingualField labelEn="Page Heading" labelBn="Page Heading (Bangla)" valueEn={pageContent.heading.en} valueBn={pageContent.heading.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, heading: { ...p.heading, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, heading: { ...p.heading, bn: v } }))} isTextArea />
+            <BilingualField labelEn="Page Intro" labelBn="Page Intro (Bangla)" valueEn={pageContent.intro.en} valueBn={pageContent.intro.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, intro: { ...p.intro, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, intro: { ...p.intro, bn: v } }))} isTextArea />
+            <BilingualField labelEn="Filter Section Label" labelBn="Filter Section Label (Bangla)" valueEn={pageContent.filterLabel.en} valueBn={pageContent.filterLabel.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterLabel: { ...p.filterLabel, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterLabel: { ...p.filterLabel, bn: v } }))} />
+            <BilingualField labelEn="Filter Section Text" labelBn="Filter Section Text (Bangla)" valueEn={pageContent.filterText.en} valueBn={pageContent.filterText.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterText: { ...p.filterText, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterText: { ...p.filterText, bn: v } }))} />
+          </div>
+          <button
+            onClick={async () => {
+              try {
+                await Promise.all([
+                  apiClient.patch('/api/admin/content/gallery/pageContent/eyebrow', { valueEn: pageContent.eyebrow.en, valueBn: pageContent.eyebrow.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/heading', { valueEn: pageContent.heading.en, valueBn: pageContent.heading.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/intro', { valueEn: pageContent.intro.en, valueBn: pageContent.intro.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterLabel', { valueEn: pageContent.filterLabel.en, valueBn: pageContent.filterLabel.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterText', { valueEn: pageContent.filterText.en, valueBn: pageContent.filterText.bn }),
+                ])
+                showToast('Page content saved', 'success')
+              } catch {
+                showToast('Failed to save page content', 'error')
+              }
+            }}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium"
+          >
+            Save Page Content
+          </button>
+        </div>
+      )}
 
       {/* Error Message */}
       {error && (

@@ -1,13 +1,25 @@
 import express from 'express'
+import rateLimit from 'express-rate-limit'
 import { body, validationResult } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { sendNotificationEmail } from '../../lib/mailer.js'
 
 const router = express.Router()
 
+const formLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many submissions. Please try again later.' },
+})
+
+
+
 // POST /api/forms/contact - Save contact form submission
 router.post(
   '/contact',
+  formLimiter,
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -71,6 +83,7 @@ router.post(
 // POST /api/forms/volunteer - Save volunteer form submission
 router.post(
   '/volunteer',
+  formLimiter,
   [
     body('name').trim().notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Valid email is required'),
@@ -135,6 +148,7 @@ router.post(
 // POST /api/forms/partner - Save partner inquiry form submission
 router.post(
   '/partner',
+  formLimiter,
   [
     body('organizationName').trim().notEmpty().withMessage('Organization name is required'),
     body('contactPerson').trim().notEmpty().withMessage('Contact person name is required'),

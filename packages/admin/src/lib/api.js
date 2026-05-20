@@ -4,7 +4,7 @@ const API_BASE =
   import.meta.env.VITE_API_BASE ||
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? ''
-    : 'https://heritageofhope-api.onrender.com')
+    : '')
 
 const apiClient = axios.create({
   baseURL: API_BASE,
@@ -16,7 +16,7 @@ const apiClient = axios.create({
 
 // Add JWT token to requests
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('hoh_admin_token') || localStorage.getItem('adminToken')
+  const token = localStorage.getItem('hoh_admin_token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }

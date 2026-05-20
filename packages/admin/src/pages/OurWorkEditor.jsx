@@ -96,13 +96,13 @@ export default function OurWorkEditor() {
   }
 
   const updateField = (section, fieldKey, lang, value) => {
-    setData({
-      ...data,
+    setData((current) => ({
+      ...current,
       [section]: {
-        ...data[section],
-        [fieldKey]: { ...data[section]?.[fieldKey], [lang]: value },
+        ...current[section],
+        [fieldKey]: { ...current[section]?.[fieldKey], [lang]: value },
       },
-    })
+    }))
   }
 
   const saveSection = async (section) => {
@@ -139,6 +139,8 @@ export default function OurWorkEditor() {
     <div style={styles.container}>
       <h1 style={{ marginBottom: '0.5rem', fontSize: '1.8rem' }}>Our Work Page Editor</h1>
       <p style={styles.hint}>This controls the public Our Work page text sections. Program cards still use the shared program content.</p>
+
+      {error && <ErrorMessage error={error} onClose={() => setError('')} className="mb-4" />}
 
       {initialLoading ? (
         <LoadingSpinner fullPage text="Loading our work content..." />
@@ -261,9 +263,73 @@ export default function OurWorkEditor() {
             </button>
           </div>
 
+          <div style={styles.section}>
+            <div style={styles.title}>Page Labels</div>
+            <BilingualField labelEn="Page Eyebrow" labelBn="Page Eyebrow (Bangla)" valueEn={data.pageContent?.eyebrow?.en} valueBn={data.pageContent?.eyebrow?.bn} onChangeEn={(val) => updateField('pageContent', 'eyebrow', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'eyebrow', 'bn', val)} />
+            <BilingualField labelEn="Approach Section Label" labelBn="Approach Section Label (Bangla)" valueEn={data.pageContent?.approachLabel?.en} valueBn={data.pageContent?.approachLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'approachLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'approachLabel', 'bn', val)} />
+            <BilingualField labelEn="Join Section Label" labelBn="Join Section Label (Bangla)" valueEn={data.pageContent?.joinLabel?.en} valueBn={data.pageContent?.joinLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'joinLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'joinLabel', 'bn', val)} />
+            <button onClick={() => saveSection('pageContent')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Page Labels'}
+            </button>
+          </div>
+
+          <div style={styles.section}>
+            <div style={styles.title}>Showcase Photos</div>
+            <p style={styles.hint}>These photos appear in the photo grid section on the public Our Work page. Up to 6 images. Leave fields blank to omit.</p>
+            {[1, 2, 3, 4, 5, 6].map((idx) => (
+              <div key={idx} style={{ border: '1px solid #e5e7eb', borderRadius: '0.4rem', padding: '1rem', marginBottom: '1rem' }}>
+                <p style={{ fontWeight: 600, marginBottom: '0.5rem', color: '#374151' }}>Image {idx}</p>
+                <div style={{ marginBottom: '0.75rem' }}>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: '0.25rem' }}>Image URL</label>
+                  <input
+                    type="text"
+                    value={data.showcase?.[`img${idx}_url`]?.en || ''}
+                    onChange={(e) => updateField('showcase', `img${idx}_url`, 'en', e.target.value)}
+                    style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.3rem', fontSize: '0.9rem' }}
+                    placeholder="https://res.cloudinary.com/..."
+                  />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: '0.25rem' }}>Label (EN)</label>
+                    <input
+                      type="text"
+                      value={data.showcase?.[`img${idx}_labelEn`]?.en || ''}
+                      onChange={(e) => updateField('showcase', `img${idx}_labelEn`, 'en', e.target.value)}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.3rem', fontSize: '0.9rem' }}
+                      placeholder="English label"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: '#374151', marginBottom: '0.25rem' }}>Label (BN)</label>
+                    <input
+                      type="text"
+                      value={data.showcase?.[`img${idx}_labelBn`]?.en || ''}
+                      onChange={(e) => updateField('showcase', `img${idx}_labelBn`, 'en', e.target.value)}
+                      style={{ width: '100%', padding: '0.5rem', border: '1px solid #d1d5db', borderRadius: '0.3rem', fontSize: '0.9rem' }}
+                      placeholder="Bangla label"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button onClick={() => saveSection('showcase')} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Showcase Photos'}
+            </button>
+          </div>
+
           {statusMessage && <div style={successStyle}>{statusMessage}</div>}
         </>
       )}
     </div>
   )
+}
+
+const successStyle = {
+  marginTop: '1rem',
+  padding: '0.75rem',
+  borderRadius: '0.4rem',
+  fontSize: '0.9rem',
+  background: '#dbeafe',
+  color: '#0c4a6e',
 }

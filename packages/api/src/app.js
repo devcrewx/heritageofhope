@@ -25,5 +25,9 @@ export function createApp() {
   app.use('/api', publicRoutes)
   app.use('/api/admin', adminRoutes)
 
+  app.use((_req, res) => {
+    res.status(404).json({ error: 'Not found' })
+  })
+
   return app
 }

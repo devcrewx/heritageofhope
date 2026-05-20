@@ -106,14 +106,13 @@ export default function DocumentsEditor() {
   }
 
   const handleInputChange = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }))
-    // Clear error when user starts typing
-    if (formErrors[field]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [field]: ''
-      }))
-    }
+    setForm((prev) => ({ ...prev, [field]: value }))
+    setFormErrors((prev) => {
+      if (prev[field]) {
+        return { ...prev, [field]: '' }
+      }
+      return prev
+    })
   }
 
   async function handleSubmit(e) {

@@ -8,6 +8,12 @@ const router = Router()
 // Apply JWT verification to all routes
 router.use(verifyJWT)
 
+function resolveContentFields(body) {
+  const valueEn = body.valueEn !== undefined ? body.valueEn : body.en
+  const valueBn = body.valueBn !== undefined ? body.valueBn : body.bn
+  return { valueEn, valueBn }
+}
+
 function mergeContentValues(existing, valueEn, valueBn) {
   return {
     valueEn: valueEn !== undefined ? valueEn : existing.valueEn,
@@ -24,7 +30,7 @@ function mergeContentValues(existing, valueEn, valueBn) {
 router.patch('/settings/:fieldKey', async (req, res) => {
   try {
     const { fieldKey } = req.params
-    const { valueEn, valueBn } = req.body
+    const { valueEn, valueBn } = resolveContentFields(req.body)
 
     const page = 'settings'
     const section = 'general'
@@ -73,7 +79,7 @@ router.patch('/settings/:fieldKey', async (req, res) => {
 router.patch('/:page/:section/:fieldKey', async (req, res) => {
   try {
     const { page, section, fieldKey } = req.params
-    const { valueEn, valueBn } = req.body
+    const { valueEn, valueBn } = resolveContentFields(req.body)
 
     // Only reject if both language values are completely absent (undefined).
     // Allow empty strings so admins can explicitly clear content.

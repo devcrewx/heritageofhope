@@ -1,8 +1,36 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
-import { resolve, text } from '../content'
+import { resolve, text } from '../utils/i18n'
 
-function Layout({ language, setLanguage, siteContent }) {
+function Layout({ language, setLanguage, siteContent, contentLoading, contentError }) {
+  if (contentLoading && !siteContent) {
+    return (
+      <div className="site-shell">
+        <div className="loading-screen">
+          <div className="loading-spinner" />
+          <p>Loading content...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (contentError && !siteContent) {
+    return (
+      <div className="site-shell">
+        <div className="loading-screen">
+          <p className="error-text">Failed to load site content. Please try again later.</p>
+          <button className="btn btn-solid" onClick={() => window.location.reload()}>
+            Retry
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!siteContent) {
+    return null
+  }
+
   const siteMeta = siteContent.siteMeta || {}
   const navCopy = {
     en: { donate: 'Donate Now', switchTo: 'বাংলা' },
@@ -83,10 +111,10 @@ function Layout({ language, setLanguage, siteContent }) {
           to="/"
           aria-label={siteMeta.orgName || 'Heritage of Hope Foundation'}
         >
-          <img src="/assets/profile_pic.webp" alt="" />
+          <img src={siteMeta.logoUrl || 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210218/heritage-of-hope/brand/profile_pic.webp'} alt="" />
           <div>
             <p className="brand-name">{siteMeta.orgName || 'Heritage of Hope Foundation'}</p>
-            <p className="brand-sub" aria-hidden="true">{resolve(language, siteMeta.navbarSubtitle || text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
+            <p className="brand-sub" aria-hidden="true">{resolve(language, siteMeta.navSubtitle || text('Registered NGO | West Bengal', 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ'))}</p>
           </div>
         </Link>
 
@@ -147,7 +175,7 @@ function Layout({ language, setLanguage, siteContent }) {
               {resolve(language, siteMeta.footerMission || text('Children, women and communities in South 24 Parganas, West Bengal.', 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।'))}
             </p>
             <div style={{ marginTop: '1.5rem' }}>
-              <a href={siteContent.contact.contactDetails.facebookUrl || 'https://www.facebook.com/profile.php?id=61559891799273'} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: '0.5rem 0', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+              <a href={siteMeta.facebookUrl || 'https://www.facebook.com/profile.php?id=61559891799273'} target="_blank" rel="noopener noreferrer" className="btn btn-ghost" style={{ padding: '0.5rem 0', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                 </svg>
@@ -156,9 +184,9 @@ function Layout({ language, setLanguage, siteContent }) {
             </div>
           </div>
           <div>
-            <p>{siteContent.contact.contactDetails.phone}</p>
-            <p>{siteContent.contact.contactDetails.email}</p>
-            <p>{siteContent.contact.contactDetails.address}</p>
+            <p>{siteMeta.phone}</p>
+            <p>{siteMeta.email}</p>
+            <p>{resolve(language, siteMeta.address)}</p>
           </div>
         </footer>
       </div>

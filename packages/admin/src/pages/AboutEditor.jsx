@@ -34,6 +34,7 @@ export default function AboutEditor() {
   }
 
   const heroImageUrl = data.hero?.heroImage?.en || ''
+  const certImageUrl = data.registration?.certImage?.en || ''
 
   const uploadHeroImage = async (file) => {
     setHeroUploading(true)
@@ -92,6 +93,61 @@ export default function AboutEditor() {
     }
   }
 
+  const uploadCertImage = async (file) => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'about')
+      formData.append('section', 'registration')
+      formData.append('fieldKey', 'certImage')
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+
+      if (response.data?.data?.url) {
+        setData((current) => ({
+          ...current,
+          registration: {
+            ...current.registration,
+            certImage: { en: response.data.data.url, bn: response.data.data.publicId || '' },
+          },
+        }))
+      }
+      setStatusMessage('Certificate image updated')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
+  const deleteCertImage = async () => {
+    setHeroUploading(true)
+    setError('')
+    setStatusMessage('')
+
+    try {
+      await apiClient.delete('/api/admin/media/about/registration/certImage')
+      setData((current) => ({
+        ...current,
+        registration: {
+          ...current.registration,
+          certImage: { en: '', bn: '' },
+        },
+      }))
+      setStatusMessage('Certificate image removed')
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setHeroUploading(false)
+    }
+  }
+
   const saveSection = async (section) => {
     setSaving(true)
     setError('')
@@ -114,16 +170,16 @@ export default function AboutEditor() {
   }
 
   const updateField = (section, fieldKey, lang, value) => {
-    setData({
-      ...data,
+    setData((current) => ({
+      ...current,
       [section]: {
-        ...data[section],
+        ...current[section],
         [fieldKey]: {
-          ...data[section]?.[fieldKey],
+          ...current[section]?.[fieldKey],
           [lang]: value,
         },
       },
-    })
+    }))
   }
 
   const valueCards = [0, 1, 2, 3]
@@ -134,6 +190,7 @@ export default function AboutEditor() {
     { key: 'story', label: 'Our Story' },
     { key: 'mission', label: 'Mission & Vision' },
     { key: 'values', label: 'Core Values' },
+    { key: 'registration', label: 'Registration' },
   ]
 
   const section = (title, sectionKey) => (
@@ -173,34 +230,42 @@ export default function AboutEditor() {
       )}
       {sectionKey === 'pageContent' && (
         <>
-          <BilingualField
-            labelEn="Documents Section Label"
-            labelBn="Documents Section Label (Bangla)"
-            valueEn={data.pageContent?.documentsLabel?.en}
-            valueBn={data.pageContent?.documentsLabel?.bn}
-            onChangeEn={(val) => updateField('pageContent', 'documentsLabel', 'en', val)}
-            onChangeBn={(val) => updateField('pageContent', 'documentsLabel', 'bn', val)}
-          />
-          <BilingualField
-            labelEn="Documents Section Heading"
-            labelBn="Documents Section Heading (Bangla)"
-            valueEn={data.pageContent?.documentsHeading?.en}
-            valueBn={data.pageContent?.documentsHeading?.bn}
-            onChangeEn={(val) => updateField('pageContent', 'documentsHeading', 'en', val)}
-            onChangeBn={(val) => updateField('pageContent', 'documentsHeading', 'bn', val)}
-          />
+          <BilingualField labelEn="Page Eyebrow" labelBn="Page Eyebrow (Bangla)" valueEn={data.pageContent?.eyebrow?.en} valueBn={data.pageContent?.eyebrow?.bn} onChangeEn={(val) => updateField('pageContent', 'eyebrow', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'eyebrow', 'bn', val)} />
+          <BilingualField labelEn="Story Section Label" labelBn="Story Section Label (Bangla)" valueEn={data.pageContent?.storyLabel?.en} valueBn={data.pageContent?.storyLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'storyLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'storyLabel', 'bn', val)} />
+          <BilingualField labelEn="Mission Label" labelBn="Mission Label (Bangla)" valueEn={data.pageContent?.missionLabel?.en} valueBn={data.pageContent?.missionLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'missionLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'missionLabel', 'bn', val)} />
+          <BilingualField labelEn="Vision Label" labelBn="Vision Label (Bangla)" valueEn={data.pageContent?.visionLabel?.en} valueBn={data.pageContent?.visionLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'visionLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'visionLabel', 'bn', val)} />
+          <BilingualField labelEn="Values Section Eyebrow" labelBn="Values Section Eyebrow (Bangla)" valueEn={data.pageContent?.valuesLabel?.en} valueBn={data.pageContent?.valuesLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'valuesLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'valuesLabel', 'bn', val)} />
+          <BilingualField labelEn="Values Section Heading" labelBn="Values Section Heading (Bangla)" valueEn={data.pageContent?.valuesHeading?.en} valueBn={data.pageContent?.valuesHeading?.bn} onChangeEn={(val) => updateField('pageContent', 'valuesHeading', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'valuesHeading', 'bn', val)} />
+          <BilingualField labelEn="Registration Section Eyebrow" labelBn="Registration Section Eyebrow (Bangla)" valueEn={data.pageContent?.regLabel?.en} valueBn={data.pageContent?.regLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'regLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'regLabel', 'bn', val)} />
+          <BilingualField labelEn="Registration Section Heading" labelBn="Registration Section Heading (Bangla)" valueEn={data.pageContent?.regHeading?.en} valueBn={data.pageContent?.regHeading?.bn} onChangeEn={(val) => updateField('pageContent', 'regHeading', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'regHeading', 'bn', val)} />
+          <BilingualField labelEn="Certificate Label" labelBn="Certificate Label (Bangla)" valueEn={data.pageContent?.certLabel?.en} valueBn={data.pageContent?.certLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'certLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'certLabel', 'bn', val)} />
+          <BilingualField labelEn="Partners Label" labelBn="Partners Label (Bangla)" valueEn={data.pageContent?.partnersLabel?.en} valueBn={data.pageContent?.partnersLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'partnersLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'partnersLabel', 'bn', val)} />
+          <BilingualField labelEn="Team Section Eyebrow" labelBn="Team Section Eyebrow (Bangla)" valueEn={data.pageContent?.teamLabel?.en} valueBn={data.pageContent?.teamLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'teamLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'teamLabel', 'bn', val)} />
+          <BilingualField labelEn="Team Section Heading" labelBn="Team Section Heading (Bangla)" valueEn={data.pageContent?.teamHeading?.en} valueBn={data.pageContent?.teamHeading?.bn} onChangeEn={(val) => updateField('pageContent', 'teamHeading', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'teamHeading', 'bn', val)} />
+          <BilingualField labelEn="Documents Section Label" labelBn="Documents Section Label (Bangla)" valueEn={data.pageContent?.documentsLabel?.en} valueBn={data.pageContent?.documentsLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'documentsLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'documentsLabel', 'bn', val)} />
+          <BilingualField labelEn="Documents Section Heading" labelBn="Documents Section Heading (Bangla)" valueEn={data.pageContent?.documentsHeading?.en} valueBn={data.pageContent?.documentsHeading?.bn} onChangeEn={(val) => updateField('pageContent', 'documentsHeading', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'documentsHeading', 'bn', val)} />
         </>
       )}
       {sectionKey === 'story' && (
-        <BilingualField
-          labelEn="Our Story"
-          labelBn="Our Story (Bangla)"
-          valueEn={data.story?.body?.en}
-          valueBn={data.story?.body?.bn}
-          onChangeEn={(val) => updateField('story', 'body', 'en', val)}
-          onChangeBn={(val) => updateField('story', 'body', 'bn', val)}
-          isTextArea
-        />
+        <>
+          <BilingualField
+            labelEn="Story Heading"
+            labelBn="Story Heading (Bangla)"
+            valueEn={data.story?.heading?.en}
+            valueBn={data.story?.heading?.bn}
+            onChangeEn={(val) => updateField('story', 'heading', 'en', val)}
+            onChangeBn={(val) => updateField('story', 'heading', 'bn', val)}
+          />
+          <BilingualField
+            labelEn="Story Body"
+            labelBn="Story Body (Bangla)"
+            valueEn={data.story?.body?.en}
+            valueBn={data.story?.body?.bn}
+            onChangeEn={(val) => updateField('story', 'body', 'en', val)}
+            onChangeBn={(val) => updateField('story', 'body', 'bn', val)}
+            isTextArea
+          />
+        </>
       )}
       {sectionKey === 'mission' && (
         <>
@@ -346,6 +411,33 @@ export default function AboutEditor() {
           {activeSection === 'story' && section('Our Story', 'story')}
           {activeSection === 'mission' && section('Mission & Vision', 'mission')}
           {activeSection === 'values' && section('Core Values', 'values')}
+          {activeSection === 'registration' && (
+            <div style={sectionStyle}>
+              <div style={titleStyle}>Registration</div>
+              <MediaUploadField
+                label="Certificate Image"
+                helperText="Registration certificate image displayed on the About page."
+                currentUrl={certImageUrl}
+                currentAlt="Registration certificate"
+                onUpload={uploadCertImage}
+                onDelete={certImageUrl ? deleteCertImage : undefined}
+                uploading={heroUploading}
+                previewClassName="h-64 w-full object-contain"
+              />
+              <BilingualField
+                labelEn="Registration Body Text"
+                labelBn="Registration Body Text (Bangla)"
+                valueEn={data.registration?.body?.en}
+                valueBn={data.registration?.body?.bn}
+                onChangeEn={(val) => updateField('registration', 'body', 'en', val)}
+                onChangeBn={(val) => updateField('registration', 'body', 'bn', val)}
+                isTextArea
+              />
+              <button onClick={() => saveSection('registration')} disabled={saving} style={buttonStyle}>
+                {saving ? 'Saving...' : 'Save Registration'}
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

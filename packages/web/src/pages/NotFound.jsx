@@ -1,24 +1,20 @@
 import { Link, useOutletContext } from 'react-router-dom'
-import { resolve, text } from '../content'
+import { resolve } from '../utils/i18n'
 
 function NotFound() {
-  const { language } = useOutletContext()
+  const { language, siteContent } = useOutletContext()
+  const page = siteContent?.notFound?.pageContent || {}
 
   return (
     <main className="page-stack">
       <section className="panel split-panel">
         <div>
-          <p className="eyebrow">404</p>
-          <h1 className="page-title">{resolve(language, text('Page not found', 'পেজ পাওয়া যায়নি'))}</h1>
-          <p>
-            {resolve(
-              language,
-              text('Return to the homepage to continue exploring.', 'হোমপেজে ফিরে গিয়ে আবার ঘুরে দেখুন।'),
-            )}
-          </p>
+          <p className="eyebrow">{resolve(language, page.eyebrow)}</p>
+          <h1 className="page-title">{resolve(language, page.heading)}</h1>
+          <p>{resolve(language, page.body)}</p>
         </div>
         <Link className="btn btn-solid" to="/">
-          {resolve(language, text('Go home', 'মূল পাতায় ফিরে যান'))}
+          {resolve(language, page.buttonLabel)}
         </Link>
       </section>
     </main>

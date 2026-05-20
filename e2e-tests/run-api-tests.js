@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const { execSync } = require('child_process')
 
-const API_URL = process.env.API_URL || 'https://heritageofhope-api.onrender.com'
+const API_URL = process.env.API_URL || 'http://localhost:4010'
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@heritageofhope.org'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Welcome@123'
 const TEST_IMAGE_PATH = process.env.TEST_IMAGE_PATH || ''

@@ -70,17 +70,16 @@ export default function TeamEditor() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }))
-    // Clear error for this field when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
+    setFormErrors((prev) => {
+      if (prev[name]) {
+        return { ...prev, [name]: '' }
+      }
+      return prev
+    })
   }
 
   const handleFileChange = (e) => {

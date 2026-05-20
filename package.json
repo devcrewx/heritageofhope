@@ -17,6 +17,14 @@
     "dev:admin": "npm run dev --workspace @heritageofhope/admin",
     "dev:api": "npm run dev --workspace @heritageofhope/api",
     "build:api": "npm run build --workspace @heritageofhope/api",
-    "start": "node packages/api/src/index.js"
+    "start": "node packages/api/src/index.js",
+    "docker:build": "docker compose build",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "db:migrate": "docker compose exec api npx prisma migrate dev --schema packages/api/prisma/schema.prisma",
+    "db:push": "docker compose exec api npx prisma db push --schema packages/api/prisma/schema.prisma",
+    "db:seed": "docker compose exec api node packages/api/scripts/seed.js",
+    "db:create-admin": "docker compose exec api node packages/api/scripts/createAdmin.js"
   }
 }

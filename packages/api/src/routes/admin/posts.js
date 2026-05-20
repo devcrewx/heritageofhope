@@ -28,12 +28,15 @@ router.patch('/reorder', async (req, res) => {
     if (!Array.isArray(postUpdates)) {
       return res.status(400).json({ error: 'Invalid reorder data' });
     }
+    if (!postUpdates.every((p) => Number.isInteger(Number(p.id)) && Number(p.id) > 0 && Number.isInteger(Number(p.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
+    }
 
     const updated = await Promise.all(
       postUpdates.map(p =>
         prisma.activityPost.update({
-          where: { id: p.id },
-          data: { sortOrder: p.sortOrder }
+          where: { id: Number(p.id) },
+          data: { sortOrder: Number(p.sortOrder) }
         })
       )
     );
@@ -42,18 +45,6 @@ router.patch('/reorder', async (req, res) => {
   } catch (error) {
     console.error('Error reordering posts:', error);
     res.status(500).json({ error: 'Failed to reorder posts' });
-  }
-});
-
-// GET all activity posts
-router.get('/', async (req, res) => {
-  try {
-    const posts = await prisma.activityPost.findMany({
-      orderBy: { sortOrder: 'desc' }
-    });
-    res.json(posts);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch activity posts' });
   }
 });
 
@@ -70,6 +61,9 @@ router.post('/', upload.single('file'), async (req, res) => {
     let photoPublicId = null;
 
     if (req.file) {
+      if (!process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_CLOUD_NAME) {
+        return res.status(500).json({ error: 'Cloudinary not configured on server' })
+      }
       const result = await uploadToCloudinary(
         req.file.buffer,
         `heritage-of-hope/activity-posts/${Date.now()}`,

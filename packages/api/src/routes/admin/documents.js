@@ -100,6 +100,9 @@ router.patch('/reorder', async (req, res) => {
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'items must be array' })
     }
+    if (!items.every((item) => Number.isInteger(Number(item.id)) && Number(item.id) > 0 && Number.isInteger(Number(item.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
+    }
 
     const updated = await Promise.all(
       items.map((item) =>

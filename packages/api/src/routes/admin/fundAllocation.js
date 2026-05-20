@@ -1,7 +1,9 @@
 import { Router } from 'express'
+import { body } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
+import { handleValidationErrors, validateFundAllocation } from '../../middleware/validation.js'
 
 const router = Router()
 
@@ -19,31 +21,31 @@ router.get('/', async (_req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
-  try {
-    const { categoryEn, categoryBn, percentage, sortOrder = 0 } = req.body
+router.post(
+  '/',
+  [...validateFundAllocation()],
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const { categoryEn, categoryBn, percentage, sortOrder = 0 } = req.body
 
-    if (!categoryEn || percentage === undefined) {
-      return res.status(400).json({ error: 'categoryEn and percentage are required' })
+      const item = await prisma.fundAllocation.create({
+        data: {
+          categoryEn,
+          categoryBn,
+          percentage: Number(percentage),
+          sortOrder: Number(sortOrder),
+        },
+      })
+
+      invalidateCache()
+
+      res.json({ success: true, data: item })
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create fund allocation' })
     }
-
-    const item = await prisma.fundAllocation.create({
-      data: {
-        categoryEn,
-        categoryBn,
-        percentage: Number(percentage),
-        sortOrder: Number(sortOrder),
-      },
-    })
-
-    // Invalidate cache so changes appear immediately
-    invalidateCache()
-
-    res.json({ success: true, data: item })
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create fund allocation' })
   }
-})
+)
 
 router.patch('/batch', async (req, res) => {
   try {
@@ -51,6 +53,9 @@ router.patch('/batch', async (req, res) => {
 
     if (!Array.isArray(items)) {
       return res.status(400).json({ error: 'items must be an array' })
+    }
+    if (!items.every((item) => Number.isInteger(Number(item.id)) && Number(item.id) > 0 && Number.isInteger(Number(item.sortOrder)))) {
+      return res.status(400).json({ error: 'Each item must have a valid id and sortOrder' })
     }
 
     const updated = await Promise.all(

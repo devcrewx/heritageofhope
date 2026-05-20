@@ -44,32 +44,32 @@ router.use(verifyJWT)
 router.patch(
   '/',
   [
-    body('orgName').optional().trim().isLength({ min: 2, max: 200 }),
+    body('org_name').optional().trim().isLength({ min: 2, max: 200 }),
     body('phone').optional().trim().isLength({ min: 5, max: 20 }),
     body('email').optional().isEmail(),
     body('address').optional().trim().isLength({ min: 10, max: 500 }),
-    body('facebookUrl').optional().isURL(),
-    body('registeredBadge').optional().trim().isLength({ max: 100 }),
-    body('estYear').optional().trim().isLength({ max: 50 }),
-    body('navbarSubtitle').optional().trim().isLength({ max: 200 }),
-    body('footerMission').optional().trim().isLength({ max: 500 }),
+    body('facebook_url').optional().isURL(),
+    body('registered_badge').optional().trim().isLength({ max: 100 }),
+    body('est_year').optional().trim().isLength({ max: 50 }),
+    body('navbar_subtitle').optional().trim().isLength({ max: 200 }),
+    body('footer_mission').optional().trim().isLength({ max: 500 }),
   ],
   handleValidationErrors,
   async (req, res) => {
     try {
-      const { orgName, phone, email, address, facebookUrl, registeredBadge, estYear, navbarSubtitle, footerMission } =
+      const { org_name, phone, email, address, facebook_url, registered_badge, est_year, navbar_subtitle, footer_mission } =
         req.body
 
       const updates = {
-        orgName,
+        org_name,
         phone,
         email,
         address,
-        facebookUrl,
-        registeredBadge,
-        estYear,
-        navbarSubtitle,
-        footerMission,
+        facebook_url,
+        registered_badge,
+        est_year,
+        navbar_subtitle,
+        footer_mission,
       }
 
       const saved = {}

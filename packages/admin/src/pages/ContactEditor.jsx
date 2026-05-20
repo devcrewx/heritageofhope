@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import MediaUploadField from '../components/MediaUploadField'
+import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 
 export default function ContactEditor() {
@@ -11,6 +13,11 @@ export default function ContactEditor() {
   const [error, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [formErrors, setFormErrors] = useState({})
+  const [mapEmbedUrl, setMapEmbedUrl] = useState('')
+  const [mosaicSlots, setMosaicSlots] = useState(
+    Array.from({ length: 4 }, () => ({ url: '', labelEn: '', labelBn: '' }))
+  )
+  const [mosaicUploading, setMosaicUploading] = useState(Array(4).fill(false))
 
   useEffect(() => {
     loadContent()
@@ -18,9 +25,32 @@ export default function ContactEditor() {
 
   const loadContent = async () => {
     try {
-      const response = await request('/api/admin/content/settings')
-      if (response.success) {
-        setData(response.sections || {})
+      const [settingsResponse, contactResponse] = await Promise.all([
+        request('/api/admin/content/settings'),
+        request('/api/admin/content/contact'),
+      ])
+      if (settingsResponse.success) {
+        setData(settingsResponse.sections || {})
+      }
+      if (contactResponse.success && contactResponse.sections?.pageContent) {
+        const p = contactResponse.sections.pageContent
+        setData((current) => ({
+          ...current,
+          pageContent: {
+            eyebrow: p.eyebrow || { en: '' },
+            facebookLabel: p.facebookLabel || { en: '' },
+            facebookHeading: p.facebookHeading || { en: '' },
+          },
+        }))
+        setMapEmbedUrl(contactResponse.sections?.map?.embedUrl?.en || '')
+      }
+      if (contactResponse.success && contactResponse.sections?.mosaic) {
+        const m = contactResponse.sections.mosaic
+        setMosaicSlots((prev) => prev.map((slot, i) => ({
+          url: m[`img${i + 1}_url`]?.en || '',
+          labelEn: m[`img${i + 1}_labelEn`]?.en || '',
+          labelBn: m[`img${i + 1}_labelBn`]?.en || '',
+        })))
       }
     } catch (error) {
       setError(error.message)
@@ -31,13 +61,13 @@ export default function ContactEditor() {
 
   const updateField = (section, fieldKey, value) => {
     setFormErrors((current) => ({ ...current, [fieldKey]: '' }))
-    setData({
-      ...data,
+    setData((current) => ({
+      ...current,
       [section]: {
-        ...data[section],
+        ...current[section],
         [fieldKey]: { en: value },
       },
-    })
+    }))
   }
 
   const validateSection = () => {
@@ -90,6 +120,75 @@ export default function ContactEditor() {
         )
       )
       setStatusMessage('Saved successfully')
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function uploadMosaicImage(file, index) {
+    setMosaicUploading((prev) => prev.map((v, i) => (i === index ? true : v)))
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('page', 'contact')
+      formData.append('section', 'mosaic')
+      formData.append('fieldKey', `img${index + 1}_url`)
+
+      const response = await apiClient.post('/api/admin/media/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      setMosaicSlots((prev) => prev.map((slot, i) =>
+        i === index ? { ...slot, url: response.data?.data?.url || '' } : slot
+      ))
+      setStatusMessage(`Mosaic image ${index + 1} updated`)
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setMosaicUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
+    }
+  }
+
+  async function deleteMosaicImage(index) {
+    setMosaicUploading((prev) => prev.map((v, i) => (i === index ? true : v)))
+    try {
+      await apiClient.delete(`/api/admin/media/contact/mosaic/img${index + 1}_url`)
+      setMosaicSlots((prev) => prev.map((slot, i) =>
+        i === index ? { url: '', labelEn: slot.labelEn, labelBn: slot.labelBn } : slot
+      ))
+      setStatusMessage(`Mosaic image ${index + 1} removed`)
+    } catch (error) {
+      setError(error.response?.data?.error || error.message)
+    } finally {
+      setMosaicUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
+    }
+  }
+
+  function updateMosaicLabel(index, field, value) {
+    setMosaicSlots((prev) => prev.map((slot, i) =>
+      i === index ? { ...slot, [field]: value } : slot
+    ))
+  }
+
+  async function saveMosaicLabels() {
+    setSaving(true)
+    setError('')
+    setStatusMessage('')
+    try {
+      await Promise.all(
+        mosaicSlots.flatMap((slot, i) => [
+          request(`/api/admin/content/contact/mosaic/img${i + 1}_labelEn`, {
+            method: 'PATCH',
+            body: JSON.stringify({ valueEn: slot.labelEn }),
+          }),
+          request(`/api/admin/content/contact/mosaic/img${i + 1}_labelBn`, {
+            method: 'PATCH',
+            body: JSON.stringify({ valueEn: slot.labelBn }),
+          }),
+        ])
+      )
+      setStatusMessage('Mosaic labels saved')
     } catch (error) {
       setError(error.message)
     } finally {
@@ -220,8 +319,89 @@ export default function ContactEditor() {
             <button onClick={() => saveSection('contact')} disabled={saving} style={styles.button}>
               {saving ? 'Saving...' : 'Save Contact Info'}
             </button>
-            {statusMessage && <div style={successStyle}>{statusMessage}</div>}
           </div>
+
+          <div style={styles.section}>
+            <div style={styles.title}>Mosaic Images</div>
+            <p style={{ color: '#475569', marginBottom: '1rem' }}>
+              These images appear in the photo strip at the bottom of the Contact page.
+            </p>
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {mosaicSlots.map((slot, i) => (
+                <div key={i} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
+                  <div style={{ fontWeight: 700, marginBottom: '0.75rem', color: '#0f172a', fontSize: '0.95rem' }}>
+                    Image {i + 1}
+                  </div>
+                  <MediaUploadField
+                    label={`Image ${i + 1}`}
+                    helperText="Upload an image for this mosaic slot."
+                    currentUrl={slot.url}
+                    currentAlt={slot.labelEn || `Mosaic ${i + 1}`}
+                    onUpload={(file) => uploadMosaicImage(file, i)}
+                    onDelete={slot.url ? () => deleteMosaicImage(i) : undefined}
+                    uploading={mosaicUploading[i]}
+                    previewClassName="h-32 w-full object-cover"
+                  />
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
+                    <div>
+                      <label style={{ ...styles.label, marginBottom: '0.25rem' }}>Label (EN)</label>
+                      <input
+                        type="text"
+                        value={slot.labelEn}
+                        onChange={(e) => updateMosaicLabel(i, 'labelEn', e.target.value)}
+                        placeholder="In Action"
+                        style={{ ...styles.input, marginBottom: 0 }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ ...styles.label, marginBottom: '0.25rem' }}>Label (BN)</label>
+                      <input
+                        type="text"
+                        value={slot.labelBn}
+                        onChange={(e) => updateMosaicLabel(i, 'labelBn', e.target.value)}
+                        placeholder="সক্রিয় অবস্থায়"
+                        style={{ ...styles.input, marginBottom: 0 }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={saveMosaicLabels} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Mosaic Labels'}
+            </button>
+          </div>
+
+          <div style={styles.section}>
+            <div style={styles.title}>Page Content Labels</div>
+            <label style={styles.label}>Page Eyebrow</label>
+            <input type="text" value={data.pageContent?.eyebrow?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, eyebrow: { en: e.target.value } } }))} placeholder="Contact" style={styles.input} />
+            <label style={styles.label}>Facebook Section Eyebrow</label>
+            <input type="text" value={data.pageContent?.facebookLabel?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookLabel: { en: e.target.value } } }))} placeholder="Featured from Facebook" style={styles.input} />
+            <label style={styles.label}>Facebook Section Heading</label>
+            <input type="text" value={data.pageContent?.facebookHeading?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookHeading: { en: e.target.value } } }))} placeholder="Recent moments from the page" style={styles.input} />
+            <label style={styles.label}>Google Maps Embed URL</label>
+            <input type="url" value={mapEmbedUrl} onChange={(e) => setMapEmbedUrl(e.target.value)} placeholder="https://www.google.com/maps?q=..." style={styles.input} />
+            <button onClick={async () => {
+              setSaving(true)
+              setError('')
+              setStatusMessage('')
+              try {
+                await Promise.all([
+                  request('/api/admin/content/contact/pageContent/eyebrow', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.eyebrow?.en || '' }) }),
+                  request('/api/admin/content/contact/pageContent/facebookLabel', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.facebookLabel?.en || '' }) }),
+                  request('/api/admin/content/contact/pageContent/facebookHeading', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.facebookHeading?.en || '' }) }),
+                  request('/api/admin/content/contact/map/embedUrl', { method: 'PATCH', body: JSON.stringify({ valueEn: mapEmbedUrl }) }),
+                ])
+                setStatusMessage('Page labels saved')
+              } catch (error) { setError(error.message) }
+              finally { setSaving(false) }
+            }} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Page Labels'}
+            </button>
+          </div>
+
+          {statusMessage && <div style={successStyle}>{statusMessage}</div>}
         </>
       )}
     </div>

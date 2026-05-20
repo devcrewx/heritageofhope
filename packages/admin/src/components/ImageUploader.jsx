@@ -41,8 +41,11 @@ export function ImageUploader({ onFilesSelected, disabled = false, maxFiles = 10
     }
 
     if (valid.length > 0) {
-      setSelectedFiles([...selectedFiles, ...valid])
-      onFilesSelected([...selectedFiles, ...valid])
+      setSelectedFiles((prev) => {
+        const updated = [...prev, ...valid]
+        onFilesSelected(updated)
+        return updated
+      })
     }
   }
 

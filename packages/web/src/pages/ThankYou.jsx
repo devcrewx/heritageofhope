@@ -1,29 +1,22 @@
 import { Link, useOutletContext } from 'react-router-dom'
-import { resolve, text } from '../content'
+import { resolve } from '../utils/i18n'
 
 function ThankYou() {
-  const { language } = useOutletContext()
+  const { language, siteContent } = useOutletContext()
+  const page = siteContent?.thankYou?.pageContent || {}
 
   return (
     <main className="page-stack">
       <section className="panel split-panel">
         <div>
-          <p className="eyebrow">{resolve(language, text('Submission received', 'আপনার বার্তাটি আমরা পেয়েছি'))}</p>
+          <p className="eyebrow">{resolve(language, page.eyebrow)}</p>
           <h1 className="page-title">
-            {resolve(language, text('Thank you for reaching out.', 'যোগাযোগ করার জন্য ধন্যবাদ।'))}
+            {resolve(language, page.heading)}
           </h1>
-          <p>
-            {resolve(
-              language,
-              text(
-                'We will review your message and respond as soon as possible.',
-                'আপনার বার্তাটা দেখে আমরা দ্রুতই যোগাযোগ করব।',
-              ),
-            )}
-          </p>
+          <p>{resolve(language, page.body)}</p>
         </div>
         <Link className="btn btn-solid" to="/">
-          {resolve(language, text('Return home', 'মূল পাতায় ফিরে যান'))}
+          {resolve(language, page.buttonLabel)}
         </Link>
       </section>
     </main>

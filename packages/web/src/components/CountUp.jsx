@@ -9,6 +9,7 @@ function CountUp({ value, duration = 2000 }) {
   const ref = useRef(null)
   const [display, setDisplay] = useState('0')
   const hasAnimated = useRef(false)
+  const rafId = useRef(null)
 
   // Parse "200+" → { target: 200, suffix: "+" }
   const match = String(value).match(/^(\d+)(.*)$/)
@@ -31,7 +32,10 @@ function CountUp({ value, duration = 2000 }) {
     )
 
     observer.observe(element)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (rafId.current) cancelAnimationFrame(rafId.current)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -49,11 +53,11 @@ function CountUp({ value, duration = 2000 }) {
       setDisplay(`${current}${suffix}`)
 
       if (progress < 1) {
-        requestAnimationFrame(tick)
+        rafId.current = requestAnimationFrame(tick)
       }
     }
 
-    requestAnimationFrame(tick)
+    rafId.current = requestAnimationFrame(tick)
   }
 
   return <span ref={ref}>{display}</span>

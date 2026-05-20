@@ -11,7 +11,6 @@ import Contact from './pages/Contact'
 import ThankYou from './pages/ThankYou'
 import NotFound from './pages/NotFound'
 import './App.css'
-import { siteContent as fallbackSiteContent } from './content'
 
 function ScrollToTop() {
   const location = useLocation()
@@ -27,26 +26,29 @@ function RevealOnScroll({ language }) {
   const location = useLocation()
 
   useEffect(() => {
-    const elements = Array.from(document.querySelectorAll('[data-reveal]'))
-    const sectionCounters = new Map()
-    const easing = 'cubic-bezier(0.22, 1, 0.36, 1)'
+    function observeElements() {
+      const elements = Array.from(document.querySelectorAll('[data-reveal]'))
+      const sectionCounters = new Map()
+      const easing = 'cubic-bezier(0.22, 1, 0.36, 1)'
 
-    elements.forEach((element) => {
-      const scope = element.closest('.hero-panel, .panel, .topbar') ?? document.body
-      const currentIndex = sectionCounters.get(scope) ?? 0
-      sectionCounters.set(scope, currentIndex + 1)
+      elements.forEach((element) => {
+        const scope = element.closest('.hero-panel, .panel, .topbar') ?? document.body
+        const currentIndex = sectionCounters.get(scope) ?? 0
+        sectionCounters.set(scope, currentIndex + 1)
 
-      const isHero = element.classList.contains('hero-panel') || element.classList.contains('topbar')
-      const isSection = element.classList.contains('panel')
-      const baseDelay = isHero ? 40 : isSection ? 90 : 120
-      const delay = Math.min(baseDelay + currentIndex * 55, 340)
-      const duration = isHero ? 760 : isSection ? 620 : 520
+        const isHero = element.classList.contains('hero-panel') || element.classList.contains('topbar')
+        const isSection = element.classList.contains('panel')
+        const baseDelay = isHero ? 40 : isSection ? 90 : 120
+        const delay = Math.min(baseDelay + currentIndex * 55, 340)
+        const duration = isHero ? 760 : isSection ? 620 : 520
 
-      element.style.setProperty('--reveal-delay', `${delay}ms`)
-      element.style.setProperty('--reveal-duration', `${duration}ms`)
-      element.style.setProperty('--reveal-ease', easing)
-      element.classList.remove('is-revealed')
-    })
+        element.style.setProperty('--reveal-delay', `${delay}ms`)
+        element.style.setProperty('--reveal-duration', `${duration}ms`)
+        element.style.setProperty('--reveal-ease', easing)
+        element.classList.remove('is-revealed')
+        observer.observe(element)
+      })
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,22 +65,30 @@ function RevealOnScroll({ language }) {
       },
     )
 
-    elements.forEach((element) => observer.observe(element))
+    observeElements()
 
-    return () => observer.disconnect()
-  }, [location.pathname, language])
+    const domWatcher = new MutationObserver(() => observeElements())
+    domWatcher.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+      domWatcher.disconnect()
+    }
+  }, [location.pathname])
 
   return null
 }
 
 function App() {
   const [language, setLanguage] = useState('en')
-  const [siteContent, setSiteContent] = useState(fallbackSiteContent)
+  const [siteContent, setSiteContent] = useState(null)
+  const [contentLoading, setContentLoading] = useState(true)
+  const [contentError, setContentError] = useState(null)
   const apiBase =
     import.meta.env.VITE_API_BASE_URL ||
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
       ? ''
-      : 'https://heritageofhope-api.onrender.com')
+      : '')
 
   useEffect(() => {
     let cancelled = false
@@ -86,6 +96,8 @@ function App() {
 
     async function loadSiteContent() {
       try {
+        setContentLoading(true)
+        setContentError(null)
         const response = await fetch(`${apiBase}/api/content`)
 
         if (!response.ok) {
@@ -98,7 +110,12 @@ function App() {
         }
       } catch (error) {
         if (!cancelled) {
-          setSiteContent(fallbackSiteContent)
+          console.error('Failed to load site content:', error)
+          setContentError(error.message)
+        }
+      } finally {
+        if (!cancelled) {
+          setContentLoading(false)
         }
       }
     }
@@ -122,7 +139,7 @@ function App() {
       <ScrollToTop />
       <RevealOnScroll language={language} />
       <Routes>
-        <Route element={<Layout language={language} setLanguage={setLanguage} siteContent={siteContent} />}>
+          <Route element={<Layout language={language} setLanguage={setLanguage} siteContent={siteContent} contentLoading={contentLoading} contentError={contentError} />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="our-work" element={<OurWork />} />

@@ -61,17 +61,16 @@ export default function PartnersEditor() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }))
-    // Clear error when user starts typing
-    if (formErrors[name]) {
-      setFormErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }))
-    }
+    setFormErrors((prev) => {
+      if (prev[name]) {
+        return { ...prev, [name]: '' }
+      }
+      return prev
+    })
   }
 
   const handleFileChange = (e) => {
