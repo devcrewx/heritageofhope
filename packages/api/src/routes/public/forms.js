@@ -14,8 +14,6 @@ const formLimiter = rateLimit({
   message: { error: 'Too many submissions. Please try again later.' },
 })
 
-
-
 // POST /api/forms/contact - Save contact form submission
 router.post(
   '/contact',
@@ -59,14 +57,11 @@ router.post(
         console.error('Failed to write audit log for contact submission:', e)
       }
 
-      // Try sending notification email (non-blocking)
       try {
         await sendNotificationEmail('contact', submission)
       } catch (e) {
         console.error('Email notification error (contact):', e)
       }
-      // TODO: Send email notification to admin
-      // await sendNotificationEmail('contact', submission)
 
       res.status(201).json({
         success: true,
@@ -125,13 +120,11 @@ router.post(
         console.error('Failed to write audit log for volunteer submission:', e)
       }
 
-      // Send notification email (best-effort)
       try {
         await sendNotificationEmail('volunteer', submission)
       } catch (e) {
         console.error('Email notification error (volunteer):', e)
       }
-      // TODO: Send email notification to admin
 
       res.status(201).json({
         success: true,
@@ -190,13 +183,11 @@ router.post(
         console.error('Failed to write audit log for partner submission:', e)
       }
 
-      // Send notification email (best-effort)
       try {
         await sendNotificationEmail('partner', submission)
       } catch (e) {
         console.error('Email notification error (partner):', e)
       }
-      // TODO: Send email notification to admin
 
       res.status(201).json({
         success: true,

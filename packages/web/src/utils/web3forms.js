@@ -1,68 +1,66 @@
-/**
- * Web3Forms utility for handling form submissions
- * Configuration: Update .env with your Web3Forms access key
- */
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? ''
+    : '')
+
+const endpointMap = {
+  contact: '/api/forms/contact',
+  volunteer: '/api/forms/volunteer',
+  partner: '/api/forms/partner',
+}
 
 export async function submitFormWeb3(formData, formName = 'contact') {
-  const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
-  const toEmail = import.meta.env.VITE_WEB3FORMS_TO_EMAIL
+  const endpoint = endpointMap[formName]
+  if (!endpoint) throw new Error(`Unknown form type: ${formName}`)
 
-  if (!accessKey || accessKey.includes('your_access_key')) {
-    console.error(
-      'Web3Forms access key not configured. Please update .env file with your Web3Forms key from https://web3forms.com/'
-    )
-    throw new Error(
-      'Web3Forms not configured. Please add your access key to .env'
-    )
-  }
+  const raw = Object.fromEntries(formData.entries())
 
-  // Prepare form data
-  const submissionData = new FormData()
-  
-  // Add Web3Forms required fields
-  submissionData.append('access_key', accessKey)
-  submissionData.append('to_email', toEmail)
-  
-  // Add redirect URL
-  submissionData.append('redirect', '/thank-you')
-  
-  // Add form-specific subject line
-  const subjectLines = {
-    contact: 'New Contact Form Submission - Heritage of Hope',
-    volunteer: 'New Volunteer Application - Heritage of Hope',
-    partner: 'New Partner Inquiry - Heritage of Hope',
-  }
-  submissionData.append('subject', subjectLines[formName] || 'New Form Submission')
-
-  // Add optional from_name
-  submissionData.append('from_name', 'Heritage of Hope Website')
-
-  // Add all form fields from the provided FormData
-  for (const [key, value] of formData.entries()) {
-    submissionData.append(key, value)
+  let body
+  if (formName === 'contact') {
+    const subject = raw.subject || ''
+    body = {
+      name: raw.name || '',
+      email: raw.email || '',
+      message: subject ? `[${subject}] ${raw.message || ''}` : (raw.message || ''),
+    }
+  } else if (formName === 'volunteer') {
+    body = {
+      name: raw.name || '',
+      email: raw.email || '',
+      phone: raw.phone || '',
+      interest: raw.area_of_interest || '',
+      message: raw.availability
+        ? `Availability: ${raw.availability}\n\n${raw.message || ''}`
+        : (raw.message || ''),
+    }
+  } else if (formName === 'partner') {
+    body = {
+      organizationName: raw.organization_name || '',
+      contactPerson: raw.contact_person || '',
+      email: raw.email || '',
+      phone: raw.phone || '',
+      inquiry: raw.partnership_type
+        ? `Partnership type: ${raw.partnership_type}\n\n${raw.message || ''}`
+        : (raw.message || ''),
+    }
   }
 
   try {
-    const response = await fetch('https://api.web3forms.com/submit', {
+    const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
-      body: submissionData,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
     })
 
-    const data = await response.json()
+    const result = await response.json()
 
-    if (data.success) {
-      return { success: true, message: 'Form submitted successfully!' }
+    if (response.ok && result.success) {
+      return { success: true, message: result.message || 'Form submitted successfully!' }
     } else {
-      return {
-        success: false,
-        message: data.message || 'Form submission failed. Please try again.',
-      }
+      return { success: false, message: result.error || 'Form submission failed.' }
     }
   } catch (error) {
-    console.error('Form submission error:', error)
-    return {
-      success: false,
-      message: 'An error occurred while submitting the form. Please try again.',
-    }
+    return { success: false, message: 'Network error. Please try again.' }
   }
 }
