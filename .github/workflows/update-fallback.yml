@@ -2,6 +2,8 @@ name: Update content fallback
 on:
   schedule:
     - cron: '0 2 * * *'
+  repository_dispatch:
+    types: [sync-fallback]
   workflow_dispatch:
 jobs:
   update:
@@ -12,10 +14,13 @@ jobs:
         run: |
           curl -s https://heritageofhope-api.onrender.com/api/content \
             > packages/web/public/content-fallback.json
+      - name: Generate content.js fallback
+        run: |
+          python3 .github/workflows/gen-content-js.py
       - name: Commit if changed
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add packages/web/public/content-fallback.json
+          git add packages/web/public/content-fallback.json packages/web/src/content.js
           git diff --cached --quiet || git commit -m "chore: update content fallback snapshot"
           git push
