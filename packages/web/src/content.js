@@ -769,22 +769,13 @@ export const fallbackSiteContent = {
     },
     "focusTags": [
       {
-        "tag": {
-          "en": "",
-          "bn": ""
-        }
+        "tag": ""
       },
       {
-        "tag": {
-          "en": "",
-          "bn": ""
-        }
+        "tag": ""
       },
       {
-        "tag": {
-          "en": "",
-          "bn": ""
-        }
+        "tag": ""
       }
     ],
     "featuredPrograms": [
