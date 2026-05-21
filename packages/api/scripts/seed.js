@@ -517,19 +517,12 @@ async function main() {
 
     // ===== ADMIN USER =====
     console.log('Seeding admin user...')
-    const hashedPassword = await bcrypt.hash('Welcome@123', 12)
-    await prisma.adminUser.create({
-      data: {
-        email: 'admin@heritageofhope.org',
-        passwordHash: hashedPassword,
-        role: 'admin',
-      },
-    })
+    const hashedPassword = await bcrypt.hash('7in9GOQMbXdwZnwm', 12)
 
-    console.log('✅ Database seeding completed successfully!')
-    console.log('\n📝 Admin credentials:')
+        email: 'admin@heritageofhope.org',
+
     console.log('   Email: admin@heritageofhope.org')
-    console.log('   Password: Welcome@123')
+    console.log('   Password: 7in9GOQMbXdwZnwm')
     console.log('\n⚠️  Change this password immediately!\n')
   } catch (error) {
     console.error('❌ Seeding error:', error)

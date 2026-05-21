@@ -10,7 +10,7 @@ npm run test:api        # Run Node-based API tests (recommended)
 Environment variables:
 - `API_URL` (default https://heritageofhope-api.onrender.com)
 - `ADMIN_EMAIL` (default admin@heritageofhope.org)
-- `ADMIN_PASSWORD` (default Welcome@123)
+- `ADMIN_PASSWORD` (default 7in9GOQMbXdwZnwm)
 - `TEST_IMAGE_PATH` (optional local path to an image for upload/delete test; .webp, .png, .jpg supported)
 
 ## What the tests cover
