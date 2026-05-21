@@ -1637,7 +1637,7 @@ export const fallbackSiteContent = {
         "bn": "আমাদের অনুসরণ করুন"
       }
     },
-    "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3685.2867747333216!2d88.378502!3d22.532854!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a027721d25c3f55%3A0x558be8d37d5cdfe8!2sTangra%2C%20Kolkata%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1700000000000",
+    "mapEmbedUrl": "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed",
     "formLabels": {
       "nameLabel": {
         "en": "Name",
