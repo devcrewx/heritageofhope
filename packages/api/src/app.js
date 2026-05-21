@@ -9,16 +9,6 @@ import adminRoutes from './routes/admin/index.js'
 
 const SENTRY_DSN = process.env.SENTRY_DSN
 
-if (SENTRY_DSN) {
-  Sentry.init({
-    dsn: SENTRY_DSN,
-    environment: process.env.NODE_ENV || 'development',
-    tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE || '0.1'),
-    integrations: [],
-  })
-  logger.info('Sentry initialized')
-}
-
 export function createApp() {
   const app = express()
   app.set('trust proxy', 1)
@@ -26,11 +16,6 @@ export function createApp() {
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean)
-
-  if (SENTRY_DSN) {
-    app.use(Sentry.Handlers.requestHandler())
-    app.use(Sentry.Handlers.tracingHandler())
-  }
 
   app.use(helmet())
   app.use(
@@ -57,7 +42,7 @@ export function createApp() {
   })
 
   if (SENTRY_DSN) {
-    app.use(Sentry.Handlers.errorHandler())
+    Sentry.setupExpressErrorHandler(app)
   }
 
   app.use((err, _req, res, _next) => {

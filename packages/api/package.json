@@ -7,9 +7,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "node src/index.js",
+    "dev": "node --import ./src/instrument.js src/index.js",
     "build": "node -e \"console.log('API build step is not required yet')\"",
-    "start": "node src/index.js",
+    "start": "node --import ./src/instrument.js src/index.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:push": "prisma db push",

@@ -18,6 +18,10 @@ router.use('/team', teamRouter)
 router.use('/activity-posts', postsRouter)
 router.use('/forms', formsRouter)
 
+router.get('/debug-sentry', () => {
+  throw new Error('My first Sentry error!')
+})
+
 router.get('/stats', async (req, res) => {
   try {
     const stats = await prisma.impactStat.findMany({
