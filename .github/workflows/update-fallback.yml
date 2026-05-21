@@ -1,0 +1,21 @@
+name: Update content fallback
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch content snapshot
+        run: |
+          curl -s https://heritageofhope-api.onrender.com/api/content \
+            > packages/web/public/content-fallback.json
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add packages/web/public/content-fallback.json
+          git diff --cached --quiet || git commit -m "chore: update content fallback snapshot"
+          git push
