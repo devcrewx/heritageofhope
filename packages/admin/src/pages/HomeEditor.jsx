@@ -7,7 +7,8 @@ import apiClient from '../lib/api'
 
 function HomeEditor() {
   // Hero section
-  const [heroEyebrow, setHeroEyebrow] = useState('')
+  const [heroEyebrowEn, setHeroEyebrowEn] = useState('')
+  const [heroEyebrowBn, setHeroEyebrowBn] = useState('')
   const [heroFootnoteEn, setHeroFootnoteEn] = useState('')
   const [heroFootnoteBn, setHeroFootnoteBn] = useState('')
   const [heroHeadlineEn, setHeroHeadlineEn] = useState('')
@@ -15,11 +16,6 @@ function HomeEditor() {
   const [heroIntroEn, setHeroIntroEn] = useState('')
   const [heroIntroBn, setHeroIntroBn] = useState('')
   const [heroImageUrl, setHeroImageUrl] = useState('')
-
-  // Trust badges
-  const [badge1, setBadge1] = useState('')
-  const [badge2, setBadge2] = useState('')
-  const [badge3, setBadge3] = useState('')
 
   // Impact stats
   const [stats, setStats] = useState([])
@@ -60,6 +56,14 @@ function HomeEditor() {
   // Reg cert thumb
   const [regCertThumbUrl, setRegCertThumbUrl] = useState('')
 
+  // Hero CTA labels
+  const [ctaPrimaryLabelEn, setCtaPrimaryLabelEn] = useState('')
+  const [ctaPrimaryLabelBn, setCtaPrimaryLabelBn] = useState('')
+  const [ctaSecondaryLabelEn, setCtaSecondaryLabelEn] = useState('')
+  const [ctaSecondaryLabelBn, setCtaSecondaryLabelBn] = useState('')
+  const [certCaptionEn, setCertCaptionEn] = useState('')
+  const [certCaptionBn, setCertCaptionBn] = useState('')
+
   // Showcase images
   const [showcaseSlots, setShowcaseSlots] = useState(
     Array.from({ length: 6 }, () => ({ url: '', labelEn: '', labelBn: '' }))
@@ -86,20 +90,24 @@ function HomeEditor() {
         // Parse hero section
         if (response.data.sections?.hero) {
           const h = response.data.sections.hero
-          setHeroEyebrow(h.eyebrow?.en || '')
+          setHeroEyebrowEn(h.eyebrow?.en || '')
+          setHeroEyebrowBn(h.eyebrow?.bn || '')
           setHeroFootnoteEn(h.heroFootnote?.en || '')
           setHeroFootnoteBn(h.heroFootnote?.bn || '')
           setHeroHeadlineEn(h.headline?.en || '')
           setHeroHeadlineBn(h.headline?.bn || '')
           setHeroIntroEn(h.intro?.en || '')
           setHeroIntroBn(h.intro?.bn || '')
-          setBadge1(h.badge1?.en || '')
-          setBadge2(h.badge2?.en || '')
-          setBadge3(h.badge3?.en || '')
           setHeroImageUrl(h.heroImage?.en || '')
           setFigcaptionEn(h.figcaption?.en || '')
           setFigcaptionBn(h.figcaption?.bn || '')
           setRegCertThumbUrl(h.regCertThumb?.en || '')
+          setCtaPrimaryLabelEn(h.ctaPrimaryLabel?.en || '')
+          setCtaPrimaryLabelBn(h.ctaPrimaryLabel?.bn || '')
+          setCtaSecondaryLabelEn(h.ctaSecondaryLabel?.en || '')
+          setCtaSecondaryLabelBn(h.ctaSecondaryLabel?.bn || '')
+          setCertCaptionEn(h.certCaption?.en || '')
+          setCertCaptionBn(h.certCaption?.bn || '')
         }
 
         // Parse showcase images
@@ -169,15 +177,16 @@ function HomeEditor() {
 
     try {
       await Promise.all([
-        apiClient.patch('/api/admin/content/home/hero/eyebrow', { valueEn: heroEyebrow }),
+        apiClient.patch('/api/admin/content/home/hero/eyebrow', { valueEn: heroEyebrowEn, valueBn: heroEyebrowBn }),
         apiClient.patch('/api/admin/content/home/hero/headline', { valueEn: heroHeadlineEn, valueBn: heroHeadlineBn }),
         apiClient.patch('/api/admin/content/home/hero/intro', { valueEn: heroIntroEn, valueBn: heroIntroBn }),
         apiClient.patch('/api/admin/content/home/hero/heroFootnote', { valueEn: heroFootnoteEn, valueBn: heroFootnoteBn }),
-        apiClient.patch('/api/admin/content/home/hero/badge1', { valueEn: badge1 }),
-        apiClient.patch('/api/admin/content/home/hero/badge2', { valueEn: badge2 }),
-        apiClient.patch('/api/admin/content/home/hero/badge3', { valueEn: badge3 }),
         apiClient.patch('/api/admin/content/home/hero/figcaption', { valueEn: figcaptionEn, valueBn: figcaptionBn }),
+        apiClient.patch('/api/admin/content/home/hero/ctaPrimaryLabel', { valueEn: ctaPrimaryLabelEn, valueBn: ctaPrimaryLabelBn }),
+        apiClient.patch('/api/admin/content/home/hero/ctaSecondaryLabel', { valueEn: ctaSecondaryLabelEn, valueBn: ctaSecondaryLabelBn }),
+        apiClient.patch('/api/admin/content/home/hero/certCaption', { valueEn: certCaptionEn, valueBn: certCaptionBn }),
       ])
+
       setLastSavedTime(new Date())
       showToast('✓ Saved to API', 'success')
     } catch (error) {
@@ -498,17 +507,15 @@ function HomeEditor() {
             previewClassName="h-64 w-full object-cover"
           />
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">Eyebrow Label*</label>
-            <input
-              type="text"
-              value={heroEyebrow}
-              onChange={(e) => setHeroEyebrow(e.target.value)}
-              placeholder='e.g., "LIGHTING LIVES..."'
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          <BilingualField
+            labelEn="Eyebrow Label (EN)"
+            labelBn="Eyebrow Label (BN)"
+            valueEn={heroEyebrowEn}
+            valueBn={heroEyebrowBn}
+            onChangeEn={setHeroEyebrowEn}
+            onChangeBn={setHeroEyebrowBn}
+            required
+          />
 
           <BilingualField
             labelEn="Hero Headline"
@@ -531,32 +538,16 @@ function HomeEditor() {
             isTextArea
           />
 
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold mb-4">Trust Badges</h3>
-            <div className="space-y-4">
-              <input
-                type="text"
-                value={badge1}
-                onChange={(e) => setBadge1(e.target.value)}
-                placeholder="e.g., Registered NGO"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                value={badge2}
-                onChange={(e) => setBadge2(e.target.value)}
-                placeholder="e.g., Est. 2024"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                value={badge3}
-                onChange={(e) => setBadge3(e.target.value)}
-                placeholder="e.g., Govt. of West Bengal"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
+          <BilingualField
+            labelEn="Hero Footnote (EN)"
+            labelBn="Hero Footnote (BN)"
+            valueEn={heroFootnoteEn}
+            valueBn={heroFootnoteBn}
+            onChangeEn={setHeroFootnoteEn}
+            onChangeBn={setHeroFootnoteBn}
+            isTextArea
+            hint="Small text displayed below the trust badges in the hero area"
+          />
 
           <div className="border-t pt-6">
             <h3 className="text-lg font-semibold mb-4">Hero Image Details</h3>
@@ -582,6 +573,37 @@ function HomeEditor() {
                 previewClassName="h-32 w-48 object-contain"
               />
             </div>
+          </div>
+
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-semibold mb-4">Hero CTA Buttons</h3>
+            <BilingualField
+              labelEn="Primary CTA Label (EN)"
+              labelBn="Primary CTA Label (BN)"
+              valueEn={ctaPrimaryLabelEn}
+              valueBn={ctaPrimaryLabelBn}
+              onChangeEn={setCtaPrimaryLabelEn}
+              onChangeBn={setCtaPrimaryLabelBn}
+              hint='Text for the "Support a Program" button'
+            />
+            <BilingualField
+              labelEn="Secondary CTA Label (EN)"
+              labelBn="Secondary CTA Label (BN)"
+              valueEn={ctaSecondaryLabelEn}
+              valueBn={ctaSecondaryLabelBn}
+              onChangeEn={setCtaSecondaryLabelEn}
+              onChangeBn={setCtaSecondaryLabelBn}
+              hint='Text for the "Explore Our Work" button'
+            />
+            <BilingualField
+              labelEn="Cert Caption (EN)"
+              labelBn="Cert Caption (BN)"
+              valueEn={certCaptionEn}
+              valueBn={certCaptionBn}
+              onChangeEn={setCertCaptionEn}
+              onChangeBn={setCertCaptionBn}
+              hint="Text shown below the registration certificate thumbnail"
+            />
           </div>
 
           <div className="flex gap-3 pt-6 border-t">

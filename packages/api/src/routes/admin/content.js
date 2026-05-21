@@ -175,4 +175,30 @@ router.get('/', async (req, res) => {
   }
 })
 
+/**
+ * DELETE /api/admin/content/:page/:section/:fieldKey
+ * Delete a site content record by page, section, and fieldKey.
+ */
+router.delete('/:page/:section/:fieldKey', async (req, res) => {
+  try {
+    const { page, section, fieldKey } = req.params
+
+    const existing = await prisma.siteContent.findFirst({
+      where: { page, section, fieldKey },
+    })
+
+    if (!existing) {
+      return res.status(404).json({ error: 'Not found' })
+    }
+
+    await prisma.siteContent.delete({ where: { id: existing.id } })
+    invalidateCache()
+
+    res.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting content:', error)
+    res.status(500).json({ error: 'Failed to delete content' })
+  }
+})
+
 export default router

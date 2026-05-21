@@ -1,5 +1,5 @@
 import { Link, useOutletContext } from 'react-router-dom'
-import { resolve, text } from '../utils/i18n'
+import { resolve } from '../utils/i18n'
 import CountUp from '../components/CountUp'
 
 function Home() {
@@ -19,16 +19,18 @@ function Home() {
           <p>{resolve(language, hero.intro)}</p>
           <div className="hero-cta">
             <Link className="btn btn-solid" to="/get-involved#donate">
-              Support a Program
+              {resolve(language, hero.ctaPrimaryLabel || { en: 'Support a Program', bn: 'সহায়তা করুন' })}
             </Link>
             <Link className="btn btn-outline" to="/our-work">
-              Explore Our Work
+              {resolve(language, hero.ctaSecondaryLabel || { en: 'Explore Our Work', bn: 'আমাদের কাজ দেখুন' })}
             </Link>
           </div>
           <div className="trust-strip">
-            <span>{resolve(language, hero.badge1)}</span>
-            <span>{resolve(language, hero.badge2)}</span>
-            <span>{resolve(language, hero.badge3)}</span>
+            {home.trustBadges && home.trustBadges.length > 0
+              ? home.trustBadges.map((badge, i) => (
+                  <span key={i}>{resolve(language, badge)}</span>
+                ))
+              : null}
           </div>
           <p className="hero-footnote">{resolve(language, hero.heroFootnote)}</p>
         </div>
@@ -44,7 +46,7 @@ function Home() {
               src={hero.regCertThumb}
               alt="Registration certificate preview"
             />
-            <p>{resolve(language, text('Registration proof available on About page', 'নিবন্ধনের প্রমাণ "আমাদের কথা" পাতায়'))}</p>
+            <p>{resolve(language, hero.certCaption || { en: 'Registration proof available on About page', bn: 'নিবন্ধনের প্রমাণ "আমাদের কথা" পাতায়' })}</p>
           </div>
         </aside>
       </section>

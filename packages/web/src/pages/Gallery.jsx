@@ -9,10 +9,10 @@ function Gallery() {
   const [activeCategory, setActiveCategory] = useState('all')
 
   const categories = [
-    { id: 'all', label: text('All', 'সব') },
-    { id: 'education', label: text('Education', 'শিক্ষা') },
-    { id: 'healthcare', label: text('Healthcare', 'স্বাস্থ্য') },
-    { id: 'welfare', label: text('Welfare', 'কল্যাণ') },
+    { id: 'all', label: page.filterChipAll || text('All', 'সব') },
+    { id: 'education', label: page.filterChipEducation || text('Education', 'শিক্ষা') },
+    { id: 'healthcare', label: page.filterChipHealthcare || text('Healthcare', 'স্বাস্থ্য') },
+    { id: 'welfare', label: page.filterChipWelfare || text('Welfare', 'কল্যাণ') },
   ]
 
   const visibleItems = useMemo(() => {
@@ -43,7 +43,7 @@ function Gallery() {
       </section>
 
       <section className="panel">
-        <div className="filter-row" role="tablist" aria-label={resolve(language, text('Gallery categories', 'ছবির বিভাগ'))}>
+        <div className="filter-row" role="tablist" aria-label={resolve(language, page.filterAriaLabel || text('Gallery categories', 'ছবির বিভাগ'))}>
           {categories.map((category) => (
             <button
               key={category.id}

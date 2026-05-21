@@ -151,7 +151,7 @@ router.post('/upi-qr', upload.single('file'), async (req, res) => {
 
     // Store in site_content
     const existing = await prisma.siteContent.findFirst({
-      where: { page: 'getInvolved', section: 'payment', fieldKey: 'upiQrImage' },
+      where: { page: 'getInvolved', section: 'upi', fieldKey: 'qrUrl' },
     })
 
     let content
@@ -177,8 +177,8 @@ router.post('/upi-qr', upload.single('file'), async (req, res) => {
       content = await prisma.siteContent.create({
         data: {
           page: 'getInvolved',
-          section: 'payment',
-          fieldKey: 'upiQrImage',
+          section: 'upi',
+          fieldKey: 'qrUrl',
           valueEn: cloudinaryData.secure_url,
           valueBn: cloudinaryData.public_id,
         },
@@ -210,7 +210,7 @@ router.post('/upi-qr', upload.single('file'), async (req, res) => {
 router.delete('/upi-qr', async (req, res) => {
   try {
     const content = await prisma.siteContent.findFirst({
-      where: { page: 'getInvolved', section: 'payment', fieldKey: 'upiQrImage' },
+      where: { page: 'getInvolved', section: 'upi', fieldKey: 'qrUrl' },
     })
 
     if (!content) {

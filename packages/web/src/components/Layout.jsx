@@ -32,10 +32,6 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
   }
 
   const siteMeta = siteContent.siteMeta || {}
-  const navCopy = {
-    en: { donate: 'Donate Now', switchTo: 'বাংলা' },
-    bn: { donate: 'সহযোগিতার হাত বাড়িয়ে দিন', switchTo: 'EN' },
-  }
 
   useEffect(() => {
     document.documentElement.lang = language === 'bn' ? 'bn' : 'en'
@@ -124,7 +120,7 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
           className={`nav-toggle ${navOpen ? 'open' : ''}`}
           aria-controls="primary-nav"
           aria-expanded={navOpen}
-          aria-label={resolve(language, text('Open navigation', 'মেনু খুলুন'))}
+          aria-label={resolve(language, siteContent.siteMeta.hamburgerAriaLabel || text('Open navigation', 'মেনু খুলুন'))}
           onClick={() => setNavOpen((s) => !s)}
         >
           <span className="hamburger" aria-hidden />
@@ -134,7 +130,7 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
           id="primary-nav"
           ref={navRef}
           className={`nav-links ${navOpen ? 'open' : ''}`}
-          aria-label={resolve(language, text('Primary navigation', 'প্রধান মেনু'))}
+          aria-label={resolve(language, siteContent.siteMeta.navAriaLabel || text('Primary navigation', 'প্রধান মেনু'))}
         >
           {siteContent.navItems.map((item) => (
             <NavLink
@@ -155,12 +151,12 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
             type="button"
             className="btn btn-ghost"
             onClick={() => setLanguage(language === 'en' ? 'bn' : 'en')}
-            aria-label={navCopy[language].switchTo}
+            aria-label={language === 'en' ? 'বাংলা' : 'EN'}
           >
-            {navCopy[language].switchTo}
+            {language === 'en' ? 'বাংলা' : 'EN'}
           </button>
           <Link className="btn btn-solid" to="/get-involved#donate">
-            {navCopy[language].donate}
+            {resolve(language, siteMeta.donateButtonLabel || { en: 'Donate Now', bn: 'সহযোগিতার হাত বাড়িয়ে দিন' })}
           </Link>
         </div>
       </header>
@@ -179,7 +175,7 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                 </svg>
-                {resolve(language, text('Follow us on Facebook', 'ফেসবুকে আমাদের সঙ্গে থাকুন'))}
+                {resolve(language, siteMeta.facebookLabel || { en: 'Follow us on Facebook', bn: 'ফেসবুকে আমাদের সঙ্গে থাকুন' })}
               </a>
             </div>
           </div>

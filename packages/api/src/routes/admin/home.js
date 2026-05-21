@@ -88,4 +88,30 @@ router.patch('/:section/:fieldKey', async (req, res) => {
   }
 })
 
+/**
+ * DELETE /api/admin/content/home/trustBadges/:fieldKey
+ * Remove a trust badge by its fieldKey.
+ */
+router.delete('/trustBadges/:fieldKey', async (req, res) => {
+  try {
+    const { fieldKey } = req.params
+
+    const existing = await prisma.siteContent.findFirst({
+      where: { page: 'home', section: 'trustBadges', fieldKey },
+    })
+
+    if (!existing) {
+      return res.status(404).json({ error: 'Trust badge not found' })
+    }
+
+    await prisma.siteContent.delete({ where: { id: existing.id } })
+    invalidateCache()
+
+    res.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting trust badge:', error)
+    res.status(500).json({ error: 'Failed to delete trust badge' })
+  }
+})
+
 export default router

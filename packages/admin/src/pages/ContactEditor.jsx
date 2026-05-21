@@ -59,13 +59,15 @@ export default function ContactEditor() {
     }
   }
 
-  const updateField = (section, fieldKey, value) => {
+  const updateField = (section, fieldKey, langOrValue, maybeValue) => {
     setFormErrors((current) => ({ ...current, [fieldKey]: '' }))
+    const lang = maybeValue !== undefined ? langOrValue : 'en'
+    const value = maybeValue !== undefined ? maybeValue : langOrValue
     setData((current) => ({
       ...current,
       [section]: {
         ...current[section],
-        [fieldKey]: { en: value },
+        [fieldKey]: { ...current[section]?.[fieldKey], [lang]: value },
       },
     }))
   }
@@ -171,6 +173,22 @@ export default function ContactEditor() {
     ))
   }
 
+  function updateFormLabel(fieldKey, lang, value) {
+    setData((current) => ({
+      ...current,
+      contact: {
+        ...current.contact,
+        formLabels: {
+          ...current.contact?.formLabels,
+          [fieldKey]: {
+            ...current.contact?.formLabels?.[fieldKey],
+            [lang]: value,
+          },
+        },
+      },
+    }))
+  }
+
   async function saveMosaicLabels() {
     setSaving(true)
     setError('')
@@ -189,6 +207,33 @@ export default function ContactEditor() {
         ])
       )
       setStatusMessage('Mosaic labels saved')
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function saveContactFormLabels() {
+    setSaving(true)
+    setError('')
+    setStatusMessage('')
+    try {
+      const fl = data.contact?.formLabels || {}
+      const fields = [
+        'nameLabel', 'namePlaceholder', 'emailLabel', 'emailPlaceholder',
+        'subjectLabel', 'messageLabel', 'messagePlaceholder',
+        'submitLabel', 'submittingLabel', 'errorMessage',
+      ]
+      await Promise.all(
+        fields.map((key) =>
+          request(`/api/admin/content/contact/formLabels/${key}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ valueEn: fl[key]?.en || '', valueBn: fl[key]?.bn || '' }),
+          })
+        )
+      )
+      setStatusMessage('Form labels saved')
     } catch (error) {
       setError(error.message)
     } finally {
@@ -264,60 +309,182 @@ export default function ContactEditor() {
             />
             {formErrors.facebookUrl && <div style={styles.fieldError}>{formErrors.facebookUrl}</div>}
 
-            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
+              <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #e5e7eb' }}>
               <div style={styles.title}>Contact Page Copy</div>
-              <label style={styles.label}>Page Title</label>
-              <input
-                type="text"
-                value={data.contact?.contact_page_title?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_page_title', e.target.value)}
-                placeholder="We’d love to hear from you."
-                style={styles.input}
-              />
-              <label style={styles.label}>Page Intro</label>
-              <input
-                type="text"
-                value={data.contact?.contact_page_intro?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_page_intro', e.target.value)}
-                placeholder="Reach out to us for inquiries, partnerships, or just to say hello."
-                style={styles.input}
-              />
-              <label style={styles.label}>Response Time Label</label>
-              <input
-                type="text"
-                value={data.contact?.contact_response_label?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_response_label', e.target.value)}
-                placeholder="Response time"
-                style={styles.input}
-              />
-              <label style={styles.label}>Response Time Value</label>
-              <input
-                type="text"
-                value={data.contact?.contact_response_value?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_response_value', e.target.value)}
-                placeholder="Usually within 2 business days"
-                style={styles.input}
-              />
-              <label style={styles.label}>Form Label</label>
-              <input
-                type="text"
-                value={data.contact?.contact_form_label?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_form_label', e.target.value)}
-                placeholder="Contact form"
-                style={styles.input}
-              />
-              <label style={styles.label}>Form Heading</label>
-              <input
-                type="text"
-                value={data.contact?.contact_form_heading?.en || ''}
-                onChange={(e) => updateField('contact', 'contact_form_heading', e.target.value)}
-                placeholder="Send us a direct message"
-                style={styles.input}
-              />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Page Title (EN)</label>
+                  <input type="text" value={data.contact?.contact_page_title?.en || ''} onChange={(e) => updateField('contact', 'contact_page_title', 'en', e.target.value)} placeholder="We’d love to hear from you." style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Page Title (BN)</label>
+                  <input type="text" value={data.contact?.contact_page_title?.bn || ''} onChange={(e) => updateField('contact', 'contact_page_title', 'bn', e.target.value)} placeholder="আমরা আপনার কথা শুনতে চাই।" style={styles.input} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Page Intro (EN)</label>
+                  <input type="text" value={data.contact?.contact_page_intro?.en || ''} onChange={(e) => updateField('contact', 'contact_page_intro', 'en', e.target.value)} placeholder="Reach out to us for inquiries, partnerships, or just to say hello." style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Page Intro (BN)</label>
+                  <input type="text" value={data.contact?.contact_page_intro?.bn || ''} onChange={(e) => updateField('contact', 'contact_page_intro', 'bn', e.target.value)} placeholder="যে কোনো প্রশ্ন, অংশীদারিত্ব বা শুভেচ্ছা জানাতে যোগাযোগ করুন।" style={styles.input} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Response Time Label (EN)</label>
+                  <input type="text" value={data.contact?.contact_response_label?.en || ''} onChange={(e) => updateField('contact', 'contact_response_label', 'en', e.target.value)} placeholder="Response time" style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Response Time Label (BN)</label>
+                  <input type="text" value={data.contact?.contact_response_label?.bn || ''} onChange={(e) => updateField('contact', 'contact_response_label', 'bn', e.target.value)} placeholder="প্রতিক্রিয়া সময়" style={styles.input} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Response Time Value (EN)</label>
+                  <input type="text" value={data.contact?.contact_response_value?.en || ''} onChange={(e) => updateField('contact', 'contact_response_value', 'en', e.target.value)} placeholder="Usually within 2 business days" style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Response Time Value (BN)</label>
+                  <input type="text" value={data.contact?.contact_response_value?.bn || ''} onChange={(e) => updateField('contact', 'contact_response_value', 'bn', e.target.value)} placeholder="সাধারণত ২ কার্যদিবসের মধ্যে" style={styles.input} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Form Label (EN)</label>
+                  <input type="text" value={data.contact?.contact_form_label?.en || ''} onChange={(e) => updateField('contact', 'contact_form_label', 'en', e.target.value)} placeholder="Contact form" style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Form Label (BN)</label>
+                  <input type="text" value={data.contact?.contact_form_label?.bn || ''} onChange={(e) => updateField('contact', 'contact_form_label', 'bn', e.target.value)} placeholder="যোগাযোগ ফর্ম" style={styles.input} />
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                <div>
+                  <label style={styles.label}>Form Heading (EN)</label>
+                  <input type="text" value={data.contact?.contact_form_heading?.en || ''} onChange={(e) => updateField('contact', 'contact_form_heading', 'en', e.target.value)} placeholder="Send us a direct message" style={styles.input} />
+                </div>
+                <div>
+                  <label style={styles.label}>Form Heading (BN)</label>
+                  <input type="text" value={data.contact?.contact_form_heading?.bn || ''} onChange={(e) => updateField('contact', 'contact_form_heading', 'bn', e.target.value)} placeholder="সরাসরি বার্তা পাঠান" style={styles.input} />
+                </div>
+              </div>
             </div>
 
             <button onClick={() => saveSection('contact')} disabled={saving} style={styles.button}>
               {saving ? 'Saving...' : 'Save Contact Info'}
+            </button>
+          </div>
+
+          <div style={styles.section}>
+            <div style={styles.title}>Contact Form Labels</div>
+            <p style={{ color: '#475569', marginBottom: '1rem' }}>
+              These labels appear inside the contact form on the public page.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Name Label (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.nameLabel?.en || ''} onChange={(e) => updateFormLabel('nameLabel', 'en', e.target.value)} placeholder="Name" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Name Label (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.nameLabel?.bn || ''} onChange={(e) => updateFormLabel('nameLabel', 'bn', e.target.value)} placeholder="নাম" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Name Placeholder (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.namePlaceholder?.en || ''} onChange={(e) => updateFormLabel('namePlaceholder', 'en', e.target.value)} placeholder="Your name" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Name Placeholder (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.namePlaceholder?.bn || ''} onChange={(e) => updateFormLabel('namePlaceholder', 'bn', e.target.value)} placeholder="আপনার নাম" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Email Label (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.emailLabel?.en || ''} onChange={(e) => updateFormLabel('emailLabel', 'en', e.target.value)} placeholder="Email" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Email Label (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.emailLabel?.bn || ''} onChange={(e) => updateFormLabel('emailLabel', 'bn', e.target.value)} placeholder="ইমেল" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Email Placeholder (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.emailPlaceholder?.en || ''} onChange={(e) => updateFormLabel('emailPlaceholder', 'en', e.target.value)} placeholder="you@example.com" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Email Placeholder (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.emailPlaceholder?.bn || ''} onChange={(e) => updateFormLabel('emailPlaceholder', 'bn', e.target.value)} style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Subject Label (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.subjectLabel?.en || ''} onChange={(e) => updateFormLabel('subjectLabel', 'en', e.target.value)} placeholder="Subject" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Subject Label (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.subjectLabel?.bn || ''} onChange={(e) => updateFormLabel('subjectLabel', 'bn', e.target.value)} placeholder="বিষয়" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Message Label (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.messageLabel?.en || ''} onChange={(e) => updateFormLabel('messageLabel', 'en', e.target.value)} placeholder="Message" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Message Label (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.messageLabel?.bn || ''} onChange={(e) => updateFormLabel('messageLabel', 'bn', e.target.value)} placeholder="বার্তা" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Message Placeholder (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.messagePlaceholder?.en || ''} onChange={(e) => updateFormLabel('messagePlaceholder', 'en', e.target.value)} placeholder="Tell us how you want to help" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Message Placeholder (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.messagePlaceholder?.bn || ''} onChange={(e) => updateFormLabel('messagePlaceholder', 'bn', e.target.value)} style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Submit Button (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.submitLabel?.en || ''} onChange={(e) => updateFormLabel('submitLabel', 'en', e.target.value)} placeholder="Send message" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Submit Button (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.submitLabel?.bn || ''} onChange={(e) => updateFormLabel('submitLabel', 'bn', e.target.value)} placeholder="বার্তা পাঠান" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Submitting Text (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.submittingLabel?.en || ''} onChange={(e) => updateFormLabel('submittingLabel', 'en', e.target.value)} placeholder="Sending..." style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Submitting Text (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.submittingLabel?.bn || ''} onChange={(e) => updateFormLabel('submittingLabel', 'bn', e.target.value)} placeholder="পাঠানো হচ্ছে..." style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Error Message (EN)</label>
+                <input type="text" value={data.contact?.formLabels?.errorMessage?.en || ''} onChange={(e) => updateFormLabel('errorMessage', 'en', e.target.value)} placeholder="Failed to submit form. Please try again." style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Error Message (BN)</label>
+                <input type="text" value={data.contact?.formLabels?.errorMessage?.bn || ''} onChange={(e) => updateFormLabel('errorMessage', 'bn', e.target.value)} placeholder="ফর্ম জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।" style={styles.input} />
+              </div>
+            </div>
+            <button onClick={saveContactFormLabels} disabled={saving} style={styles.button}>
+              {saving ? 'Saving...' : 'Save Contact Form Labels'}
             </button>
           </div>
 
@@ -374,12 +541,56 @@ export default function ContactEditor() {
 
           <div style={styles.section}>
             <div style={styles.title}>Page Content Labels</div>
-            <label style={styles.label}>Page Eyebrow</label>
-            <input type="text" value={data.pageContent?.eyebrow?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, eyebrow: { en: e.target.value } } }))} placeholder="Contact" style={styles.input} />
-            <label style={styles.label}>Facebook Section Eyebrow</label>
-            <input type="text" value={data.pageContent?.facebookLabel?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookLabel: { en: e.target.value } } }))} placeholder="Featured from Facebook" style={styles.input} />
-            <label style={styles.label}>Facebook Section Heading</label>
-            <input type="text" value={data.pageContent?.facebookHeading?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookHeading: { en: e.target.value } } }))} placeholder="Recent moments from the page" style={styles.input} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Page Eyebrow (EN)</label>
+                <input type="text" value={data.pageContent?.eyebrow?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, eyebrow: { ...c.pageContent?.eyebrow, en: e.target.value } } }))} placeholder="Contact" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Page Eyebrow (BN)</label>
+                <input type="text" value={data.pageContent?.eyebrow?.bn || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, eyebrow: { ...c.pageContent?.eyebrow, bn: e.target.value } } }))} placeholder="যোগাযোগ" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Facebook Section Eyebrow (EN)</label>
+                <input type="text" value={data.pageContent?.facebookLabel?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookLabel: { ...c.pageContent?.facebookLabel, en: e.target.value } } }))} placeholder="Featured from Facebook" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Facebook Section Eyebrow (BN)</label>
+                <input type="text" value={data.pageContent?.facebookLabel?.bn || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookLabel: { ...c.pageContent?.facebookLabel, bn: e.target.value } } }))} placeholder="ফেসবুক থেকে" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Facebook Section Heading (EN)</label>
+                <input type="text" value={data.pageContent?.facebookHeading?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookHeading: { ...c.pageContent?.facebookHeading, en: e.target.value } } }))} placeholder="Recent moments from the page" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Facebook Section Heading (BN)</label>
+                <input type="text" value={data.pageContent?.facebookHeading?.bn || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, facebookHeading: { ...c.pageContent?.facebookHeading, bn: e.target.value } } }))} placeholder="সাম্প্রতিক মুহূর্ত" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Visit Facebook Button Label (EN)</label>
+                <input type="text" value={data.pageContent?.visitFacebookLabel?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, visitFacebookLabel: { ...c.pageContent?.visitFacebookLabel, en: e.target.value } } }))} placeholder="Visit Official Facebook Page →" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Visit Facebook Button Label (BN)</label>
+                <input type="text" value={data.pageContent?.visitFacebookLabel?.bn || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, visitFacebookLabel: { ...c.pageContent?.visitFacebookLabel, bn: e.target.value } } }))} placeholder="অফিসিয়াল ফেসবুক পেজ দেখুন →" style={styles.input} />
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '0.5rem' }}>
+              <div>
+                <label style={styles.label}>Map Iframe Title (EN)</label>
+                <input type="text" value={data.pageContent?.mapTitle?.en || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, mapTitle: { ...c.pageContent?.mapTitle, en: e.target.value } } }))} placeholder="Heritage of Hope Foundation location" style={styles.input} />
+              </div>
+              <div>
+                <label style={styles.label}>Map Iframe Title (BN)</label>
+                <input type="text" value={data.pageContent?.mapTitle?.bn || ''} onChange={(e) => setData((c) => ({ ...c, pageContent: { ...c.pageContent, mapTitle: { ...c.pageContent?.mapTitle, bn: e.target.value } } }))} placeholder="হেরিটেজ অফ হোপ ফাউন্ডেশনের অবস্থান" style={styles.input} />
+              </div>
+            </div>
             <label style={styles.label}>Google Maps Embed URL</label>
             <input type="url" value={mapEmbedUrl} onChange={(e) => setMapEmbedUrl(e.target.value)} placeholder="https://www.google.com/maps?q=..." style={styles.input} />
             <button onClick={async () => {
@@ -387,10 +598,13 @@ export default function ContactEditor() {
               setError('')
               setStatusMessage('')
               try {
+                const pc = data.pageContent || {}
                 await Promise.all([
-                  request('/api/admin/content/contact/pageContent/eyebrow', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.eyebrow?.en || '' }) }),
-                  request('/api/admin/content/contact/pageContent/facebookLabel', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.facebookLabel?.en || '' }) }),
-                  request('/api/admin/content/contact/pageContent/facebookHeading', { method: 'PATCH', body: JSON.stringify({ valueEn: data.pageContent?.facebookHeading?.en || '' }) }),
+                  request('/api/admin/content/contact/pageContent/eyebrow', { method: 'PATCH', body: JSON.stringify({ valueEn: pc.eyebrow?.en || '', valueBn: pc.eyebrow?.bn || '' }) }),
+                  request('/api/admin/content/contact/pageContent/facebookLabel', { method: 'PATCH', body: JSON.stringify({ valueEn: pc.facebookLabel?.en || '', valueBn: pc.facebookLabel?.bn || '' }) }),
+                  request('/api/admin/content/contact/pageContent/facebookHeading', { method: 'PATCH', body: JSON.stringify({ valueEn: pc.facebookHeading?.en || '', valueBn: pc.facebookHeading?.bn || '' }) }),
+                  request('/api/admin/content/contact/pageContent/visitFacebookLabel', { method: 'PATCH', body: JSON.stringify({ valueEn: pc.visitFacebookLabel?.en || '', valueBn: pc.visitFacebookLabel?.bn || '' }) }),
+                  request('/api/admin/content/contact/pageContent/mapTitle', { method: 'PATCH', body: JSON.stringify({ valueEn: pc.mapTitle?.en || '', valueBn: pc.mapTitle?.bn || '' }) }),
                   request('/api/admin/content/contact/map/embedUrl', { method: 'PATCH', body: JSON.stringify({ valueEn: mapEmbedUrl }) }),
                 ])
                 setStatusMessage('Page labels saved')

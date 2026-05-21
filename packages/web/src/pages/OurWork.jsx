@@ -23,7 +23,7 @@ function OurWork() {
           <p>{resolve(language, hero.intro)}</p>
         </div>
         <div className="mini-panel accent-panel">
-          <p className="meta">Focus areas</p>
+          <p className="meta">{resolve(language, page.focusLabel || { en: 'Focus areas', bn: 'ফোকাস এরিয়া' })}</p>
           {focusText ? <p>{focusText}</p> : null}
         </div>
       </section>

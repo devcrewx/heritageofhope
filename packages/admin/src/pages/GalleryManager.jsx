@@ -15,6 +15,11 @@ export function GalleryManager() {
     intro: { en: '', bn: '' },
     filterLabel: { en: '', bn: '' },
     filterText: { en: '', bn: '' },
+    filterChipAll: { en: 'All', bn: 'সব' },
+    filterChipEducation: { en: 'Education', bn: 'শিক্ষা' },
+    filterChipHealthcare: { en: 'Healthcare', bn: 'স্বাস্থ্য' },
+    filterChipWelfare: { en: 'Welfare', bn: 'কল্যাণ' },
+    filterAriaLabel: { en: 'Gallery categories', bn: 'ছবির বিভাগ' },
   })
   const [pageContentLoading, setPageContentLoading] = useState(true)
   const [galleryItems, setGalleryItems] = useState([])
@@ -52,6 +57,11 @@ export function GalleryManager() {
             intro: p.intro || { en: '', bn: '' },
             filterLabel: p.filterLabel || { en: '', bn: '' },
             filterText: p.filterText || { en: '', bn: '' },
+            filterChipAll: p.filterChipAll || { en: 'All', bn: 'সব' },
+            filterChipEducation: p.filterChipEducation || { en: 'Education', bn: 'শিক্ষা' },
+            filterChipHealthcare: p.filterChipHealthcare || { en: 'Healthcare', bn: 'স্বাস্থ্য' },
+            filterChipWelfare: p.filterChipWelfare || { en: 'Welfare', bn: 'কল্যাণ' },
+            filterAriaLabel: p.filterAriaLabel || { en: 'Gallery categories', bn: 'ছবির বিভাগ' },
           })
         }
       } catch (error) {
@@ -257,6 +267,16 @@ export function GalleryManager() {
             <BilingualField labelEn="Page Intro" labelBn="Page Intro (Bangla)" valueEn={pageContent.intro.en} valueBn={pageContent.intro.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, intro: { ...p.intro, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, intro: { ...p.intro, bn: v } }))} isTextArea />
             <BilingualField labelEn="Filter Section Label" labelBn="Filter Section Label (Bangla)" valueEn={pageContent.filterLabel.en} valueBn={pageContent.filterLabel.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterLabel: { ...p.filterLabel, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterLabel: { ...p.filterLabel, bn: v } }))} />
             <BilingualField labelEn="Filter Section Text" labelBn="Filter Section Text (Bangla)" valueEn={pageContent.filterText.en} valueBn={pageContent.filterText.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterText: { ...p.filterText, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterText: { ...p.filterText, bn: v } }))} />
+            <div className="border-t pt-4 mt-4">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Filter Chip Labels</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <BilingualField labelEn="All" labelBn="সব" valueEn={pageContent.filterChipAll.en} valueBn={pageContent.filterChipAll.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterChipAll: { ...p.filterChipAll, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterChipAll: { ...p.filterChipAll, bn: v } }))} />
+                <BilingualField labelEn="Education" labelBn="শিক্ষা" valueEn={pageContent.filterChipEducation.en} valueBn={pageContent.filterChipEducation.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterChipEducation: { ...p.filterChipEducation, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterChipEducation: { ...p.filterChipEducation, bn: v } }))} />
+                <BilingualField labelEn="Healthcare" labelBn="স্বাস্থ্য" valueEn={pageContent.filterChipHealthcare.en} valueBn={pageContent.filterChipHealthcare.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterChipHealthcare: { ...p.filterChipHealthcare, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterChipHealthcare: { ...p.filterChipHealthcare, bn: v } }))} />
+                <BilingualField labelEn="Welfare" labelBn="কল্যাণ" valueEn={pageContent.filterChipWelfare.en} valueBn={pageContent.filterChipWelfare.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterChipWelfare: { ...p.filterChipWelfare, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterChipWelfare: { ...p.filterChipWelfare, bn: v } }))} />
+              </div>
+            </div>
+            <BilingualField labelEn="Filter Row Aria Label" labelBn="ফিল্টার আরিয়া লেবেল" valueEn={pageContent.filterAriaLabel.en} valueBn={pageContent.filterAriaLabel.bn} onChangeEn={(v) => setPageContent((p) => ({ ...p, filterAriaLabel: { ...p.filterAriaLabel, en: v } }))} onChangeBn={(v) => setPageContent((p) => ({ ...p, filterAriaLabel: { ...p.filterAriaLabel, bn: v } }))} />
           </div>
           <button
             onClick={async () => {
@@ -267,6 +287,11 @@ export function GalleryManager() {
                   apiClient.patch('/api/admin/content/gallery/pageContent/intro', { valueEn: pageContent.intro.en, valueBn: pageContent.intro.bn }),
                   apiClient.patch('/api/admin/content/gallery/pageContent/filterLabel', { valueEn: pageContent.filterLabel.en, valueBn: pageContent.filterLabel.bn }),
                   apiClient.patch('/api/admin/content/gallery/pageContent/filterText', { valueEn: pageContent.filterText.en, valueBn: pageContent.filterText.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterChipAll', { valueEn: pageContent.filterChipAll.en, valueBn: pageContent.filterChipAll.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterChipEducation', { valueEn: pageContent.filterChipEducation.en, valueBn: pageContent.filterChipEducation.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterChipHealthcare', { valueEn: pageContent.filterChipHealthcare.en, valueBn: pageContent.filterChipHealthcare.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterChipWelfare', { valueEn: pageContent.filterChipWelfare.en, valueBn: pageContent.filterChipWelfare.bn }),
+                  apiClient.patch('/api/admin/content/gallery/pageContent/filterAriaLabel', { valueEn: pageContent.filterAriaLabel.en, valueBn: pageContent.filterAriaLabel.bn }),
                 ])
                 showToast('Page content saved', 'success')
               } catch {

@@ -36,6 +36,11 @@ function buildFallbackSiteContent() {
   c.siteMeta.footerMission = { en: 'Children, women and communities in South 24 Parganas, West Bengal.', bn: 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।' }
   c.siteMeta.registeredBadge = { en: 'Registered NGO', bn: 'নিবন্ধিত সংস্থা' }
   c.siteMeta.estYear = 'Est. 2024'
+  c.home.trustBadges = [
+    { en: 'Registered NGO', bn: 'নিবন্ধিত সংস্থা' },
+    { en: 'Est. 2024', bn: 'প্রতিষ্ঠিত ২০২৪' },
+    { en: 'Govt. of West Bengal', bn: 'পশ্চিমবঙ্গ সরকার' },
+  ]
   c.home.featuredPrograms = fallbackFeaturedPrograms
   c.home.facebookPosts = staticFacebookPosts
   c.home.impactMetrics = fallbackImpactMetrics
@@ -129,6 +134,7 @@ export async function getSiteContent() {
           const raw = String(stat.value || '')
           const digitsOnly = /^\d+$/.test(raw)
           return {
+            id: stat.id,
             value: digitsOnly ? `${raw}+` : raw,
             label: { en: stat.labelEn, bn: stat.labelBn || stat.labelEn },
           }
@@ -137,6 +143,7 @@ export async function getSiteContent() {
 
     const transformedTeamMembers = teamMembers.length > 0
       ? teamMembers.map((member) => ({
+          id: member.id,
           image: member.photoUrl || '',
           name: { en: member.name, bn: member.name },
           role: { en: member.roleEn, bn: member.roleBn || member.roleEn },
@@ -171,16 +178,19 @@ export async function getSiteContent() {
     }
 
     const transformedDonationTiers = donationTiers.map((tier) => ({
+      id: tier.id,
       amount: tier.amount,
       label: { en: tier.labelEn, bn: tier.labelBn || tier.labelEn },
     }))
 
     const transformedFundAllocation = fundAllocation.map((fund) => ({
+      id: fund.id,
       category: { en: fund.categoryEn, bn: fund.categoryBn || fund.categoryEn },
       percentage: fund.percentage,
     }))
 
     const transformedVolunteerRoles = volunteerRoles.map((role) => ({
+      id: role.id,
       title: { en: role.titleEn, bn: role.titleBn || role.titleEn },
       description: { en: role.descriptionEn || '', bn: role.descriptionBn || role.descriptionEn || '' },
     }))
@@ -237,6 +247,22 @@ export async function getSiteContent() {
         bn: settingsMap.registered_badge?.bn || 'নিবন্ধিত সংস্থা',
       },
       estYear: settingsMap.est_year?.en || 'Est. 2024',
+      donateButtonLabel: {
+        en: settingsMap.donate_button_label?.en || 'Donate Now',
+        bn: settingsMap.donate_button_label?.bn || 'সহযোগিতার হাত বাড়িয়ে দিন',
+      },
+      facebookLabel: {
+        en: settingsMap.facebook_label?.en || 'Follow us on Facebook',
+        bn: settingsMap.facebook_label?.bn || 'ফেসবুকে আমাদের সঙ্গে থাকুন',
+      },
+      hamburgerAriaLabel: {
+        en: settingsMap.hamburger_aria_label?.en || 'Open navigation',
+        bn: settingsMap.hamburger_aria_label?.bn || 'মেনু খুলুন',
+      },
+      navAriaLabel: {
+        en: settingsMap.nav_aria_label?.en || 'Primary navigation',
+        bn: settingsMap.nav_aria_label?.bn || 'প্রধান মেনু',
+      },
     }
 
     c.home.hero = {
@@ -245,11 +271,36 @@ export async function getSiteContent() {
       intro: homeMap.hero?.intro || c.home.hero.intro,
       heroFootnote: homeMap.hero?.heroFootnote || c.home.hero.heroFootnote,
       heroImage: homeMap.hero?.heroImage?.en || '',
-      badge1: homeMap.hero?.badge1 || c.home.hero.badge1,
-      badge2: homeMap.hero?.badge2 || c.home.hero.badge2,
-      badge3: homeMap.hero?.badge3 || c.home.hero.badge3,
       regCertThumb: homeMap.hero?.regCertThumb?.en || '',
       figcaption: homeMap.hero?.figcaption || c.home.hero.figcaption,
+      ctaPrimaryLabel: homeMap.hero?.ctaPrimaryLabel || c.home.hero.ctaPrimaryLabel,
+      ctaSecondaryLabel: homeMap.hero?.ctaSecondaryLabel || c.home.hero.ctaSecondaryLabel,
+      certCaption: homeMap.hero?.certCaption || c.home.hero.certCaption,
+    }
+
+    // Trust badges: read from settings section, fallback to home section, then legacy
+    const settingsTrustBadges = settings
+      .filter((item) => item.section === 'trustBadges')
+      .sort((a, b) => a.fieldKey.localeCompare(b.fieldKey))
+      .map((item) => ({ en: item.valueEn || '', bn: item.valueBn || '' }))
+      .filter((badge) => badge.en || badge.bn)
+    if (settingsTrustBadges.length > 0) {
+      c.home.trustBadges = settingsTrustBadges
+    } else {
+      const homeBadges = Object.entries(homeMap.trustBadges || {})
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([, value]) => ({ en: value.en || '', bn: value.bn || '' }))
+        .filter((badge) => badge.en || badge.bn)
+      if (homeBadges.length > 0) {
+        c.home.trustBadges = homeBadges
+      } else {
+        // Legacy: hero.badge1/2/3
+        const legacy = []
+        if (homeMap.hero?.badge1?.en) legacy.push({ en: homeMap.hero.badge1.en, bn: homeMap.hero.badge1.bn || '' })
+        if (homeMap.hero?.badge2?.en) legacy.push({ en: homeMap.hero.badge2.en, bn: homeMap.hero.badge2.bn || '' })
+        if (homeMap.hero?.badge3?.en) legacy.push({ en: homeMap.hero.badge3.en, bn: homeMap.hero.badge3.bn || '' })
+        if (legacy.length > 0) c.home.trustBadges = legacy
+      }
     }
 
     c.home.pageContent = {
@@ -327,12 +378,14 @@ export async function getSiteContent() {
     }
 
     c.ourWork.hero = {
-      pageTitle: ourWorkMap.hero?.title || c.ourWork.hero.pageTitle,
-      intro: ourWorkMap.hero?.intro || c.ourWork.hero.intro,
+      pageTitle: ourWorkMap.intro?.title || c.ourWork.hero.pageTitle,
+      intro: ourWorkMap.intro?.paragraph || c.ourWork.hero.intro,
+      heroImage: ourWorkMap.hero?.heroImage?.en || '',
     }
     c.ourWork.pageContent = {
       eyebrow: ourWorkMap.pageContent?.eyebrow || c.ourWork.pageContent.eyebrow,
       approachLabel: ourWorkMap.pageContent?.approachLabel || c.ourWork.pageContent.approachLabel,
+      focusLabel: ourWorkMap.pageContent?.focusLabel || c.ourWork.pageContent.focusLabel,
       joinLabel: ourWorkMap.pageContent?.joinLabel || c.ourWork.pageContent.joinLabel,
     }
     c.ourWork.focusTags = [
@@ -390,6 +443,11 @@ export async function getSiteContent() {
       intro: galleryMap.pageContent?.intro || c.gallery.pageContent.intro,
       filterLabel: galleryMap.pageContent?.filterLabel || c.gallery.pageContent.filterLabel,
       filterText: galleryMap.pageContent?.filterText || c.gallery.pageContent.filterText,
+      filterChipAll: galleryMap.pageContent?.filterChipAll || c.gallery.pageContent.filterChipAll,
+      filterChipEducation: galleryMap.pageContent?.filterChipEducation || c.gallery.pageContent.filterChipEducation,
+      filterChipHealthcare: galleryMap.pageContent?.filterChipHealthcare || c.gallery.pageContent.filterChipHealthcare,
+      filterChipWelfare: galleryMap.pageContent?.filterChipWelfare || c.gallery.pageContent.filterChipWelfare,
+      filterAriaLabel: galleryMap.pageContent?.filterAriaLabel || c.gallery.pageContent.filterAriaLabel,
     }
 
     const transformedGalleryItems = galleryItems.map((item) => ({
@@ -420,24 +478,68 @@ export async function getSiteContent() {
       partnerSubtitle: getInvolvedMap.pageContent?.partnerSubtitle || c.getInvolved.pageContent.partnerSubtitle,
       partnerFormLabel: getInvolvedMap.pageContent?.partnerFormLabel || c.getInvolved.pageContent.partnerFormLabel,
       partnerFormHeading: getInvolvedMap.pageContent?.partnerFormHeading || c.getInvolved.pageContent.partnerFormHeading,
+      bankLabel: getInvolvedMap.pageContent?.bankLabel || c.getInvolved.pageContent.bankLabel,
+      chequeModalTitle: getInvolvedMap.pageContent?.chequeModalTitle || c.getInvolved.pageContent.chequeModalTitle,
+      chequeButtonLabel: getInvolvedMap.pageContent?.chequeButtonLabel || c.getInvolved.pageContent.chequeButtonLabel,
     }
     c.getInvolved.bankDetails = {
-      accountName: getInvolvedMap.bank?.accountName?.en || 'Heritage of Hope Foundation',
-      bankName: getInvolvedMap.bank?.bankName?.en || 'State Bank of India, Ruby Park Branch',
+      accountName: getInvolvedMap.bank?.accountName || { en: 'Heritage of Hope Foundation', bn: 'হেরিটেজ অফ হোপ ফাউন্ডেশন' },
+      bankName: getInvolvedMap.bank?.bankName || { en: 'State Bank of India, Ruby Park Branch', bn: 'স্টেট ব্যাংক অফ ইন্ডিয়া, রুবি পার্ক শাখা' },
       accountNumber: getInvolvedMap.bank?.accountNumber?.en || 'A/C No: 43107075580',
       ifsc: getInvolvedMap.bank?.ifsc?.en || 'IFSC: SBIN0008438',
     }
     c.getInvolved.upiImage = getInvolvedMap.upi?.qrUrl?.en || ''
     c.getInvolved.upiDeepLink = getInvolvedMap.upi?.intentUrl?.en || 'upi://pay?pa=8420119790%40okbizaxis&pn=Heritage%20of%20Hope%20Foundation&cu=INR'
+    c.getInvolved.upiLabels = {
+      buttonLabel: getInvolvedMap.upiLabels?.buttonLabel || c.getInvolved.upiLabels.buttonLabel,
+      mobileHint: getInvolvedMap.upiLabels?.mobileHint || c.getInvolved.upiLabels.mobileHint,
+      fallbackHint: getInvolvedMap.upiLabels?.fallbackHint || c.getInvolved.upiLabels.fallbackHint,
+      qrHint: getInvolvedMap.upiLabels?.qrHint || c.getInvolved.upiLabels.qrHint,
+    }
     c.getInvolved.donationTiers = transformedDonationTiers
     c.getInvolved.volunteer.heading = getInvolvedMap.volunteer?.heading || c.getInvolved.volunteer.heading
+    c.getInvolved.volunteer.description = getInvolvedMap.volunteer?.description || c.getInvolved.volunteer.description
     c.getInvolved.volunteer.roles = transformedVolunteerRoles
+    c.getInvolved.volunteerFormLabels = {
+      nameLabel: getInvolvedMap.volunteerFormLabels?.nameLabel || c.getInvolved.volunteerFormLabels.nameLabel,
+      emailLabel: getInvolvedMap.volunteerFormLabels?.emailLabel || c.getInvolved.volunteerFormLabels.emailLabel,
+      phoneLabel: getInvolvedMap.volunteerFormLabels?.phoneLabel || c.getInvolved.volunteerFormLabels.phoneLabel,
+      phoneValidation: getInvolvedMap.volunteerFormLabels?.phoneValidation || c.getInvolved.volunteerFormLabels.phoneValidation,
+      interestLabel: getInvolvedMap.volunteerFormLabels?.interestLabel || c.getInvolved.volunteerFormLabels.interestLabel,
+      interestPlaceholder: getInvolvedMap.volunteerFormLabels?.interestPlaceholder || c.getInvolved.volunteerFormLabels.interestPlaceholder,
+      availabilityLabel: getInvolvedMap.volunteerFormLabels?.availabilityLabel || c.getInvolved.volunteerFormLabels.availabilityLabel,
+      availabilityPlaceholder: getInvolvedMap.volunteerFormLabels?.availabilityPlaceholder || c.getInvolved.volunteerFormLabels.availabilityPlaceholder,
+      availabilityWeekends: getInvolvedMap.volunteerFormLabels?.availabilityWeekends || c.getInvolved.volunteerFormLabels.availabilityWeekends,
+      availabilityWeekdays: getInvolvedMap.volunteerFormLabels?.availabilityWeekdays || c.getInvolved.volunteerFormLabels.availabilityWeekdays,
+      availabilityOccasional: getInvolvedMap.volunteerFormLabels?.availabilityOccasional || c.getInvolved.volunteerFormLabels.availabilityOccasional,
+      messageLabel: getInvolvedMap.volunteerFormLabels?.messageLabel || c.getInvolved.volunteerFormLabels.messageLabel,
+      submitLabel: getInvolvedMap.volunteerFormLabels?.submitLabel || c.getInvolved.volunteerFormLabels.submitLabel,
+      submittingLabel: getInvolvedMap.volunteerFormLabels?.submittingLabel || c.getInvolved.volunteerFormLabels.submittingLabel,
+      errorMessage: getInvolvedMap.volunteerFormLabels?.errorMessage || c.getInvolved.volunteerFormLabels.errorMessage,
+    }
     c.getInvolved.partnerSection = {
       heading: getInvolvedMap.partner?.heading || c.getInvolved.partnerSection.heading,
       body: getInvolvedMap.partner?.description || c.getInvolved.partnerSection.body,
       image: getInvolvedMap.partner?.image?.en || '',
     }
     c.getInvolved.specimenChequeImage = getInvolvedMap.bank?.chequeUrl?.en || ''
+    c.getInvolved.partnerFormLabels = {
+      orgNameLabel: getInvolvedMap.partnerFormLabels?.orgNameLabel || c.getInvolved.partnerFormLabels.orgNameLabel,
+      contactPersonLabel: getInvolvedMap.partnerFormLabels?.contactPersonLabel || c.getInvolved.partnerFormLabels.contactPersonLabel,
+      emailLabel: getInvolvedMap.partnerFormLabels?.emailLabel || c.getInvolved.partnerFormLabels.emailLabel,
+      phoneLabel: getInvolvedMap.partnerFormLabels?.phoneLabel || c.getInvolved.partnerFormLabels.phoneLabel,
+      phoneValidation: getInvolvedMap.partnerFormLabels?.phoneValidation || c.getInvolved.partnerFormLabels.phoneValidation,
+      partnershipTypeLabel: getInvolvedMap.partnerFormLabels?.partnershipTypeLabel || c.getInvolved.partnerFormLabels.partnershipTypeLabel,
+      partnershipTypePlaceholder: getInvolvedMap.partnerFormLabels?.partnershipTypePlaceholder || c.getInvolved.partnerFormLabels.partnershipTypePlaceholder,
+      partnershipTypeCsr: getInvolvedMap.partnerFormLabels?.partnershipTypeCsr || c.getInvolved.partnerFormLabels.partnershipTypeCsr,
+      partnershipTypeHospital: getInvolvedMap.partnerFormLabels?.partnershipTypeHospital || c.getInvolved.partnerFormLabels.partnershipTypeHospital,
+      partnershipTypeInstitution: getInvolvedMap.partnerFormLabels?.partnershipTypeInstitution || c.getInvolved.partnerFormLabels.partnershipTypeInstitution,
+      partnershipTypeOther: getInvolvedMap.partnerFormLabels?.partnershipTypeOther || c.getInvolved.partnerFormLabels.partnershipTypeOther,
+      messageLabel: getInvolvedMap.partnerFormLabels?.messageLabel || c.getInvolved.partnerFormLabels.messageLabel,
+      submitLabel: getInvolvedMap.partnerFormLabels?.submitLabel || c.getInvolved.partnerFormLabels.submitLabel,
+      submittingLabel: getInvolvedMap.partnerFormLabels?.submittingLabel || c.getInvolved.partnerFormLabels.submittingLabel,
+      errorMessage: getInvolvedMap.partnerFormLabels?.errorMessage || c.getInvolved.partnerFormLabels.errorMessage,
+    }
 
     const mosaicImages = []
     for (let i = 1; i <= 4; i++) {
@@ -458,15 +560,42 @@ export async function getSiteContent() {
     c.contact.responseValue = settingsMap.contact_response_value || c.contact.responseValue
     c.contact.formLabel = settingsMap.contact_form_label || c.contact.formLabel
     c.contact.formHeading = settingsMap.contact_form_heading || c.contact.formHeading
+    c.contact.phoneLabel = settingsMap.contact_phone_label || c.contact.phoneLabel
+    c.contact.emailLabel = settingsMap.contact_email_label || c.contact.emailLabel
+    c.contact.addressLabel = settingsMap.contact_address_label || c.contact.addressLabel
+    c.contact.visitFacebookLabel = contactMap.pageContent?.visitFacebookLabel || c.contact.visitFacebookLabel
+    c.contact.mapTitle = contactMap.pageContent?.mapTitle || c.contact.mapTitle
     c.contact.pageContent = {
       eyebrow: contactMap.pageContent?.eyebrow || c.contact.pageContent.eyebrow,
       facebookLabel: contactMap.pageContent?.facebookLabel || c.contact.pageContent.facebookLabel,
       facebookHeading: contactMap.pageContent?.facebookHeading || c.contact.pageContent.facebookHeading,
     }
+    c.contact.formLabels = {
+      nameLabel: contactMap.formLabels?.nameLabel || c.contact.formLabels.nameLabel,
+      namePlaceholder: contactMap.formLabels?.namePlaceholder || c.contact.formLabels.namePlaceholder,
+      emailLabel: contactMap.formLabels?.emailLabel || c.contact.formLabels.emailLabel,
+      emailPlaceholder: contactMap.formLabels?.emailPlaceholder || c.contact.formLabels.emailPlaceholder,
+      subjectLabel: contactMap.formLabels?.subjectLabel || c.contact.formLabels.subjectLabel,
+      messageLabel: contactMap.formLabels?.messageLabel || c.contact.formLabels.messageLabel,
+      messagePlaceholder: contactMap.formLabels?.messagePlaceholder || c.contact.formLabels.messagePlaceholder,
+      submitLabel: contactMap.formLabels?.submitLabel || c.contact.formLabels.submitLabel,
+      submittingLabel: contactMap.formLabels?.submittingLabel || c.contact.formLabels.submittingLabel,
+      errorMessage: contactMap.formLabels?.errorMessage || c.contact.formLabels.errorMessage,
+    }
     c.contact.mapEmbedUrl = contactMap.map?.embedUrl?.en || ''
     c.contact.mosaicImages = mosaicImages.length > 0 ? mosaicImages : staticShowcaseImages.contact
     c.contact.facebookPosts = c.home.facebookPosts
-    c.navItems = navItems
+    if (settingsMap.navItems) {
+      c.navItems = navItems.map(item => ({
+        ...item,
+        label: {
+          en: settingsMap.navItems[item.fieldKey]?.valueEn || item.label.en,
+          bn: settingsMap.navItems[item.fieldKey]?.valueBn || item.label.bn,
+        }
+      }))
+    } else {
+      c.navItems = navItems
+    }
 
     const thankYouMap = buildPageMap(thankYouContent || [])
     c.thankYou.pageContent = {

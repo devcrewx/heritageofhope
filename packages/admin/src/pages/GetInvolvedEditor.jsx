@@ -58,7 +58,7 @@ export default function GetInvolvedEditor() {
     }
   }
 
-  const upiQrImageUrl = data.payment?.upiQrImage?.en || ''
+  const upiQrImageUrl = data.upi?.qrUrl?.en || ''
   const specimenChequeUrl = data.bank?.chequeUrl?.en || ''
   const partnerImageUrl = data.partner?.image?.en || ''
 
@@ -80,9 +80,9 @@ export default function GetInvolvedEditor() {
       if (response.data?.data?.url) {
         setData((current) => ({
           ...current,
-          payment: {
-            ...current.payment,
-            upiQrImage: {
+          upi: {
+            ...current.upi,
+            qrUrl: {
               en: response.data.data.url,
               bn: response.data.data.publicId || response.data.data.url,
             },
@@ -106,12 +106,12 @@ export default function GetInvolvedEditor() {
     try {
       await apiClient.delete('/api/admin/media/upi-qr')
       setData((current) => ({
-        ...current,
-        payment: {
-          ...current.payment,
-          upiQrImage: { en: '', bn: '' },
-        },
-      }))
+          ...current,
+          upi: {
+            ...current.upi,
+            qrUrl: { en: '', bn: '' },
+          },
+        }))
       setStatusMessage('UPI QR image removed')
     } catch (error) {
       setError(error.response?.data?.error || error.message)
@@ -287,6 +287,9 @@ export default function GetInvolvedEditor() {
     { fieldKey: 'partnerSubtitle', labelEn: 'Partner Section Subtitle', labelBn: 'Partner Section Subtitle (Bangla)' },
     { fieldKey: 'partnerFormLabel', labelEn: 'Partner Form Label', labelBn: 'Partner Form Label (Bangla)' },
     { fieldKey: 'partnerFormHeading', labelEn: 'Partner Form Heading', labelBn: 'Partner Form Heading (Bangla)' },
+    { fieldKey: 'bankLabel', labelEn: 'Bank Details Header', labelBn: 'Bank Details Header (Bangla)' },
+    { fieldKey: 'chequeModalTitle', labelEn: 'Specimen Cheque Modal Title', labelBn: 'Specimen Cheque Modal Title (Bangla)' },
+    { fieldKey: 'chequeButtonLabel', labelEn: 'View Cheque Button Label', labelBn: 'View Cheque Button Label (Bangla)' },
   ]
 
   const saveDonationTiers = async () => {
@@ -739,6 +742,7 @@ export default function GetInvolvedEditor() {
       )}
 
       {activeTab === 'labels' && (
+        <div>
         <div style={styles.section}>
           <div style={styles.title}>Page Labels</div>
           <p style={{ color: '#475569', marginBottom: '1rem' }}>These labels drive the public section headings on the Get Involved page.</p>
@@ -759,6 +763,315 @@ export default function GetInvolvedEditor() {
             {saving ? 'Saving...' : 'Save Page Labels'}
           </button>
         </div>
+
+        <div style={{ ...styles.section, marginTop: '1.5rem' }}>
+          <div style={styles.title}>Volunteer Form Labels</div>
+          <p style={{ color: '#475569', marginBottom: '1rem' }}>
+            Labels for the volunteer interest form.
+          </p>
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            <BilingualField
+              labelEn="Name Label"
+              labelBn="Name Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.nameLabel?.en}
+              valueBn={data.volunteerFormLabels?.nameLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'nameLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'nameLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Email Label"
+              labelBn="Email Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.emailLabel?.en}
+              valueBn={data.volunteerFormLabels?.emailLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'emailLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'emailLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Phone Label"
+              labelBn="Phone Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.phoneLabel?.en}
+              valueBn={data.volunteerFormLabels?.phoneLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'phoneLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'phoneLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Phone Validation Message"
+              labelBn="Phone Validation Message (Bangla)"
+              valueEn={data.volunteerFormLabels?.phoneValidation?.en}
+              valueBn={data.volunteerFormLabels?.phoneValidation?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'phoneValidation', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'phoneValidation', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Interest Label"
+              labelBn="Interest Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.interestLabel?.en}
+              valueBn={data.volunteerFormLabels?.interestLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'interestLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'interestLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Interest Placeholder"
+              labelBn="Interest Placeholder (Bangla)"
+              valueEn={data.volunteerFormLabels?.interestPlaceholder?.en}
+              valueBn={data.volunteerFormLabels?.interestPlaceholder?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'interestPlaceholder', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'interestPlaceholder', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Availability Label"
+              labelBn="Availability Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.availabilityLabel?.en}
+              valueBn={data.volunteerFormLabels?.availabilityLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'availabilityLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'availabilityLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Availability Placeholder"
+              labelBn="Availability Placeholder (Bangla)"
+              valueEn={data.volunteerFormLabels?.availabilityPlaceholder?.en}
+              valueBn={data.volunteerFormLabels?.availabilityPlaceholder?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'availabilityPlaceholder', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'availabilityPlaceholder', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Weekends Option"
+              labelBn="Weekends Option (Bangla)"
+              valueEn={data.volunteerFormLabels?.availabilityWeekends?.en}
+              valueBn={data.volunteerFormLabels?.availabilityWeekends?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'availabilityWeekends', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'availabilityWeekends', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Weekdays Option"
+              labelBn="Weekdays Option (Bangla)"
+              valueEn={data.volunteerFormLabels?.availabilityWeekdays?.en}
+              valueBn={data.volunteerFormLabels?.availabilityWeekdays?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'availabilityWeekdays', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'availabilityWeekdays', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Occasionally Option"
+              labelBn="Occasionally Option (Bangla)"
+              valueEn={data.volunteerFormLabels?.availabilityOccasional?.en}
+              valueBn={data.volunteerFormLabels?.availabilityOccasional?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'availabilityOccasional', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'availabilityOccasional', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Message Label"
+              labelBn="Message Label (Bangla)"
+              valueEn={data.volunteerFormLabels?.messageLabel?.en}
+              valueBn={data.volunteerFormLabels?.messageLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'messageLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'messageLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Submit Button"
+              labelBn="Submit Button (Bangla)"
+              valueEn={data.volunteerFormLabels?.submitLabel?.en}
+              valueBn={data.volunteerFormLabels?.submitLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'submitLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'submitLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Submitting Text"
+              labelBn="Submitting Text (Bangla)"
+              valueEn={data.volunteerFormLabels?.submittingLabel?.en}
+              valueBn={data.volunteerFormLabels?.submittingLabel?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'submittingLabel', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'submittingLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Error Message"
+              labelBn="Error Message (Bangla)"
+              valueEn={data.volunteerFormLabels?.errorMessage?.en}
+              valueBn={data.volunteerFormLabels?.errorMessage?.bn}
+              onChangeEn={(val) => updateField('volunteerFormLabels', 'errorMessage', 'en', val)}
+              onChangeBn={(val) => updateField('volunteerFormLabels', 'errorMessage', 'bn', val)}
+            />
+          </div>
+          <button onClick={() => saveSection('volunteerFormLabels')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save Volunteer Form Labels'}
+          </button>
+        </div>
+
+        <div style={{ ...styles.section, marginTop: '1.5rem' }}>
+          <div style={styles.title}>Partner Form Labels</div>
+          <p style={{ color: '#475569', marginBottom: '1rem' }}>
+            Labels for the partner inquiry form.
+          </p>
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            <BilingualField
+              labelEn="Organization Name Label"
+              labelBn="Organization Name Label (Bangla)"
+              valueEn={data.partnerFormLabels?.orgNameLabel?.en}
+              valueBn={data.partnerFormLabels?.orgNameLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'orgNameLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'orgNameLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Contact Person Label"
+              labelBn="Contact Person Label (Bangla)"
+              valueEn={data.partnerFormLabels?.contactPersonLabel?.en}
+              valueBn={data.partnerFormLabels?.contactPersonLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'contactPersonLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'contactPersonLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Email Label"
+              labelBn="Email Label (Bangla)"
+              valueEn={data.partnerFormLabels?.emailLabel?.en}
+              valueBn={data.partnerFormLabels?.emailLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'emailLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'emailLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Phone Label"
+              labelBn="Phone Label (Bangla)"
+              valueEn={data.partnerFormLabels?.phoneLabel?.en}
+              valueBn={data.partnerFormLabels?.phoneLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'phoneLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'phoneLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Phone Validation Message"
+              labelBn="Phone Validation Message (Bangla)"
+              valueEn={data.partnerFormLabels?.phoneValidation?.en}
+              valueBn={data.partnerFormLabels?.phoneValidation?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'phoneValidation', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'phoneValidation', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Partnership Type Label"
+              labelBn="Partnership Type Label (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypeLabel?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypeLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypeLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypeLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Partnership Type Placeholder"
+              labelBn="Partnership Type Placeholder (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypePlaceholder?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypePlaceholder?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypePlaceholder', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypePlaceholder', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="CSR Option"
+              labelBn="CSR Option (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypeCsr?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypeCsr?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypeCsr', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypeCsr', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Hospital / Medical Option"
+              labelBn="Hospital / Medical Option (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypeHospital?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypeHospital?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypeHospital', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypeHospital', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Institution / School Option"
+              labelBn="Institution / School Option (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypeInstitution?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypeInstitution?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypeInstitution', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypeInstitution', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Other Option"
+              labelBn="Other Option (Bangla)"
+              valueEn={data.partnerFormLabels?.partnershipTypeOther?.en}
+              valueBn={data.partnerFormLabels?.partnershipTypeOther?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'partnershipTypeOther', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'partnershipTypeOther', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Message Label"
+              labelBn="Message Label (Bangla)"
+              valueEn={data.partnerFormLabels?.messageLabel?.en}
+              valueBn={data.partnerFormLabels?.messageLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'messageLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'messageLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Submit Button"
+              labelBn="Submit Button (Bangla)"
+              valueEn={data.partnerFormLabels?.submitLabel?.en}
+              valueBn={data.partnerFormLabels?.submitLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'submitLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'submitLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Submitting Text"
+              labelBn="Submitting Text (Bangla)"
+              valueEn={data.partnerFormLabels?.submittingLabel?.en}
+              valueBn={data.partnerFormLabels?.submittingLabel?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'submittingLabel', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'submittingLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Error Message"
+              labelBn="Error Message (Bangla)"
+              valueEn={data.partnerFormLabels?.errorMessage?.en}
+              valueBn={data.partnerFormLabels?.errorMessage?.bn}
+              onChangeEn={(val) => updateField('partnerFormLabels', 'errorMessage', 'en', val)}
+              onChangeBn={(val) => updateField('partnerFormLabels', 'errorMessage', 'bn', val)}
+            />
+          </div>
+          <button onClick={() => saveSection('partnerFormLabels')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save Partner Form Labels'}
+          </button>
+        </div>
+
+        <div style={{ ...styles.section, marginTop: '1.5rem' }}>
+          <div style={styles.title}>UPI Labels</div>
+          <p style={{ color: '#475569', marginBottom: '1rem' }}>
+            Text hints and labels for the UPI/QR section.
+          </p>
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            <BilingualField
+              labelEn="UPI Button Label"
+              labelBn="UPI Button Label (Bangla)"
+              valueEn={data.upiLabels?.buttonLabel?.en}
+              valueBn={data.upiLabels?.buttonLabel?.bn}
+              onChangeEn={(val) => updateField('upiLabels', 'buttonLabel', 'en', val)}
+              onChangeBn={(val) => updateField('upiLabels', 'buttonLabel', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Mobile Hint"
+              labelBn="Mobile Hint (Bangla)"
+              valueEn={data.upiLabels?.mobileHint?.en}
+              valueBn={data.upiLabels?.mobileHint?.bn}
+              onChangeEn={(val) => updateField('upiLabels', 'mobileHint', 'en', val)}
+              onChangeBn={(val) => updateField('upiLabels', 'mobileHint', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="Fallback Hint"
+              labelBn="Fallback Hint (Bangla)"
+              valueEn={data.upiLabels?.fallbackHint?.en}
+              valueBn={data.upiLabels?.fallbackHint?.bn}
+              onChangeEn={(val) => updateField('upiLabels', 'fallbackHint', 'en', val)}
+              onChangeBn={(val) => updateField('upiLabels', 'fallbackHint', 'bn', val)}
+            />
+            <BilingualField
+              labelEn="QR Hint"
+              labelBn="QR Hint (Bangla)"
+              valueEn={data.upiLabels?.qrHint?.en}
+              valueBn={data.upiLabels?.qrHint?.bn}
+              onChangeEn={(val) => updateField('upiLabels', 'qrHint', 'en', val)}
+              onChangeBn={(val) => updateField('upiLabels', 'qrHint', 'bn', val)}
+            />
+          </div>
+          <button onClick={() => saveSection('upiLabels')} disabled={saving} style={styles.button}>
+            {saving ? 'Saving...' : 'Save UPI Labels'}
+          </button>
+        </div>
+      </div>
       )}
 
       {statusMessage && <div style={successStyle}>{statusMessage}</div>}

@@ -231,16 +231,8 @@ export default function OurWorkEditor() {
             </button>
           </div>
 
-          <div style={styles.section}>
+            <div style={styles.section}>
             <div style={styles.title}>Join Mission Box</div>
-            <BilingualField
-              labelEn="Small Label"
-              labelBn="Small Label (Bangla)"
-              valueEn={data.join?.meta?.en}
-              valueBn={data.join?.meta?.bn}
-              onChangeEn={(val) => updateField('join', 'meta', 'en', val)}
-              onChangeBn={(val) => updateField('join', 'meta', 'bn', val)}
-            />
             <BilingualField
               labelEn="Body Text"
               labelBn="Body Text (Bangla)"
@@ -267,6 +259,7 @@ export default function OurWorkEditor() {
             <div style={styles.title}>Page Labels</div>
             <BilingualField labelEn="Page Eyebrow" labelBn="Page Eyebrow (Bangla)" valueEn={data.pageContent?.eyebrow?.en} valueBn={data.pageContent?.eyebrow?.bn} onChangeEn={(val) => updateField('pageContent', 'eyebrow', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'eyebrow', 'bn', val)} />
             <BilingualField labelEn="Approach Section Label" labelBn="Approach Section Label (Bangla)" valueEn={data.pageContent?.approachLabel?.en} valueBn={data.pageContent?.approachLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'approachLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'approachLabel', 'bn', val)} />
+            <BilingualField labelEn="Focus Section Label" labelBn="Focus Section Label (Bangla)" valueEn={data.pageContent?.focusLabel?.en} valueBn={data.pageContent?.focusLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'focusLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'focusLabel', 'bn', val)} />
             <BilingualField labelEn="Join Section Label" labelBn="Join Section Label (Bangla)" valueEn={data.pageContent?.joinLabel?.en} valueBn={data.pageContent?.joinLabel?.bn} onChangeEn={(val) => updateField('pageContent', 'joinLabel', 'en', val)} onChangeBn={(val) => updateField('pageContent', 'joinLabel', 'bn', val)} />
             <button onClick={() => saveSection('pageContent')} disabled={saving} style={styles.button}>
               {saving ? 'Saving...' : 'Save Page Labels'}

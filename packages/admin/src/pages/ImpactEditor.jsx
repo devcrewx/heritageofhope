@@ -275,7 +275,7 @@ export default function ImpactEditor() {
             onChangeBn={(val) => updateField('hero', 'promise', 'bn', val)}
             isTextArea
           />
-          <button onClick={() => saveSection('intro')} disabled={saving} style={styles.button}>
+          <button onClick={async () => { await Promise.all([saveSection('intro'), saveSection('hero')]); }} disabled={saving} style={styles.button}>
             {saving ? 'Saving...' : 'Save Page Hero'}
           </button>
         </div>

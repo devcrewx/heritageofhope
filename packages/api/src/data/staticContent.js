@@ -5,13 +5,13 @@
  */
 
 export const navItems = [
-  { to: '/', label: { en: 'Home', bn: 'হোম' } },
-  { to: '/about', label: { en: 'About', bn: 'আমাদের কথা' } },
-  { to: '/our-work', label: { en: 'Our Work', bn: 'আমাদের কাজ' } },
-  { to: '/impact', label: { en: 'Impact', bn: 'ফলাফল' } },
-  { to: '/gallery', label: { en: 'Gallery', bn: 'ছবিঘর' } },
-  { to: '/get-involved', label: { en: 'Get Involved', bn: 'সাথে থাকুন' } },
-  { to: '/contact', label: { en: 'Contact', bn: 'যোগাযোগ' } },
+  { to: '/', fieldKey: 'home', label: { en: 'Home', bn: 'হোম' } },
+  { to: '/about', fieldKey: 'about', label: { en: 'About', bn: 'আমাদের কথা' } },
+  { to: '/our-work', fieldKey: 'ourWork', label: { en: 'Our Work', bn: 'আমাদের কাজ' } },
+  { to: '/impact', fieldKey: 'impact', label: { en: 'Impact', bn: 'ফলাফল' } },
+  { to: '/gallery', fieldKey: 'gallery', label: { en: 'Gallery', bn: 'ছবিঘর' } },
+  { to: '/get-involved', fieldKey: 'getInvolved', label: { en: 'Get Involved', bn: 'সাথে থাকুন' } },
+  { to: '/contact', fieldKey: 'contact', label: { en: 'Contact', bn: 'যোগাযোগ' } },
 ]
 
 export const contactDetails = {

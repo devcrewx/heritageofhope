@@ -7,6 +7,7 @@ function Contact() {
   const { language, siteContent } = useOutletContext()
   const navigate = useNavigate()
   const { contact, home, siteMeta } = siteContent
+  const formLabels = contact.formLabels || {}
   const page = contact.pageContent || {}
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
@@ -28,19 +29,19 @@ function Contact() {
       <section className="panel card-grid two-up" data-reveal>
         <article className="card value-card" data-reveal>
           <div className="card-body">
-            <p className="meta">Phone</p>
+            <p className="meta">{resolve(language, contact.phoneLabel || { en: 'Phone', bn: 'ফোন' })}</p>
             <h3>{siteMeta.phone}</h3>
           </div>
         </article>
         <article className="card value-card" data-reveal>
           <div className="card-body">
-            <p className="meta">Email</p>
+            <p className="meta">{resolve(language, contact.emailLabel || { en: 'Email', bn: 'ইমেল' })}</p>
             <h3>{siteMeta.email}</h3>
           </div>
         </article>
         <article className="card value-card wide-card" data-reveal>
           <div className="card-body">
-            <p className="meta">Address</p>
+            <p className="meta">{resolve(language, contact.addressLabel || { en: 'Address', bn: 'ঠিকানা' })}</p>
             <h3>{resolve(language, siteMeta.address)}</h3>
           </div>
         </article>
@@ -49,7 +50,7 @@ function Contact() {
       <section className="panel split-panel" data-reveal>
         <div className="map-frame" data-reveal>
           <iframe
-            title="Heritage of Hope Foundation location"
+            title={resolve(language, contact.mapTitle || { en: 'Heritage of Hope Foundation location', bn: 'হেরিটেজ অফ হোপ ফাউন্ডেশনের অবস্থান' })}
             src={contact.mapEmbedUrl || "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed"}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
@@ -73,7 +74,7 @@ function Contact() {
                 setSubmitStatus({ type: 'error', message: result.message })
               }
             } catch (error) {
-              setSubmitStatus({ type: 'error', message: 'Failed to submit form. Please try again.' })
+              setSubmitStatus({ type: 'error', message: resolve(language, formLabels.errorMessage) })
             } finally {
               setIsSubmitting(false)
             }
@@ -89,30 +90,30 @@ function Contact() {
             <h2>{resolve(language, contact.formHeading)}</h2>
           </div>
           <div className="field">
-            <label htmlFor="name">Name</label>
-            <input id="name" name="name" type="text" required placeholder="Your name" />
+            <label htmlFor="name">{resolve(language, formLabels.nameLabel)}</label>
+            <input id="name" name="name" type="text" required placeholder={resolve(language, formLabels.namePlaceholder)} />
           </div>
           <div className="form-grid two-col">
             <div className="field">
-              <label htmlFor="email">Email</label>
-              <input id="email" name="email" type="email" required placeholder="you@example.com" />
+              <label htmlFor="email">{resolve(language, formLabels.emailLabel)}</label>
+              <input id="email" name="email" type="email" required placeholder={resolve(language, formLabels.emailPlaceholder)} />
             </div>
             <div className="field">
-              <label htmlFor="subject">Subject</label>
-              <input id="subject" name="subject" type="text" required />
+              <label htmlFor="subject">{resolve(language, formLabels.subjectLabel)}</label>
+              <input id="subject" name="subject" type="text" required placeholder={resolve(language, formLabels.subjectLabel)} />
             </div>
           </div>
           <div className="field">
-            <label htmlFor="message">Message</label>
+            <label htmlFor="message">{resolve(language, formLabels.messageLabel)}</label>
             <textarea
               id="message"
               name="message"
               rows="6"
-              placeholder="Tell us how you want to help"
+              placeholder={resolve(language, formLabels.messagePlaceholder)}
             />
           </div>
           <button type="submit" className="btn btn-solid" disabled={isSubmitting}>
-            {isSubmitting ? 'Sending...' : 'Send message'}
+            {isSubmitting ? resolve(language, formLabels.submittingLabel) : resolve(language, formLabels.submitLabel)}
           </button>
         </form>
       </section>
@@ -124,7 +125,7 @@ function Contact() {
             <h2>{resolve(language, page.facebookHeading)}</h2>
           </div>
           <a href={siteMeta.facebookUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid" style={{ borderRadius: '999px', fontSize: '0.9rem', padding: '10px 20px' }}>
-            Visit Official Facebook Page &rarr;
+            {resolve(language, contact.visitFacebookLabel || { en: 'Visit Official Facebook Page \u2192', bn: 'অফিসিয়াল ফেসবুক পেজ দেখুন \u2192' })}
           </a>
         </div>
         <div className="story-layout contact-story-layout">
