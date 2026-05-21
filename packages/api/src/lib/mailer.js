@@ -101,4 +101,47 @@ export async function sendNotificationEmail(type, submission) {
   await sendWeb3Fallback(type, submission)
 }
 
-export default { sendNotificationEmail }
+export async function sendEmail({ to, subject, html, text }) {
+  if (transporter) {
+    try {
+      await transporter.sendMail({
+        from: process.env.FROM_EMAIL || process.env.SMTP_USER || 'noreply@heritageofhope.org',
+        to,
+        subject,
+        html,
+        text,
+      })
+      console.log('Email sent via SMTP to', to)
+      return
+    } catch (err) {
+      console.error('SMTP delivery failed, attempting Web3Forms fallback:', err)
+    }
+  } else {
+    console.log('SMTP not configured; attempting Web3Forms fallback')
+  }
+
+  if (!WEB3FORMS_KEY) {
+    console.warn('Web3Forms fallback skipped: No access key provided.')
+    return
+  }
+
+  try {
+    const plainText = text || html?.replace(/<[^>]*>/g, '') || subject
+    await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        to_email: WEB3FORMS_TO,
+        subject: `[Password Reset] ${subject}`,
+        from_name: 'Heritage of Hope API (Email Fallback)',
+        message: `This is a password reset notification that could not be delivered via SMTP to ${to}.\n\n---\n${plainText}`,
+      }),
+    })
+    console.log('Email notification sent via Web3Forms fallback for', subject)
+  } catch (err) {
+    console.error('Web3Forms fallback failed:', err)
+  }
+}
+
+export default { sendNotificationEmail, sendEmail }

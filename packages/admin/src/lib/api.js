@@ -28,9 +28,12 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     const requestPath = error.config?.url || ''
-    const isLoginRequest = requestPath.includes('/api/admin/login')
+    const isAuthRequest =
+      requestPath.includes('/api/admin/login') ||
+      requestPath.includes('/api/admin/forgot-password') ||
+      requestPath.includes('/api/admin/reset-password')
 
-    if (error.response?.status === 401 && !isLoginRequest) {
+    if (error.response?.status === 401 && !isAuthRequest) {
       localStorage.removeItem('hoh_admin_token')
       localStorage.removeItem('adminToken')
 

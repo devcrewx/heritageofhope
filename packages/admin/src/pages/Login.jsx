@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 function Login({ onLogin, isAuthenticated }) {
   const navigate = useNavigate()
@@ -67,6 +67,10 @@ function Login({ onLogin, isAuthenticated }) {
         >
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
+
+        <Link to="/forgot-password" style={{ display: 'block', textAlign: 'center', marginTop: '0.75rem', color: '#475569', fontSize: '0.9rem' }}>
+          Forgot Password?
+        </Link>
       </form>
     </main>
   )

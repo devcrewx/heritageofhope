@@ -156,13 +156,15 @@ model ActivityPost {
 }
 
 model AdminUser {
-  id           Int        @id @default(autoincrement())
-  email        String     @unique
-  passwordHash String     @map("password_hash") @db.Text
-  role         String     @default("editor")
-  createdAt    DateTime   @default(now()) @map("created_at")
-  lastLogin    DateTime?  @map("last_login")
-  auditLogs    AuditLog[]
+  id                Int        @id @default(autoincrement())
+  email             String     @unique
+  passwordHash      String     @map("password_hash") @db.Text
+  role              String     @default("editor")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  lastLogin         DateTime?  @map("last_login")
+  resetToken        String?    @unique @map("reset_token")
+  resetTokenExpires DateTime?  @map("reset_token_expires")
+  auditLogs         AuditLog[]
 
   @@index([email])
   @@map("admin_users")

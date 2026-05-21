@@ -3,6 +3,8 @@ import AdminLayout from './components/AdminLayout'
 import { useAuth } from './hooks/useAuth'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Settings from './pages/Settings'
 import HomeEditor from './pages/HomeEditor'
 import { GalleryManager } from './pages/GalleryManager'
@@ -44,6 +46,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login onLogin={login} isAuthenticated={isAuthenticated} />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/"
           element={(
