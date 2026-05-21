@@ -179,6 +179,7 @@ function About() {
           <img
             src={registration.certImage}
             alt="Registration certificate"
+            onError={(e) => { e.target.style.display = 'none' }}
           />
         </div>
         <div>

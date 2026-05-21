@@ -37,7 +37,7 @@ function Home() {
 
         <aside className="hero-media editorial-hero">
           <figure className="hero-photo-frame">
-            <img loading="lazy" src={hero.heroImage} alt={resolve(language, hero.figcaption)} />
+            <img loading="lazy" src={hero.heroImage} alt={resolve(language, hero.figcaption)} onError={(e) => { e.target.style.display = 'none' }} />
             <figcaption>{resolve(language, hero.figcaption)}</figcaption>
           </figure>
           <div className="hero-cert">
@@ -45,6 +45,7 @@ function Home() {
               loading="lazy"
               src={hero.regCertThumb}
               alt="Registration certificate preview"
+              onError={(e) => { e.target.style.display = 'none' }}
             />
             <p>{resolve(language, hero.certCaption || { en: 'Registration proof available on About page', bn: 'নিবন্ধনের প্রমাণ "আমাদের কথা" পাতায়' })}</p>
           </div>

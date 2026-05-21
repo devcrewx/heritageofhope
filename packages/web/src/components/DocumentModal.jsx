@@ -51,7 +51,7 @@ export default function DocumentModal({ open, onClose, title, type = 'pdf', onNe
           <h3 className="doc-modal-title">{title}</h3>
           <div className="doc-modal-inner">
             {type === 'image' ? (
-              <img src={downloadUrl} alt={title} />
+              <img src={downloadUrl} alt={title} onError={(e) => { e.target.style.display = 'none' }} />
             ) : (
               <div className="doc-pdf-placeholder">
                 {thumbUrl && <img className="doc-pdf-thumb" src={thumbUrl} alt={title} />}

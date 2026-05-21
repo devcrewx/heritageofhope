@@ -43,8 +43,20 @@ router.get('/fund-allocation', async (_req, res) => {
   }
 })
 
-router.get('/health', (_req, res) => {
-  res.json({ ok: true, service: 'heritageofhope-api' })
+router.get('/health', async (_req, res) => {
+  let db = 'disconnected'
+  try {
+    await prisma.$queryRaw`SELECT 1`
+    db = 'connected'
+  } catch (err) {
+    console.error('Health check — DB ping failed:', err.message)
+  }
+  res.json({
+    ok: db === 'connected',
+    service: 'heritageofhope-api',
+    database: db,
+    timestamp: new Date().toISOString(),
+  })
 })
 
 export default router

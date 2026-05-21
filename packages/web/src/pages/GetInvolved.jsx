@@ -75,6 +75,7 @@ function GetInvolved() {
               src={getInvolved.upiImage}
               alt="Official UPI QR code for donations"
               loading="lazy"
+              onError={(e) => { e.target.style.display = 'none' }}
             />
           </div>
           <div style={{ marginTop: '0.75rem' }}>
@@ -200,6 +201,7 @@ function GetInvolved() {
               src={partnerPhoto}
               alt="Partnership-led community outreach activity by Heritage of Hope Foundation"
               loading="lazy"
+              onError={(e) => { e.target.style.display = 'none' }}
             />
             <figcaption>{resolve(language, partnerSection.body)}</figcaption>
           </figure>

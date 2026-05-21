@@ -10,6 +10,7 @@ import GetInvolved from './pages/GetInvolved'
 import Contact from './pages/Contact'
 import ThankYou from './pages/ThankYou'
 import NotFound from './pages/NotFound'
+import { fallbackSiteContent } from './content.js'
 import './App.css'
 
 function ScrollToTop() {
@@ -81,7 +82,7 @@ function RevealOnScroll({ language }) {
 
 function App() {
   const [language, setLanguage] = useState('en')
-  const [siteContent, setSiteContent] = useState(null)
+  const [siteContent, setSiteContent] = useState(fallbackSiteContent)
   const [contentLoading, setContentLoading] = useState(true)
   const [contentError, setContentError] = useState(null)
   const apiBase =

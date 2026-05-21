@@ -46,21 +46,17 @@ export async function submitFormWeb3(formData, formName = 'contact') {
     }
   }
 
-  try {
-    const response = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
 
-    const result = await response.json()
+  const result = await response.json()
 
-    if (response.ok && result.success) {
-      return { success: true, message: result.message || 'Form submitted successfully!' }
-    } else {
-      return { success: false, message: result.error || 'Form submission failed.' }
-    }
-  } catch (error) {
-    return { success: false, message: 'Network error. Please try again.' }
+  if (response.ok && result.success) {
+    return { success: true, message: result.message || 'Form submitted successfully!' }
+  } else {
+    return { success: false, message: result.error || 'Form submission failed.' }
   }
 }
