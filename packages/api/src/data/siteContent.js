@@ -228,40 +228,40 @@ export async function getSiteContent() {
     const c = JSON.parse(JSON.stringify(siteContentContract))
 
     c.siteMeta = {
-      orgName: settingsMap.org_name?.en || 'Heritage of Hope Foundation',
+      orgName: settingsMap.general?.org_name?.en || 'Heritage of Hope Foundation',
       navSubtitle: {
-        en: settingsMap.navbar_subtitle?.en || 'Registered NGO | West Bengal',
-        bn: settingsMap.navbar_subtitle?.bn || 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ',
+        en: settingsMap.general?.navbar_subtitle?.en || 'Registered NGO | West Bengal',
+        bn: settingsMap.general?.navbar_subtitle?.bn || 'নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ',
       },
-      logoUrl: settingsMap.logo_url?.en || '',
-      phone: settingsMap.phone?.en || staticContactDetails.phone,
-      email: settingsMap.email?.en || staticContactDetails.email,
-      address: settingsMap.address || { en: staticContactDetails.address, bn: 'সুকান্তপল্লী, সুভাস গ্রাম, পশ্চিমবঙ্গ ৭০০১৪৭, ভারত' },
-      facebookUrl: settingsMap.facebook_url?.en || staticContactDetails.facebookUrl,
+      logoUrl: settingsMap.general?.logo_url?.en || '',
+      phone: settingsMap.general?.phone?.en || staticContactDetails.phone,
+      email: settingsMap.general?.email?.en || staticContactDetails.email,
+      address: settingsMap.general?.address || { en: staticContactDetails.address, bn: 'সুকান্তপল্লী, সুভাষ গ্রাম, ৭০০১৪৭, দক্ষিণ ২৪ পরগনা, পশ্চিমবঙ্গ, ভারত' },
+      facebookUrl: settingsMap.general?.facebook_url?.en || staticContactDetails.facebookUrl,
       footerMission: {
-        en: settingsMap.footer_mission?.en || 'Children, women and communities in South 24 Parganas, West Bengal.',
-        bn: settingsMap.footer_mission?.bn || 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
+        en: settingsMap.general?.footer_mission?.en || 'Children, women and communities in South 24 Parganas, West Bengal.',
+        bn: settingsMap.general?.footer_mission?.bn || 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।',
       },
       registeredBadge: {
-        en: settingsMap.registered_badge?.en || 'Registered NGO',
-        bn: settingsMap.registered_badge?.bn || 'নিবন্ধিত সংস্থা',
+        en: settingsMap.general?.registered_badge?.en || 'Registered NGO',
+        bn: settingsMap.general?.registered_badge?.bn || 'নিবন্ধিত সংস্থা',
       },
-      estYear: settingsMap.est_year?.en || 'Est. 2024',
+      estYear: settingsMap.general?.est_year?.en || 'Est. 2024',
       donateButtonLabel: {
-        en: settingsMap.donate_button_label?.en || 'Donate Now',
-        bn: settingsMap.donate_button_label?.bn || 'সহযোগিতার হাত বাড়িয়ে দিন',
+        en: settingsMap.general?.donate_button_label?.en || 'Donate Now',
+        bn: settingsMap.general?.donate_button_label?.bn || 'সহযোগিতার হাত বাড়িয়ে দিন',
       },
       facebookLabel: {
-        en: settingsMap.facebook_label?.en || 'Follow us on Facebook',
-        bn: settingsMap.facebook_label?.bn || 'ফেসবুকে আমাদের সঙ্গে থাকুন',
+        en: settingsMap.general?.facebook_label?.en || 'Follow us on Facebook',
+        bn: settingsMap.general?.facebook_label?.bn || 'ফেসবুকে আমাদের সঙ্গে থাকুন',
       },
       hamburgerAriaLabel: {
-        en: settingsMap.hamburger_aria_label?.en || 'Open navigation',
-        bn: settingsMap.hamburger_aria_label?.bn || 'মেনু খুলুন',
+        en: settingsMap.general?.hamburger_aria_label?.en || 'Open navigation',
+        bn: settingsMap.general?.hamburger_aria_label?.bn || 'মেনু খুলুন',
       },
       navAriaLabel: {
-        en: settingsMap.nav_aria_label?.en || 'Primary navigation',
-        bn: settingsMap.nav_aria_label?.bn || 'প্রধান মেনু',
+        en: settingsMap.general?.nav_aria_label?.en || 'Primary navigation',
+        bn: settingsMap.general?.nav_aria_label?.bn || 'প্রধান মেনু',
       },
     }
 
@@ -554,15 +554,15 @@ export async function getSiteContent() {
         })
       }
     }
-    c.contact.pageTitle = settingsMap.contact_page_title || c.contact.pageTitle
-    c.contact.intro = settingsMap.contact_page_intro || c.contact.intro
-    c.contact.responseLabel = settingsMap.contact_response_label || c.contact.responseLabel
-    c.contact.responseValue = settingsMap.contact_response_value || c.contact.responseValue
-    c.contact.formLabel = settingsMap.contact_form_label || c.contact.formLabel
-    c.contact.formHeading = settingsMap.contact_form_heading || c.contact.formHeading
-    c.contact.phoneLabel = settingsMap.contact_phone_label || c.contact.phoneLabel
-    c.contact.emailLabel = settingsMap.contact_email_label || c.contact.emailLabel
-    c.contact.addressLabel = settingsMap.contact_address_label || c.contact.addressLabel
+    c.contact.pageTitle = settingsMap.general?.contact_page_title || c.contact.pageTitle
+    c.contact.intro = settingsMap.general?.contact_page_intro || c.contact.intro
+    c.contact.responseLabel = settingsMap.general?.contact_response_label || c.contact.responseLabel
+    c.contact.responseValue = settingsMap.general?.contact_response_value || c.contact.responseValue
+    c.contact.formLabel = settingsMap.general?.contact_form_label || c.contact.formLabel
+    c.contact.formHeading = settingsMap.general?.contact_form_heading || c.contact.formHeading
+    c.contact.phoneLabel = settingsMap.general?.contact_phone_label || c.contact.phoneLabel
+    c.contact.emailLabel = settingsMap.general?.contact_email_label || c.contact.emailLabel
+    c.contact.addressLabel = settingsMap.general?.contact_address_label || c.contact.addressLabel
     c.contact.visitFacebookLabel = contactMap.pageContent?.visitFacebookLabel || c.contact.visitFacebookLabel
     c.contact.mapTitle = contactMap.pageContent?.mapTitle || c.contact.mapTitle
     c.contact.pageContent = {

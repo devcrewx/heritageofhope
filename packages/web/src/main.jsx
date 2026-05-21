@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import * as Sentry from '@sentry/react'
+import { SentryFallback } from './components/SentryFallback.jsx'
 import './index.css'
 import App from './App.jsx'
 
@@ -14,5 +15,5 @@ if (SENTRY_DSN) {
 }
 
 createRoot(document.getElementById('root')).render(
-  SENTRY_DSN ? <Sentry.ErrorBoundary fallback={<p>Something went wrong.</p>}><App /></Sentry.ErrorBoundary> : <App />,
+  SENTRY_DSN ? <Sentry.ErrorBoundary fallback={<SentryFallback />}><App /></Sentry.ErrorBoundary> : <App />,
 )

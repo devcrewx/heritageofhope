@@ -74,7 +74,7 @@ async function main() {
         { page: 'settings', section: 'general', fieldKey: 'footer_mission', valueEn: 'Children, women and communities in South 24 Parganas, West Bengal.', valueBn: 'দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।' },
         { page: 'settings', section: 'general', fieldKey: 'phone', valueEn: '+91 8420119790', valueBn: null },
         { page: 'settings', section: 'general', fieldKey: 'email', valueEn: 'heritageofhopefoundation@gmail.com', valueBn: null },
-        { page: 'settings', section: 'general', fieldKey: 'address', valueEn: 'Sukantapally, Subhas Gram, West Bengal 700147, India', valueBn: 'সুকান্তপল্লী, সুভাস গ্রাম, পশ্চিমবঙ্গ ৭০০১৪৭, ভারত' },
+        { page: 'settings', section: 'general', fieldKey: 'address', valueEn: 'Sukantapally, Subhas Gram, 700147, South 24 Pgs, WB, IN', valueBn: 'সুকান্তপল্লী, সুভাষ গ্রাম, ৭০০১৪৭, দক্ষিণ ২৪ পরগনা, পশ্চিমবঙ্গ, ভারত' },
         { page: 'settings', section: 'general', fieldKey: 'facebook_url', valueEn: 'https://www.facebook.com/profile.php?id=61559891799273', valueBn: null },
         { page: 'settings', section: 'general', fieldKey: 'hamburger_aria_label', valueEn: 'Open navigation', valueBn: 'মেনু খুলুন' },
         { page: 'settings', section: 'general', fieldKey: 'nav_aria_label', valueEn: 'Primary navigation', valueBn: 'প্রধান মেনু' },

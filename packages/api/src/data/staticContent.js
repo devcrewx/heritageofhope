@@ -17,7 +17,7 @@ export const navItems = [
 export const contactDetails = {
   phone: '+91 98765 43210',
   email: 'heritageofhopefoundation@gmail.com',
-  address: 'Sukantapally, Subhas Gram, West Bengal 700147, India',
+  address: 'Sukantapally, Subhas Gram, 700147, South 24 Pgs, WB, IN',
   facebookUrl: 'https://www.facebook.com/profile.php?id=61559891799273',
 }
 

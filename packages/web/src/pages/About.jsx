@@ -120,11 +120,11 @@ function About() {
                 {descText ? <p className="muted small">{descText}</p> : null}
                 <div style={{ marginTop: '0.75rem' }}>
                   <button type="button" className="btn btn-ghost" onClick={(e) => { e.stopPropagation(); openDoc(doc); }}>
-                    View
+                    {resolve(language, { en: 'View', bn: 'দেখুন' })}
                   </button>
                   {isPdfUrl(doc?.pdfUrl) ? (
                     <button type="button" className="btn" style={{ marginLeft: '0.5rem' }} onClick={(e) => { e.stopPropagation(); handleDownload(doc); }}>
-                      Download
+                      {resolve(language, { en: 'Download', bn: 'ডাউনলোড করুন' })}
                     </button>
                   ) : null}
                 </div>

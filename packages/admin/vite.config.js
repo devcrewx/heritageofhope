@@ -5,11 +5,11 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 export default defineConfig({
   plugins: [
     react(),
-    sentryVitePlugin({
+    ...(process.env.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
       org: 'devcrewx-j0',
       project: 'heritageofhope-admin',
       telemetry: false,
-    }),
+    })] : []),
   ],
   server: {
     port: 5174,

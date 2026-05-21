@@ -3,11 +3,11 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 export default defineConfig({
   plugins: [
-    sentryVitePlugin({
+    ...(process.env.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
       org: 'devcrewx-j0',
       project: 'heritageofhope-web',
       telemetry: false,
-    }),
+    })] : []),
   ],
   server: {
     proxy: {

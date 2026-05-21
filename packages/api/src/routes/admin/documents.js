@@ -2,22 +2,18 @@ import { Router } from 'express'
 import multer from 'multer'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
-import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
+import { cloudinary, uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 
 const router = Router()
 const storage = multer.memoryStorage()
 
 const fileFilter = (_req, file, cb) => {
-  const allowedImageMimes = ['image/jpeg', 'image/png', 'image/webp']
-  const allowedPdfMimes = ['application/pdf']
-
-  if (allowedPdfMimes.includes(file.mimetype) || allowedImageMimes.includes(file.mimetype)) {
+  if (file.mimetype === 'application/pdf') {
     cb(null, true)
     return
   }
-
-  cb(new Error('Only PDF and image files are allowed'))
+  cb(new Error('Only PDF files are allowed'))
 }
 
 const upload = multer({
@@ -38,11 +34,10 @@ router.get('/', async (_req, res) => {
   }
 })
 
-router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview', maxCount: 1 }]), async (req, res) => {
+router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }]), async (req, res) => {
   try {
     const { titleEn, titleBn, descriptionEn, descriptionBn, date } = req.body
     const pdfFile = req.files?.pdf?.[0]
-    const previewFile = req.files?.preview?.[0]
 
     if (!titleEn) return res.status(400).json({ error: 'titleEn is required' })
     if (!pdfFile) return res.status(400).json({ error: 'PDF file is required' })
@@ -55,19 +50,15 @@ router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview',
     const nextSortOrder = (highestSort._max.sortOrder ?? -1) + 1
 
     const pdfData = await uploadToCloudinary(pdfFile.buffer, 'heritage-of-hope/documents', {
-      resourceType: 'raw',
+      resourceType: 'image',
     })
 
-    let previewImgUrl = null
-    let previewImgPublicId = null
-    if (previewFile) {
-      const previewData = await uploadToCloudinary(previewFile.buffer, 'heritage-of-hope/documents/previews', {
-        resourceType: 'image',
-        transformation: [{ width: 800, crop: 'limit', quality: 'auto:good' }],
-      })
-      previewImgUrl = previewData.secure_url
-      previewImgPublicId = previewData.public_id
-    }
+    const previewImgUrl = cloudinary.url(pdfData.public_id, {
+      resource_type: 'image',
+      transformation: [{ width: 400, crop: 'limit' }],
+      format: 'jpg',
+      page: 1,
+    })
 
     const item = await prisma.document.create({
       data: {
@@ -79,7 +70,6 @@ router.post('/', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview',
         pdfUrl: pdfData.secure_url,
         pdfPublicId: pdfData.public_id,
         previewImgUrl,
-        previewImgPublicId,
         sortOrder: nextSortOrder,
       },
     })
@@ -123,12 +113,11 @@ router.patch('/reorder', async (req, res) => {
   }
 })
 
-router.patch('/:id', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'preview', maxCount: 1 }]), async (req, res) => {
+router.patch('/:id', upload.fields([{ name: 'pdf', maxCount: 1 }]), async (req, res) => {
   try {
     const { id } = req.params
     const { titleEn, titleBn, descriptionEn, descriptionBn, date } = req.body
     const pdfFile = req.files?.pdf?.[0]
-    const previewFile = req.files?.preview?.[0]
 
     const existing = await prisma.document.findUnique({ where: { id: Number(id) } })
     if (!existing) return res.status(404).json({ error: 'Document not found' })
@@ -144,21 +133,15 @@ router.patch('/:id', upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'previ
       if (existing.pdfPublicId) {
         try { await deleteFromCloudinary(existing.pdfPublicId) } catch (e) { console.warn('Failed deleting old PDF:', e) }
       }
-      const pdfData = await uploadToCloudinary(pdfFile.buffer, 'heritage-of-hope/documents', { resourceType: 'raw' })
+      const pdfData = await uploadToCloudinary(pdfFile.buffer, 'heritage-of-hope/documents', { resourceType: 'image' })
       data.pdfUrl = pdfData.secure_url
       data.pdfPublicId = pdfData.public_id
-    }
-
-    if (previewFile) {
-      if (existing.previewImgPublicId) {
-        try { await deleteFromCloudinary(existing.previewImgPublicId) } catch (e) { console.warn('Failed deleting old preview:', e) }
-      }
-      const previewData = await uploadToCloudinary(previewFile.buffer, 'heritage-of-hope/documents/previews', {
-        resourceType: 'image',
-        transformation: [{ width: 800, crop: 'limit', quality: 'auto:good' }],
+      data.previewImgUrl = cloudinary.url(pdfData.public_id, {
+        resource_type: 'image',
+        transformation: [{ width: 400, crop: 'limit' }],
+        format: 'jpg',
+        page: 1,
       })
-      data.previewImgUrl = previewData.secure_url
-      data.previewImgPublicId = previewData.public_id
     }
 
     const item = await prisma.document.update({ where: { id: Number(id) }, data })

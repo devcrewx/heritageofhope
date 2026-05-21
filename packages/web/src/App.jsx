@@ -99,7 +99,10 @@ function App() {
       try {
         setContentLoading(true)
         setContentError(null)
-        const response = await fetch(`${apiBase}/api/content`)
+        const controller = new AbortController()
+        const timeout = setTimeout(() => controller.abort(), 5000)
+        const response = await fetch(`${apiBase}/api/content`, { signal: controller.signal })
+        clearTimeout(timeout)
 
         if (!response.ok) {
           throw new Error(`Failed to load site content: ${response.status}`)
@@ -113,6 +116,13 @@ function App() {
         if (!cancelled) {
           console.error('Failed to load site content:', error)
           setContentError(error.message)
+          try {
+            const fallbackRes = await fetch('/content-fallback.json')
+            if (fallbackRes.ok) {
+              const fallbackData = await fallbackRes.json()
+              setSiteContent({ ...fallbackData, _isStale: true })
+            }
+          } catch {}
         }
       } finally {
         if (!cancelled) {

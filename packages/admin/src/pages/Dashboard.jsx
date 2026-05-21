@@ -25,7 +25,7 @@ function Dashboard() {
         setStats({
           galleryPhotos: gallery.data.items?.length || gallery.data.length || 0,
           teamMembers: team.data.length || 0,
-          documents: docs.data.length || 0,
+          documents: docs.data.items?.length || 0,
           activityPosts: posts.data.length || 0,
         })
       } catch (error) {

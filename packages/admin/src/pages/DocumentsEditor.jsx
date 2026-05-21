@@ -22,7 +22,6 @@ export default function DocumentsEditor() {
     descriptionBn: '',
     date: '',
     pdf: null,
-    preview: null,
   })
   const [formErrors, setFormErrors] = useState({})
 
@@ -85,7 +84,6 @@ export default function DocumentsEditor() {
       descriptionBn: '',
       date: '',
       pdf: null,
-      preview: null,
     })
     setFormErrors({})
   }
@@ -99,7 +97,6 @@ export default function DocumentsEditor() {
       descriptionBn: item.descriptionBn || '',
       date: item.date ? String(item.date).slice(0, 10) : '',
       pdf: null,
-      preview: null,
     })
     setFormErrors({})
     setError(null)
@@ -135,7 +132,6 @@ export default function DocumentsEditor() {
       formData.append('descriptionBn', form.descriptionBn)
       formData.append('date', form.date)
       if (form.pdf) formData.append('pdf', form.pdf)
-      if (form.preview) formData.append('preview', form.preview)
 
       const response = editingId
         ? await apiClient.patch(`/api/admin/documents/${editingId}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
@@ -320,7 +316,7 @@ export default function DocumentsEditor() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Date
@@ -344,20 +340,6 @@ export default function DocumentsEditor() {
             />
             {form.pdf && (
               <p className="text-sm text-green-600 mt-1">✓ {form.pdf.name}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Preview Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleInputChange('preview', e.target.files?.[0] || null)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2"
-            />
-            {form.preview && (
-              <p className="text-sm text-green-600 mt-1">✓ {form.preview.name}</p>
             )}
           </div>
         </div>
@@ -429,24 +411,27 @@ export default function DocumentsEditor() {
                 </p>
                 <div className="flex flex-wrap gap-3 text-sm">
                   {item.pdfUrl && (
-                    <a
-                      href={item.pdfUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 hover:underline"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        fetch(item.pdfUrl)
+                          .then((res) => res.blob())
+                          .then((blob) => {
+                            const url = URL.createObjectURL(blob)
+                            const a = document.createElement('a')
+                            a.href = url
+                            a.download = (item.titleEn || 'document') + '.pdf'
+                            document.body.appendChild(a)
+                            a.click()
+                            document.body.removeChild(a)
+                            setTimeout(() => URL.revokeObjectURL(url), 60000)
+                          })
+                          .catch(() => window.open(item.pdfUrl, '_blank'))
+                      }}
+                      className="text-blue-600 hover:underline cursor-pointer"
                     >
-                      Open PDF
-                    </a>
-                  )}
-                  {item.previewImgUrl && (
-                    <a
-                      href={item.previewImgUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 hover:underline"
-                    >
-                      Open preview
-                    </a>
+                      Download PDF
+                    </button>
                   )}
                 </div>
               </div>
