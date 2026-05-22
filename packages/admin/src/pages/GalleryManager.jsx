@@ -155,7 +155,7 @@ export function GalleryManager() {
       setFormErrors({})
       showToast(`Uploaded ${response.data.count} image(s)`, 'success')
     } catch (error) {
-      showToast(error.response?.data?.message || 'Upload failed', 'error')
+      showToast(error.response?.data?.error || error.message || 'Upload failed', 'error')
     } finally {
       setUploading(false)
     }
@@ -192,7 +192,7 @@ export function GalleryManager() {
       setFormErrors({})
       showToast('Photo updated', 'success')
     } catch (error) {
-      showToast('Failed to update photo', 'error')
+      showToast(error.response?.data?.error || error.message || 'Failed to update photo', 'error')
     }
   }
 
