@@ -1226,27 +1226,6 @@ export const fallbackSiteContent = {
         "category": "Welfare"
       },
       {
-        "id": 197,
-        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779427782/heritage-of-hope/gallery/y3dcph8ihdj63kwbbhpz.jpg",
-        "altEn": "test",
-        "altBn": "real.jpg",
-        "category": "gallery"
-      },
-      {
-        "id": 198,
-        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779428113/heritage-of-hope/gallery/ppwbdhqffum4spvjp1rk.png",
-        "altEn": "test",
-        "altBn": "test",
-        "category": "gallery"
-      },
-      {
-        "id": 199,
-        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779428368/heritage-of-hope/gallery/makb1ztsrhe84brkw7e9.png",
-        "altEn": "test",
-        "altBn": "পরীক্ষা",
-        "category": "gallery"
-      },
-      {
         "id": 200,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779428964/heritage-of-hope/gallery/nnmrceqzdvadc7gel9qk.jpg",
         "altEn": "Spioniro Golubiro",
@@ -1447,6 +1426,17 @@ export const fallbackSiteContent = {
           "description": {
             "en": "Assist in health camps and medical outreach efforts.",
             "bn": "স্বাস্থ্য শিবির ও চিকিৎসা সেবায় সহায়তা করুন।"
+          }
+        },
+        {
+          "id": 58,
+          "title": {
+            "en": "Spioniro Golubiro",
+            "bn": "ঘুমন্ত পায়রা"
+          },
+          "description": {
+            "en": "spionioro golubiro",
+            "bn": "ঘুমন্ত পায়রা"
           }
         }
       ]
