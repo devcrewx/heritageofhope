@@ -1427,17 +1427,6 @@ export const fallbackSiteContent = {
             "en": "Assist in health camps and medical outreach efforts.",
             "bn": "স্বাস্থ্য শিবির ও চিকিৎসা সেবায় সহায়তা করুন।"
           }
-        },
-        {
-          "id": 58,
-          "title": {
-            "en": "Spioniro Golubiro",
-            "bn": "ঘুমন্ত পায়রা"
-          },
-          "description": {
-            "en": "spionioro golubiro",
-            "bn": "ঘুমন্ত পায়রা"
-          }
         }
       ]
     },
