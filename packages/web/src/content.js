@@ -1224,6 +1224,13 @@ export const fallbackSiteContent = {
         "altEn": "Children celebrating together",
         "altBn": "শিশুদের আনন্দ উদযাপন",
         "category": "Welfare"
+      },
+      {
+        "id": 195,
+        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779427617/heritage-of-hope/gallery/hlingw1uv9zcwv3f8sl2.png",
+        "altEn": "test",
+        "altBn": "পরীক্ষা",
+        "category": "gallery"
       }
     ]
   },
