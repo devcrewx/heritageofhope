@@ -31,6 +31,8 @@ router.get('/', async (_req, res) => {
 router.post('/', upload.array('files', 5), async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
+      console.error('Gallery upload: no files. contentType=%s body=%j keys=%j files=%j', 
+        req.headers['content-type'], req.body, Object.keys(req.body || {}), req.files)
       return res.status(400).json({ error: 'No files provided' })
     }
 
