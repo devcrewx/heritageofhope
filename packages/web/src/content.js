@@ -1245,6 +1245,13 @@ export const fallbackSiteContent = {
         "altEn": "test",
         "altBn": "real.jpg",
         "category": "gallery"
+      },
+      {
+        "id": 198,
+        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779428113/heritage-of-hope/gallery/ppwbdhqffum4spvjp1rk.png",
+        "altEn": "test",
+        "altBn": "test",
+        "category": "gallery"
       }
     ]
   },
