@@ -22,7 +22,7 @@ const globalForPrisma = globalThis
 function buildDbUrl(base) {
   if (!base) return undefined
   const sep = base.includes('?') ? '&' : '?'
-  return `${base}${sep}connection_limit=5&pool_timeout=10`
+  return `${base}${sep}connection_limit=5&pool_timeout=10&pgbouncer=true`
 }
 
 export const prisma =
