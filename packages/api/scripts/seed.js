@@ -519,9 +519,9 @@ async function main() {
     console.log('Seeding admin user...')
     const hashedPassword = await bcrypt.hash('7in9GOQMbXdwZnwm', 12)
 
-        email: 'admin@heritageofhope.org',
+        email: 'heritageofhopefoundation@gmail.com',
 
-    console.log('   Email: admin@heritageofhope.org')
+    console.log('   Email: heritageofhopefoundation@gmail.com')
     console.log('   Password: 7in9GOQMbXdwZnwm')
     console.log('\n⚠️  Change this password immediately!\n')
   } catch (error) {

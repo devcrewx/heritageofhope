@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test')
 
 // Environment variables (fallbacks)
 const API_URL = process.env.API_URL || 'https://heritageofhope-api.onrender.com'
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@heritageofhope.org'
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'heritageofhopefoundation@gmail.com'
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '7in9GOQMbXdwZnwm'
 
 test.describe('API auth and content tests', () => {
