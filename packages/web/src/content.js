@@ -1238,6 +1238,13 @@ export const fallbackSiteContent = {
         "altEn": "test",
         "altBn": "পরীক্ষা",
         "category": "gallery"
+      },
+      {
+        "id": 197,
+        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779427782/heritage-of-hope/gallery/y3dcph8ihdj63kwbbhpz.jpg",
+        "altEn": "test",
+        "altBn": "real.jpg",
+        "category": "gallery"
       }
     ]
   },
