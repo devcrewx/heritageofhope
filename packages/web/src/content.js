@@ -1374,17 +1374,6 @@ export const fallbackSiteContent = {
       },
       "roles": [
         {
-          "id": 37,
-          "title": {
-            "en": "Event coordination",
-            "bn": "অনুষ্ঠান গোছানো"
-          },
-          "description": {
-            "en": "Plan and coordinate community events and outreach programs.",
-            "bn": "সামাজিক অনুষ্ঠান ও রিলিফ ড্রাইভের পরিকল্পনা ও সমন্বয় করুন।"
-          }
-        },
-        {
           "id": 36,
           "title": {
             "en": "Teaching support",
@@ -1393,6 +1382,17 @@ export const fallbackSiteContent = {
           "description": {
             "en": "Support field execution, coordination, and regular follow-up.",
             "bn": "মাঠের কাজ ও শিক্ষাদানে সহায়তা করুন।"
+          }
+        },
+        {
+          "id": 37,
+          "title": {
+            "en": "Event coordination",
+            "bn": "অনুষ্ঠান গোছানো"
+          },
+          "description": {
+            "en": "Plan and coordinate community events and outreach programs.",
+            "bn": "সামাজিক অনুষ্ঠান ও রিলিফ ড্রাইভের পরিকল্পনা ও সমন্বয় করুন।"
           }
         },
         {
