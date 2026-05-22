@@ -321,8 +321,7 @@ export function GalleryManager() {
         <div className="grid gap-4 md:grid-cols-3 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-1">Category</label>
-            <input
-              type="text"
+            <select
               value={uploadCategory}
               onChange={(e) => {
                 setUploadCategory(e.target.value)
@@ -333,7 +332,12 @@ export function GalleryManager() {
               className={`w-full px-3 py-2 border rounded-lg text-sm ${
                 formErrors.uploadCategory ? 'border-red-500' : 'border-gray-300'
               }`}
-            />
+            >
+              <option value="gallery">Gallery</option>
+              <option value="team">Team</option>
+              <option value="events">Events</option>
+              <option value="programs">Programs</option>
+            </select>
             {formErrors.uploadCategory && (
               <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
                 <AlertCircle className="w-3.5 h-3.5" /> {formErrors.uploadCategory}
@@ -426,8 +430,7 @@ export function GalleryManager() {
                           <label className="block text-sm font-medium text-gray-900 mb-1">
                             Category
                           </label>
-                          <input
-                            type="text"
+                          <select
                             value={editForm.category}
                             onChange={(e) => {
                               setEditForm({ ...editForm, category: e.target.value })
@@ -438,7 +441,12 @@ export function GalleryManager() {
                             className={`w-full px-3 py-2 border rounded-lg text-sm ${
                               formErrors.category ? 'border-red-500' : 'border-gray-300'
                             }`}
-                          />
+                          >
+                            <option value="gallery">Gallery</option>
+                            <option value="team">Team</option>
+                            <option value="events">Events</option>
+                            <option value="programs">Programs</option>
+                          </select>
                           {formErrors.category && (
                             <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
                               <AlertCircle className="w-3.5 h-3.5" /> {formErrors.category}
