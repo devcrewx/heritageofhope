@@ -1224,13 +1224,6 @@ export const fallbackSiteContent = {
         "altEn": "Children celebrating together",
         "altBn": "শিশুদের আনন্দ উদযাপন",
         "category": "Welfare"
-      },
-      {
-        "id": 200,
-        "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779428964/heritage-of-hope/gallery/nnmrceqzdvadc7gel9qk.jpg",
-        "altEn": "Spioniro Golubiro",
-        "altBn": "ঘুমন্ত পায়রা",
-        "category": "gallery"
       }
     ]
   },
