@@ -1640,44 +1640,44 @@ export const fallbackSiteContent = {
     "mapEmbedUrl": "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed",
     "formLabels": {
       "nameLabel": {
-        "en": "Name",
-        "bn": "নাম"
+        "en": "",
+        "bn": ""
       },
       "namePlaceholder": {
-        "en": "Your name",
-        "bn": "আপনার নাম"
+        "en": "",
+        "bn": ""
       },
       "emailLabel": {
-        "en": "Email",
-        "bn": "ইমেল"
+        "en": "",
+        "bn": ""
       },
       "emailPlaceholder": {
-        "en": "you@example.com",
+        "en": "",
         "bn": ""
       },
       "subjectLabel": {
-        "en": "Subject",
-        "bn": "বিষয়"
+        "en": "",
+        "bn": ""
       },
       "messageLabel": {
-        "en": "Message",
-        "bn": "বার্তা"
+        "en": "",
+        "bn": ""
       },
       "messagePlaceholder": {
-        "en": "Tell us how you want to help",
+        "en": "",
         "bn": ""
       },
       "submitLabel": {
-        "en": "Send message",
-        "bn": "বার্তা পাঠান"
+        "en": "",
+        "bn": ""
       },
       "submittingLabel": {
-        "en": "Sending...",
-        "bn": "পাঠানো হচ্ছে..."
+        "en": "",
+        "bn": ""
       },
       "errorMessage": {
-        "en": "Failed to submit form. Please try again.",
-        "bn": "ফর্ম জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"
+        "en": "",
+        "bn": ""
       }
     },
     "mosaicImages": [
