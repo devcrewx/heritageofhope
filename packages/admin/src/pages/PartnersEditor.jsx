@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Trash2, Upload, ChevronUp, ChevronDown, AlertCircle } from 'lucide-react'
 import apiClient from '../lib/api'
 import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export default function PartnersEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [partners, setPartners] = useState([])
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -21,10 +26,6 @@ export default function PartnersEditor() {
     file: null
   })
   const [formErrors, setFormErrors] = useState({})
-
-  useEffect(() => {
-    loadPartners()
-  }, [])
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type })
@@ -44,6 +45,10 @@ export default function PartnersEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadPartners()
+  }, [])
 
   const validateForm = () => {
     const errors = {}
@@ -193,11 +198,20 @@ export default function PartnersEditor() {
     }
   }
 
+  const draft = {
+    partners: partners.map(p => ({
+      en: p.name,
+      bn: p.name,
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'about', fullContent)
+
   if (initialLoading) {
     return <LoadingSpinner fullPage text="Loading partners..." />
   }
 
   return (
+    <SplitLayout previewPage="/about" iframeRef={iframeRef}>
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Partners</h1>
 
@@ -394,5 +408,6 @@ export default function PartnersEditor() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
+    </SplitLayout>
   )
 }

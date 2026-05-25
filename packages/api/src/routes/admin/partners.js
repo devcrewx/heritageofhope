@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   try {
     const partners = await prisma.partner.findMany({ orderBy: { sortOrder: 'asc' } })
     res.json(partners)
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to fetch partners' })
   }
 })

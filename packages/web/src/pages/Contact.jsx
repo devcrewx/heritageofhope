@@ -6,7 +6,7 @@ import { submitFormWeb3 } from '../utils/web3forms'
 function Contact() {
   const { language, siteContent } = useOutletContext()
   const navigate = useNavigate()
-  const { contact, home, siteMeta } = siteContent
+  const { contact, siteMeta } = siteContent
   const formLabels = contact.formLabels || {}
   const page = contact.pageContent || {}
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -30,13 +30,13 @@ function Contact() {
         <article className="card value-card" data-reveal>
           <div className="card-body">
             <p className="meta">{resolve(language, contact.phoneLabel || { en: 'Phone', bn: 'ফোন' })}</p>
-            <h3>{siteMeta.phone}</h3>
+            <h3>{resolve(language, siteMeta.phone)}</h3>
           </div>
         </article>
         <article className="card value-card" data-reveal>
           <div className="card-body">
             <p className="meta">{resolve(language, contact.emailLabel || { en: 'Email', bn: 'ইমেল' })}</p>
-            <h3>{siteMeta.email}</h3>
+            <h3>{resolve(language, siteMeta.email)}</h3>
           </div>
         </article>
         <article className="card value-card wide-card" data-reveal>
@@ -73,7 +73,7 @@ function Contact() {
               } else {
                 setSubmitStatus({ type: 'error', message: result.message })
               }
-            } catch (error) {
+            } catch {
               setSubmitStatus({ type: 'error', message: resolve(language, formLabels.errorMessage) })
             } finally {
               setIsSubmitting(false)

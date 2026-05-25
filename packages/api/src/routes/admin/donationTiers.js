@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'

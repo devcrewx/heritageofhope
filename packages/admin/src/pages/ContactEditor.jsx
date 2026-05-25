@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import MediaUploadField from '../components/MediaUploadField'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 
 export default function ContactEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [saving, setSaving] = useState(false)
@@ -18,10 +23,6 @@ export default function ContactEditor() {
     Array.from({ length: 4 }, () => ({ url: '', labelEn: '', labelBn: '' }))
   )
   const [mosaicUploading, setMosaicUploading] = useState(Array(4).fill(false))
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -58,6 +59,10 @@ export default function ContactEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const updateField = (section, fieldKey, langOrValue, maybeValue) => {
     setFormErrors((current) => ({ ...current, [fieldKey]: '' }))
@@ -241,6 +246,26 @@ export default function ContactEditor() {
     }
   }
 
+  const draft = {
+    pageTitle: data.contact?.contact_page_title || { en: '', bn: '' },
+    intro: data.contact?.contact_page_intro || { en: '', bn: '' },
+    responseLabel: data.contact?.contact_response_label || { en: '', bn: '' },
+    responseValue: data.contact?.contact_response_value || { en: '', bn: '' },
+    formLabel: data.contact?.contact_form_label || { en: '', bn: '' },
+    formHeading: data.contact?.contact_form_heading || { en: '', bn: '' },
+    phoneLabel: data.general?.contact_phone_label || { en: '', bn: '' },
+    emailLabel: data.general?.contact_email_label || { en: '', bn: '' },
+    addressLabel: data.general?.contact_address_label || { en: '', bn: '' },
+    pageContent: data.pageContent || {},
+    formLabels: data.contact?.formLabels || {},
+    mapEmbedUrl,
+    mosaicImages: mosaicSlots.map(s => ({
+      image: s.url,
+      label: { en: s.labelEn, bn: s.labelBn },
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'contact', fullContent)
+
   const styles = {
     container: { maxWidth: '900px' },
     section: { background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' },
@@ -261,6 +286,7 @@ export default function ContactEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/contact" iframeRef={iframeRef}>
     <div style={styles.container}>
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>Contact Page Editor</h1>
       <p style={{ marginBottom: '1.25rem', color: '#475569' }}>These values power the public Contact page and footer.</p>
@@ -619,5 +645,6 @@ export default function ContactEditor() {
         </>
       )}
     </div>
+    </SplitLayout>
   )
 }

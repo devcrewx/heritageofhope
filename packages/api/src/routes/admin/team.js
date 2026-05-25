@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { body, param, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
@@ -8,7 +8,6 @@ import { verifyJWT } from '../../middleware/verifyJWT.js'
 import {
   handleValidationErrors,
   validateTeamMember,
-  validateReorderArray,
   validateId,
 } from '../../middleware/validation.js'
 
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
   try {
     const members = await prisma.teamMember.findMany({ orderBy: { sortOrder: 'asc' } })
     res.json(members)
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to fetch team members' })
   }
 })

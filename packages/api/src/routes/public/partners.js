@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
       orderBy: { sortOrder: 'asc' }
     });
     res.json(partners);
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to fetch partners' });
   }
 });

@@ -4,7 +4,7 @@ import CountUp from '../components/CountUp'
 
 function Home() {
   const { language, siteContent } = useOutletContext()
-  const { home, siteMeta } = siteContent
+  const { home } = siteContent
   const hero = home.hero
   const page = home.pageContent
   const mission = home.mission

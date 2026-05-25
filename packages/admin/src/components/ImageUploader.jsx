@@ -8,7 +8,7 @@ import { Upload, X } from 'lucide-react'
  * - Max size: 5MB per file
  * - Multi-file support
  */
-export function ImageUploader({ onFilesSelected, disabled = false, maxFiles = 10 }) {
+export function ImageUploader({ onFilesSelected, disabled = false }) {
   const [isDragActive, setIsDragActive] = useState(false)
   const [selectedFiles, setSelectedFiles] = useState([])
   const fileInputRef = useRef(null)

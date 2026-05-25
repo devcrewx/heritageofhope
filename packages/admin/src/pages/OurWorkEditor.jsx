@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import MediaUploadField from '../components/MediaUploadField'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 
@@ -10,6 +13,8 @@ const focusFields = ['tag1', 'tag2', 'tag3']
 const stepFields = ['step1', 'step2', 'step3', 'step4']
 
 export default function OurWorkEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [saving, setSaving] = useState(false)
@@ -17,10 +22,6 @@ export default function OurWorkEditor() {
   const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -34,6 +35,10 @@ export default function OurWorkEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const heroImageUrl = data.hero?.heroImage?.en || ''
 
@@ -127,6 +132,16 @@ export default function OurWorkEditor() {
     }
   }
 
+  const draft = {
+    ...data,
+    hero: {
+      pageTitle: data.intro?.title || { en: '', bn: '' },
+      intro: data.intro?.paragraph || { en: '', bn: '' },
+      heroImage: data.hero?.heroImage?.en || '',
+    },
+  }
+  usePreviewSync(iframeRef, draft, 'ourWork', fullContent)
+
   const styles = {
     container: { maxWidth: '980px' },
     section: { background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' },
@@ -136,6 +151,7 @@ export default function OurWorkEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/our-work" iframeRef={iframeRef}>
     <div style={styles.container}>
       <h1 style={{ marginBottom: '0.5rem', fontSize: '1.8rem' }}>Our Work Page Editor</h1>
       <p style={styles.hint}>This controls the public Our Work page text sections. Program cards still use the shared program content.</p>
@@ -315,6 +331,7 @@ export default function OurWorkEditor() {
         </>
       )}
     </div>
+    </SplitLayout>
   )
 }
 

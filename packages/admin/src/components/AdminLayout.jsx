@@ -26,7 +26,7 @@ function AdminLayout({ user, onLogout }) {
     <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh', fontFamily: 'system-ui, sans-serif' }}>
       <aside style={{ borderRight: '1px solid #e5e7eb', padding: '1rem', background: '#f8fafc' }}>
         <h2 style={{ marginTop: 0 }}>Heritage Admin</h2>
-        <p style={{ color: '#475569', marginTop: 0 }}>{user?.email || 'Signed in'}</p>
+        <p title={user?.email || 'Signed in'} style={{ color: '#475569', marginTop: 0, overflowWrap: 'break-word', wordBreak: 'break-all' }}>{user?.email || 'Signed in'}</p>
         <nav style={{ display: 'grid', gap: '0.5rem', marginTop: '1.25rem' }}>
           {links.map((item) => (
             <NavLink

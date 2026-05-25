@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
@@ -16,7 +15,7 @@ router.get('/', async (_req, res) => {
     })
 
     res.json({ success: true, items })
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to fetch fund allocation' })
   }
 })
@@ -41,7 +40,7 @@ router.post(
       invalidateCache()
 
       res.json({ success: true, data: item })
-    } catch (error) {
+    } catch {
       res.status(500).json({ error: 'Failed to create fund allocation' })
     }
   }
@@ -76,7 +75,7 @@ router.patch('/batch', async (req, res) => {
     invalidateCache()
 
     res.json({ success: true, updated })
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to update fund allocation batch' })
   }
 })
@@ -100,7 +99,7 @@ router.patch('/:id', async (req, res) => {
     invalidateCache()
 
     res.json({ success: true, data: item })
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to update fund allocation' })
   }
 })
@@ -117,7 +116,7 @@ router.delete('/:id', async (req, res) => {
     invalidateCache()
 
     res.json({ success: true, message: 'Fund allocation deleted' })
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to delete fund allocation' })
   }
 })

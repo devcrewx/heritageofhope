@@ -14,7 +14,7 @@ if (SENTRY_DSN) {
   })
 }
 
-function SentryFallback() {
+function SentryFallback_() {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -36,6 +36,6 @@ function SentryFallback() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {SENTRY_DSN ? <Sentry.ErrorBoundary fallback={<SentryFallback />}><App /></Sentry.ErrorBoundary> : <App />}
+    {SENTRY_DSN ? <Sentry.ErrorBoundary fallback={<SentryFallback_ />}><App /></Sentry.ErrorBoundary> : <App />}
   </React.StrictMode>,
 )

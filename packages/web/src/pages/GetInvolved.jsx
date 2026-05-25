@@ -1,6 +1,6 @@
 import { useOutletContext } from 'react-router-dom'
 import { useState } from 'react'
-import { resolve, text } from '../utils/i18n'
+import { resolve } from '../utils/i18n'
 import DocumentModal from '../components/DocumentModal'
 import { submitFormWeb3 } from '../utils/web3forms'
 
@@ -125,7 +125,7 @@ function GetInvolved() {
               } else {
                 setVolunteerStatus({ type: 'error', message: result.message })
               }
-            } catch (error) {
+            } catch {
               setVolunteerStatus({ type: 'error', message: resolve(language, volunteerFormLabels.errorMessage) })
             } finally {
               setVolunteerSubmitting(false)
@@ -222,7 +222,7 @@ function GetInvolved() {
               } else {
                 setPartnerStatus({ type: 'error', message: result.message })
               }
-            } catch (error) {
+            } catch {
               setPartnerStatus({ type: 'error', message: resolve(language, partnerFormLabels.errorMessage) })
             } finally {
               setPartnerSubmitting(false)

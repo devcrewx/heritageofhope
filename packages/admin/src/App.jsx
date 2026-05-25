@@ -1,27 +1,33 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { createContext, lazy, Suspense, useEffect, useState } from 'react'
 import AdminLayout from './components/AdminLayout'
 import { useAuth } from './hooks/useAuth'
-import Dashboard from './pages/Dashboard'
-import Login from './pages/Login'
-import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
-import Settings from './pages/Settings'
-import HomeEditor from './pages/HomeEditor'
-import { GalleryManager } from './pages/GalleryManager'
-import DocumentsEditor from './pages/DocumentsEditor'
-import PartnersEditor from './pages/PartnersEditor'
-import TeamEditor from './pages/TeamEditor'
-import ActivityPostsEditor from './pages/ActivityPostsEditor'
-import AboutEditor from './pages/AboutEditor'
-import ImpactEditor from './pages/ImpactEditor'
-import GetInvolvedEditor from './pages/GetInvolvedEditor'
-import OurWorkEditor from './pages/OurWorkEditor'
-import ContactEditor from './pages/ContactEditor'
-import ProgramsEditor from './pages/ProgramsEditor'
-import SubmissionsInbox from './pages/SubmissionsInbox'
-import ChangePassword from './pages/ChangePassword'
-import ThankYouEditor from './pages/ThankYouEditor'
-import NotFoundEditor from './pages/NotFoundEditor'
+
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const Login = lazy(() => import('./pages/Login'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const Settings = lazy(() => import('./pages/Settings'))
+const HomeEditor = lazy(() => import('./pages/HomeEditor'))
+const GalleryManager = lazy(() => import('./pages/GalleryManager').then(m => ({ default: m.GalleryManager })))
+const DocumentsEditor = lazy(() => import('./pages/DocumentsEditor'))
+const PartnersEditor = lazy(() => import('./pages/PartnersEditor'))
+const TeamEditor = lazy(() => import('./pages/TeamEditor'))
+const ActivityPostsEditor = lazy(() => import('./pages/ActivityPostsEditor'))
+const AboutEditor = lazy(() => import('./pages/AboutEditor'))
+const ImpactEditor = lazy(() => import('./pages/ImpactEditor'))
+const GetInvolvedEditor = lazy(() => import('./pages/GetInvolvedEditor'))
+const OurWorkEditor = lazy(() => import('./pages/OurWorkEditor'))
+const ContactEditor = lazy(() => import('./pages/ContactEditor'))
+const ProgramsEditor = lazy(() => import('./pages/ProgramsEditor'))
+const SubmissionsInbox = lazy(() => import('./pages/SubmissionsInbox'))
+const ChangePassword = lazy(() => import('./pages/ChangePassword'))
+const ThankYouEditor = lazy(() => import('./pages/ThankYouEditor'))
+const NotFoundEditor = lazy(() => import('./pages/NotFoundEditor'))
+
+const SiteContentContext = createContext(null)
+
+export { SiteContentContext }
 
 function RequireAuth({ isAuthenticated, ready, children }) {
   if (!ready) {
@@ -39,20 +45,46 @@ function RequireAuth({ isAuthenticated, ready, children }) {
   return children
 }
 
+function PageLoader() {
+  return (
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', fontFamily: 'system-ui, sans-serif' }}>
+      <p>Loading...</p>
+    </main>
+  )
+}
+
 function App() {
   const { user, ready, isAuthenticated, login, logout } = useAuth()
+  const [fullSiteContent, setFullSiteContent] = useState(null)
+
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_BASE || ''
+    fetch(`${apiBase}/api/content`)
+      .then(r => r.json())
+      .then(d => setFullSiteContent(d.data || d))
+      .catch(() => {
+        fetch('/content-fallback.json')
+          .then(r => r.json())
+          .then(setFullSiteContent)
+          .catch(() => {})
+      })
+  }, [])
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login onLogin={login} isAuthenticated={isAuthenticated} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/login" element={<Suspense fallback={<PageLoader />}><Login onLogin={login} isAuthenticated={isAuthenticated} /></Suspense>} />
+        <Route path="/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPassword /></Suspense>} />
+        <Route path="/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPassword /></Suspense>} />
         <Route
           path="/"
           element={(
             <RequireAuth isAuthenticated={isAuthenticated} ready={ready}>
-              <AdminLayout user={user} onLogout={logout} />
+              <Suspense fallback={<PageLoader />}>
+                <SiteContentContext.Provider value={fullSiteContent}>
+                  <AdminLayout user={user} onLogout={logout} />
+                </SiteContentContext.Provider>
+              </Suspense>
             </RequireAuth>
           )}
         >
