@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  pull-requests: write
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -24,5 +25,9 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add packages/web/public/content-fallback.json packages/web/src/content.js
-          git diff --cached --quiet || git commit -m "chore: update content fallback snapshot"
-          git push
+          git diff --cached --quiet || {
+            git checkout -b auto/fallback-$(date +%s)
+            git commit -m "chore: update content fallback snapshot"
+            git push origin HEAD
+            gh pr create --fill --base main --head auto/fallback-$(date +%s) --label automated
+          }

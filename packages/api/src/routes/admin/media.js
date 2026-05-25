@@ -19,7 +19,7 @@ router.post('/hero', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'No file provided' })
     }
 
-    const { page, section = 'hero', altEn = '', altBn = '' } = req.body
+    const { page, section = 'hero' } = req.body
     if (!page) {
       return res.status(400).json({ error: 'page parameter is required' })
     }

@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { body, param, validationResult } from 'express-validator'
 import { prisma } from '../../lib/prisma.js'
 import { invalidateCache } from '../../lib/contentCache.js'
 import { uploadToCloudinary, deleteFromCloudinary } from '../../lib/cloudinary.js'

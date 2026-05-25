@@ -1,12 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { ArrowDown, ArrowUp, Trash2, AlertCircle } from 'lucide-react'
 import apiClient from '../lib/api'
 import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export default function DocumentsEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [documents, setDocuments] = useState([])
   const [loading, setLoading] = useState(true)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -199,11 +204,15 @@ export default function DocumentsEditor() {
     }
   }
 
+  const draft = { documents }
+  usePreviewSync(iframeRef, draft, 'about', fullContent)
+
   if (initialLoading) {
     return <LoadingSpinner fullPage text="Loading documents..." />
   }
 
   return (
+    <SplitLayout previewPage="/about" iframeRef={iframeRef}>
     <div className="space-y-6 max-w-5xl p-6">
       <div className="flex items-center justify-between gap-4">
         <div>
@@ -477,5 +486,6 @@ export default function DocumentsEditor() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
+    </SplitLayout>
   )
 }

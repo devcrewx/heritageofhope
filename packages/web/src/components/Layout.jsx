@@ -3,43 +3,13 @@ import { useEffect, useState, useRef } from 'react'
 import { resolve, text } from '../utils/i18n'
 
 function Layout({ language, setLanguage, siteContent, contentLoading, contentError }) {
-  if (contentLoading && !siteContent) {
-    return (
-      <div className="site-shell">
-        <div className="loading-screen">
-          <div className="loading-spinner" />
-          <p>Loading content...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (contentError && !siteContent) {
-    return (
-      <div className="site-shell">
-        <div className="loading-screen">
-          <p className="error-text">Failed to load site content. Please try again later.</p>
-          <button className="btn btn-solid" onClick={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (!siteContent) {
-    return null
-  }
-
-  const siteMeta = siteContent.siteMeta || {}
+  const [navOpen, setNavOpen] = useState(false)
+  const navRef = useRef(null)
+  const toggleRef = useRef(null)
 
   useEffect(() => {
     document.documentElement.lang = language === 'bn' ? 'bn' : 'en'
   }, [language])
-
-  const [navOpen, setNavOpen] = useState(false)
-  const navRef = useRef(null)
-  const toggleRef = useRef(null)
 
   useEffect(() => {
     if (!navOpen) return
@@ -98,6 +68,36 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
       if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus()
     }
   }, [navOpen])
+
+  if (contentLoading && !siteContent) {
+    return (
+      <div className="site-shell">
+        <div className="loading-screen">
+          <div className="loading-spinner" />
+          <p>Loading content...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (contentError && !siteContent) {
+    return (
+      <div className="site-shell">
+        <div className="loading-screen">
+          <p className="error-text">Failed to load site content. Please try again later.</p>
+          <button className="btn btn-solid" onClick={() => window.location.reload()}>
+            Retry
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!siteContent) {
+    return null
+  }
+
+  const siteMeta = siteContent.siteMeta || {}
 
   return (
     <div className={`site-shell ${language === 'bn' ? 'lang-bn' : 'lang-en'}`}>
@@ -180,8 +180,8 @@ function Layout({ language, setLanguage, siteContent, contentLoading, contentErr
             </div>
           </div>
           <div>
-            <p>{siteMeta.phone}</p>
-            <p>{siteMeta.email}</p>
+            <p>{resolve(language, siteMeta.phone)}</p>
+            <p>{resolve(language, siteMeta.email)}</p>
             <p>{resolve(language, siteMeta.address)}</p>
           </div>
         </footer>

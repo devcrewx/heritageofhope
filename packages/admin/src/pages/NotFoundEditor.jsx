@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import { useApi } from '../hooks/useApi'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 const fields = [
   { fieldKey: 'eyebrow', labelEn: 'Page Eyebrow (shown before heading)', labelBn: 'Page Eyebrow (Bangla)' },
@@ -12,16 +15,14 @@ const fields = [
 ]
 
 export default function NotFoundEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -35,6 +36,10 @@ export default function NotFoundEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const updateField = (fieldKey, lang, value) => {
     setData((current) => ({
@@ -64,6 +69,9 @@ export default function NotFoundEditor() {
     }
   }
 
+  const draft = { pageContent: data }
+  usePreviewSync(iframeRef, draft, 'notFound', fullContent)
+
   if (initialLoading) {
     return <LoadingSpinner fullPage text="Loading not found page content..." />
   }
@@ -85,6 +93,7 @@ export default function NotFoundEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/404" iframeRef={iframeRef}>
     <div style={styles.container}>
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>Not Found (404) Page Editor</h1>
       <p style={{ marginBottom: '1.25rem', color: '#475569' }}>Edit the text shown when a visitor lands on a page that does not exist.</p>
@@ -111,5 +120,6 @@ export default function NotFoundEditor() {
       </div>
       {statusMessage && <div style={successStyle}>{statusMessage}</div>}
     </div>
+    </SplitLayout>
   )
 }

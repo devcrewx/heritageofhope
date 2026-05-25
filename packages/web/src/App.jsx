@@ -11,6 +11,7 @@ import Contact from './pages/Contact'
 import ThankYou from './pages/ThankYou'
 import NotFound from './pages/NotFound'
 import { fallbackSiteContent } from './content.js'
+import { usePreviewMode } from './hooks/usePreviewMode'
 import './App.css'
 
 function ScrollToTop() {
@@ -23,7 +24,7 @@ function ScrollToTop() {
   return null
 }
 
-function RevealOnScroll({ language }) {
+function RevealOnScroll() {
   const location = useLocation()
 
   useEffect(() => {
@@ -91,11 +92,25 @@ function App() {
       ? ''
       : '')
 
+  const isPreviewMode = usePreviewMode(setSiteContent, setLanguage)
+
   useEffect(() => {
     let cancelled = false
     let pollInterval = null
 
     async function loadSiteContent() {
+      if (isPreviewMode) {
+        try {
+          const fallbackRes = await fetch('/content-fallback.json')
+          if (fallbackRes.ok) {
+            const fallbackData = await fallbackRes.json()
+            if (!cancelled) setSiteContent(fallbackData.data || fallbackData)
+          }
+        } catch { /* silent - fallback may not exist */ }
+        if (!cancelled) setContentLoading(false)
+        return
+      }
+
       try {
         setContentLoading(true)
         setContentError(null)
@@ -122,7 +137,7 @@ function App() {
               const fallbackData = await fallbackRes.json()
               setSiteContent({ ...fallbackData, _isStale: true })
             }
-          } catch {}
+          } catch { /* silent - fallback may not exist */ }
         }
       } finally {
         if (!cancelled) {
@@ -131,11 +146,11 @@ function App() {
       }
     }
 
-    // Load content on mount
     loadSiteContent()
 
-    // Poll for content updates every 30 seconds
-    pollInterval = setInterval(loadSiteContent, 30000)
+    if (!isPreviewMode) {
+      pollInterval = setInterval(loadSiteContent, 30000)
+    }
 
     return () => {
       cancelled = true
@@ -143,7 +158,7 @@ function App() {
         clearInterval(pollInterval)
       }
     }
-  }, [])
+  }, [isPreviewMode, apiBase])
 
   return (
     <BrowserRouter>

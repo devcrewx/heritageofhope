@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 function Login({ onLogin, isAuthenticated }) {
-  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -19,7 +18,6 @@ function Login({ onLogin, isAuthenticated }) {
 
     try {
       await onLogin(email, password)
-      navigate('/')
     } catch (err) {
       setError(err.response?.data?.error || err.message || 'Unable to sign in')
     } finally {

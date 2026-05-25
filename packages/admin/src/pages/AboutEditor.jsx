@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import MediaUploadField from '../components/MediaUploadField'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 
 export default function AboutEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [saving, setSaving] = useState(false)
@@ -15,10 +20,6 @@ export default function AboutEditor() {
   const [error, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [activeSection, setActiveSection] = useState('intro')
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -32,6 +33,10 @@ export default function AboutEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const heroImageUrl = data.hero?.heroImage?.en || ''
   const certImageUrl = data.registration?.certImage?.en || ''
@@ -326,6 +331,17 @@ export default function AboutEditor() {
     </div>
   )
 
+  const draft = {
+    ...data,
+    hero: {
+      pageTitle: data.intro?.title || { en: '', bn: '' },
+      intro: data.intro?.paragraph || { en: '', bn: '' },
+      heroImage: data.hero?.heroImage?.en || '',
+    },
+    registration: { ...data.registration, certImage: data.registration?.certImage?.en || '' },
+  }
+  usePreviewSync(iframeRef, draft, 'about', fullContent)
+
   const containerStyle = {
     maxWidth: '900px',
   }
@@ -376,6 +392,7 @@ export default function AboutEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/about" iframeRef={iframeRef}>
     <div style={containerStyle}>
       <h1 style={{ marginBottom: '0.75rem', fontSize: '1.8rem' }}>About Page Editor</h1>
       <p style={{ marginBottom: '1.5rem', color: '#475569' }}>
@@ -441,5 +458,6 @@ export default function AboutEditor() {
         </>
       )}
     </div>
+    </SplitLayout>
   )
 }

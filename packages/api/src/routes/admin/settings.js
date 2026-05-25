@@ -3,9 +3,6 @@ import { prisma } from '../../lib/prisma.js'
 import { verifyJWT } from '../../middleware/verifyJWT.js'
 import {
   handleValidationErrors,
-  validateTextInput,
-  validateEmail,
-  validateUrl,
 } from '../../middleware/validation.js'
 import { body } from 'express-validator'
 
@@ -80,14 +77,13 @@ router.patch(
             where: { page: 'settings', fieldKey: key },
           })
 
-          let content
           if (existing) {
-            content = await prisma.siteContent.update({
+            await prisma.siteContent.update({
               where: { id: existing.id },
               data: { valueEn: value, updatedAt: new Date() },
             })
           } else {
-            content = await prisma.siteContent.create({
+            await prisma.siteContent.create({
               data: { page: 'settings', section: 'org', fieldKey: key, valueEn: value },
             })
           }

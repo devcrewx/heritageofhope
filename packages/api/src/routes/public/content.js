@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { getSiteContent } from '../../data/siteContent.js'
-import { getCachedContent, setCachedContent, invalidateCache } from '../../lib/contentCache.js'
+import { getCachedContent, setCachedContent } from '../../lib/contentCache.js'
 import { prisma } from '../../lib/prisma.js'
 
 const router = Router()

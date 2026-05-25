@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import { Trash2, Upload, ChevronUp, ChevronDown, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import apiClient from '../lib/api'
 import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export default function ActivityPostsEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(false)
-  const [initialLoading, setInitialLoading] = useState(true)
+  const [, setInitialLoading] = useState(true)
   const [editingId, setEditingId] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const [toast, setToast] = useState(null)
@@ -25,10 +30,6 @@ export default function ActivityPostsEditor() {
     file: null
   })
   const [formErrors, setFormErrors] = useState({})
-
-  useEffect(() => {
-    loadPosts()
-  }, [])
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type })
@@ -48,6 +49,10 @@ export default function ActivityPostsEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadPosts()
+  }, [])
 
   const validateForm = () => {
     const errors = {}
@@ -232,7 +237,18 @@ export default function ActivityPostsEditor() {
 
 
 
+  const draft = {
+    facebookPosts: posts.map(p => ({
+      date: p.date,
+      image: p.photoUrl || '',
+      title: { en: p.titleEn, bn: p.titleBn || '' },
+      excerpt: { en: p.bodyEn, bn: p.bodyBn || '' },
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'home', fullContent)
+
   return (
+    <SplitLayout previewPage="/" iframeRef={iframeRef}>
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Activity Posts</h1>
 
@@ -533,5 +549,6 @@ export default function ActivityPostsEditor() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
+    </SplitLayout>
   )
 }

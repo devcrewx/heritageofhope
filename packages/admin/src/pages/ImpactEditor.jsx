@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import { useApi } from '../hooks/useApi'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export default function ImpactEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [stats, setStats] = useState([])
@@ -12,10 +17,6 @@ export default function ImpactEditor() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
   const [activeSection, setActiveSection] = useState('stats')
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -38,6 +39,10 @@ export default function ImpactEditor() {
       setMessage(`Error: ${error.message}`)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const updateField = (section, fieldKey, lang, value) => {
     setData((current) => ({
@@ -199,6 +204,30 @@ export default function ImpactEditor() {
 
   const totalAllocation = allocation.reduce((sum, item) => sum + Number(item.percentage || 0), 0)
 
+  const draft = {
+    hero: {
+      pageTitle: data.intro?.title || { en: '', bn: '' },
+      subHeadline: data.intro?.paragraph || { en: '', bn: '' },
+      promise: data.hero?.promise || { en: '', bn: '' },
+    },
+    testimonial: {
+      quote: data.feedback?.quote || { en: '', bn: '' },
+    },
+    annualReport: {
+      body: data.report?.status || { en: '', bn: '' },
+    },
+    pageContent: data.pageContent || {},
+    impactMetrics: stats.map(s => ({
+      value: String(s.value || ''),
+      label: { en: s.labelEn, bn: s.labelBn || '' },
+    })),
+    fundAllocation: allocation.map(a => ({
+      category: { en: a.categoryEn, bn: a.categoryBn || '' },
+      percentage: a.percentage,
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'impact', fullContent)
+
   const styles = {
     container: { maxWidth: '980px' },
     section: { background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' },
@@ -215,6 +244,7 @@ export default function ImpactEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/impact" iframeRef={iframeRef}>
     <div style={styles.container}>
       <h1 style={{ marginBottom: '0.75rem', fontSize: '1.8rem' }}>Impact Page Editor</h1>
       <p style={{ marginBottom: '1.5rem', color: '#475569' }}>
@@ -289,30 +319,30 @@ export default function ImpactEditor() {
           <div style={{ display: 'grid', gap: '0.85rem' }}>
             {stats.map((stat, index) => (
               <div key={stat.id} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr auto', gap: '0.75rem', alignItems: 'start' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
                   <input
                     value={stat.value}
                     onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, value: e.target.value } : item))}
                     placeholder="200+"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '1 1 100px', minWidth: '80px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={stat.labelEn || ''}
                     onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, labelEn: e.target.value } : item))}
                     placeholder="children supported"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={stat.labelBn || ''}
                     onChange={(e) => setStats((current) => current.map((item) => item.id === stat.id ? { ...item, labelBn: e.target.value } : item))}
                     placeholder="সাহায্যপ্রাপ্ত শিশু"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <button
                     type="button"
                     onClick={() => deleteStat(stat.id)}
                     disabled={saving}
-                    style={{ ...styles.button, marginTop: 0, background: '#b91c1c' }}
+                    style={{ flex: '0 0 auto', padding: '0.6rem 1.25rem', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600 }}
                   >
                     Delete
                   </button>
@@ -326,11 +356,11 @@ export default function ImpactEditor() {
 
           <div style={{ marginTop: '1rem', borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
             <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Add Stat</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr auto', gap: '0.75rem' }}>
-              <input value={newStat.value} onChange={(e) => setNewStat({ ...newStat, value: e.target.value })} placeholder="15+" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <input value={newStat.labelEn} onChange={(e) => setNewStat({ ...newStat, labelEn: e.target.value })} placeholder="projects completed" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <input value={newStat.labelBn} onChange={(e) => setNewStat({ ...newStat, labelBn: e.target.value })} placeholder="সম্পন্ন প্রকল্প" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <button type="button" onClick={addStat} disabled={saving} style={{ ...styles.button, marginTop: 0 }}>Add</button>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <input value={newStat.value} onChange={(e) => setNewStat({ ...newStat, value: e.target.value })} placeholder="15+" style={{ flex: '1 1 100px', minWidth: '80px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newStat.labelEn} onChange={(e) => setNewStat({ ...newStat, labelEn: e.target.value })} placeholder="projects completed" style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newStat.labelBn} onChange={(e) => setNewStat({ ...newStat, labelBn: e.target.value })} placeholder="সম্পন্ন প্রকল্প" style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <button type="button" onClick={addStat} disabled={saving} style={{ flex: '0 0 auto', padding: '0.6rem 1.25rem', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600 }}>Add</button>
             </div>
             <button onClick={saveStats} disabled={saving} style={styles.button}>
               {saving ? 'Saving...' : 'Save Stats'}
@@ -349,12 +379,12 @@ export default function ImpactEditor() {
           <div style={{ display: 'grid', gap: '0.85rem' }}>
             {allocation.map((item) => (
               <div key={item.id} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 100px 80px auto', gap: '0.75rem', alignItems: 'start' }}>
-                  <input value={item.categoryEn || ''} onChange={(e) => updateAllocation(item.id, 'categoryEn', e.target.value)} placeholder="Education" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-                  <input value={item.categoryBn || ''} onChange={(e) => updateAllocation(item.id, 'categoryBn', e.target.value)} placeholder="শিক্ষা" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-                  <input value={item.percentage} type="number" min="0" max="100" onChange={(e) => updateAllocation(item.id, 'percentage', Number(e.target.value))} placeholder="25" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-                  <input value={item.sortOrder ?? 0} type="number" onChange={(e) => updateAllocation(item.id, 'sortOrder', Number(e.target.value))} style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-                  <button type="button" onClick={() => deleteAllocation(item.id)} disabled={saving} style={{ padding: '0.5rem 0.8rem', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer' }}>Delete</button>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+                  <input value={item.categoryEn || ''} onChange={(e) => updateAllocation(item.id, 'categoryEn', e.target.value)} placeholder="Education" style={{ flex: '2 1 140px', minWidth: '120px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+                  <input value={item.categoryBn || ''} onChange={(e) => updateAllocation(item.id, 'categoryBn', e.target.value)} placeholder="শিক্ষা" style={{ flex: '2 1 140px', minWidth: '120px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+                  <input value={item.percentage} type="number" min="0" max="100" onChange={(e) => updateAllocation(item.id, 'percentage', Number(e.target.value))} placeholder="25" style={{ flex: '1 1 80px', minWidth: '60px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+                  <input value={item.sortOrder ?? 0} type="number" onChange={(e) => updateAllocation(item.id, 'sortOrder', Number(e.target.value))} style={{ flex: '1 1 60px', minWidth: '50px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+                  <button type="button" onClick={() => deleteAllocation(item.id)} disabled={saving} style={{ flex: '0 0 auto', padding: '0.5rem 0.8rem', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer' }}>Delete</button>
                 </div>
               </div>
             ))}
@@ -366,12 +396,12 @@ export default function ImpactEditor() {
 
           <div style={{ marginTop: '1.5rem', borderTop: '1px solid #e5e7eb', paddingTop: '1.25rem' }}>
             <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Add Allocation</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 100px 80px auto', gap: '0.75rem', alignItems: 'start' }}>
-              <input value={newAllocation.categoryEn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryEn: e.target.value })} placeholder="Education" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <input value={newAllocation.categoryBn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryBn: e.target.value })} placeholder="শিক্ষা" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <input value={newAllocation.percentage} type="number" min="0" max="100" onChange={(e) => setNewAllocation({ ...newAllocation, percentage: Number(e.target.value) })} placeholder="25" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <input value={newAllocation.sortOrder} type="number" onChange={(e) => setNewAllocation({ ...newAllocation, sortOrder: Number(e.target.value) })} placeholder="Sort" style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
-              <button type="button" onClick={addAllocation} disabled={saving} style={{ ...styles.button, marginTop: 0 }}>Add</button>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+              <input value={newAllocation.categoryEn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryEn: e.target.value })} placeholder="Education" style={{ flex: '2 1 140px', minWidth: '120px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.categoryBn} onChange={(e) => setNewAllocation({ ...newAllocation, categoryBn: e.target.value })} placeholder="শিক্ষা" style={{ flex: '2 1 140px', minWidth: '120px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.percentage} type="number" min="0" max="100" onChange={(e) => setNewAllocation({ ...newAllocation, percentage: Number(e.target.value) })} placeholder="25" style={{ flex: '1 1 80px', minWidth: '60px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <input value={newAllocation.sortOrder} type="number" onChange={(e) => setNewAllocation({ ...newAllocation, sortOrder: Number(e.target.value) })} placeholder="Sort" style={{ flex: '1 1 60px', minWidth: '50px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }} />
+              <button type="button" onClick={addAllocation} disabled={saving} style={{ flex: '0 0 auto', padding: '0.6rem 1.25rem', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600 }}>Add</button>
             </div>
           </div>
         </div>
@@ -430,5 +460,6 @@ export default function ImpactEditor() {
 
       {message && <div style={messageStyle}>{message}</div>}
     </div>
+    </SplitLayout>
   )
 }

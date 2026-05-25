@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import { ArrowDown, ArrowUp, GripVertical, Trash2, AlertCircle } from 'lucide-react'
 import apiClient from '../lib/api'
 import { Toast } from '../components/Toast'
@@ -7,8 +7,13 @@ import BilingualField from '../components/BilingualField'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export function GalleryManager() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [pageContent, setPageContent] = useState({
     eyebrow: { en: '', bn: '' },
     heading: { en: '', bn: '' },
@@ -64,7 +69,7 @@ export function GalleryManager() {
             filterAriaLabel: p.filterAriaLabel || { en: 'Gallery categories', bn: 'ছবির বিভাগ' },
           })
         }
-      } catch (error) {
+      } catch {
         showToast('Failed to load gallery', 'error')
       } finally {
         setLoading(false)
@@ -218,7 +223,7 @@ export function GalleryManager() {
     try {
       await apiClient.patch('/api/admin/gallery/reorder', { items: reordered })
       showToast('Gallery order updated', 'success')
-    } catch (error) {
+    } catch {
       showToast('Failed to update order', 'error')
     }
   }
@@ -247,11 +252,18 @@ export function GalleryManager() {
     }
   }
 
+  const draft = {
+    pageContent,
+    items: galleryItems,
+  }
+  usePreviewSync(iframeRef, draft, 'gallery', fullContent)
+
   if (loading) {
     return <LoadingSpinner fullPage text="Loading gallery..." />
   }
 
   return (
+    <SplitLayout previewPage="/gallery" iframeRef={iframeRef}>
     <div className="p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Gallery Manager</h1>
       <p className="text-gray-600 mb-4">Upload and manage gallery photos</p>
@@ -564,5 +576,6 @@ export function GalleryManager() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
+    </SplitLayout>
   )
 }

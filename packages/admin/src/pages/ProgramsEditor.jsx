@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { request } from '../lib/api'
 import BilingualField from '../components/BilingualField'
 import ImageUploader from '../components/ImageUploader'
@@ -7,8 +7,13 @@ import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { ErrorMessage } from '../components/ErrorMessage'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 
 export default function ProgramsEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [programs, setPrograms] = useState([])
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
@@ -258,11 +263,24 @@ export default function ProgramsEditor() {
     }
   }
 
+  const draft = {
+    featuredPrograms: programs.map(p => ({
+      slug: p.slug,
+      image: p.imageUrl || '',
+      category: { en: p.categoryEn, bn: p.categoryBn || '' },
+      title: { en: p.titleEn, bn: p.titleBn || '' },
+      description: { en: p.descriptionEn, bn: p.descriptionBn || '' },
+      highlight: { en: p.highlightEn || '', bn: p.highlightBn || '' },
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'ourWork', fullContent)
+
   if (initialLoading) {
     return <LoadingSpinner fullPage text="Loading programs..." />
   }
 
   return (
+    <SplitLayout previewPage="/our-work" iframeRef={iframeRef}>
     <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
@@ -535,5 +553,6 @@ export default function ProgramsEditor() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </div>
+    </SplitLayout>
   )
 }

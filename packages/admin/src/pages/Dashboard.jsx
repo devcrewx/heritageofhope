@@ -10,7 +10,7 @@ function Dashboard() {
     documents: 0,
     activityPosts: 0,
   })
-  const [loading, setLoading] = useState(true)
+  const [, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchStats() {

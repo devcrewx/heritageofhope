@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   try {
     const posts = await prisma.activityPost.findMany({ orderBy: { sortOrder: 'desc' } })
     res.json(posts)
-  } catch (error) {
+  } catch {
     res.status(500).json({ error: 'Failed to fetch activity posts' })
   }
 })

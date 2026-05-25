@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import MediaUploadField from '../components/MediaUploadField'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 import { useApi } from '../hooks/useApi'
 import { ConfirmDialog } from '../components/ConfirmDialog'
@@ -17,6 +20,8 @@ const tabDefinitions = [
 ]
 
 export default function GetInvolvedEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const { request } = useApi()
   const [data, setData] = useState({})
   const [donationTiers, setDonationTiers] = useState([])
@@ -29,13 +34,9 @@ export default function GetInvolvedEditor() {
   const [chequeUploading, setChequeUploading] = useState(false)
   const [partnerUploading, setPartnerUploading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [, setError] = useState('')
   const [statusMessage, setStatusMessage] = useState('')
   const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, itemId: null, kind: '' })
-
-  useEffect(() => {
-    loadContent()
-  }, [])
 
   const loadContent = async () => {
     try {
@@ -57,6 +58,10 @@ export default function GetInvolvedEditor() {
       setInitialLoading(false)
     }
   }
+
+  useEffect(() => {
+    loadContent()
+  }, [])
 
   const upiQrImageUrl = data.upi?.qrUrl?.en || ''
   const specimenChequeUrl = data.bank?.chequeUrl?.en || ''
@@ -428,6 +433,38 @@ export default function GetInvolvedEditor() {
     }
   }
 
+  const draft = {
+    hero: {
+      pageTitle: data.intro?.title || { en: '', bn: '' },
+      intro: data.intro?.paragraph || { en: '', bn: '' },
+    },
+    pageContent: data.pageContent || {},
+    bankDetails: data.bank || {},
+    upiImage: data.upi?.qrUrl?.en || '',
+    upiDeepLink: data.upi?.intentUrl?.en || '',
+    upiLabels: data.upiLabels || {},
+    volunteerFormLabels: data.volunteerFormLabels || {},
+    volunteer: {
+      heading: data.volunteer?.heading || { en: '', bn: '' },
+      description: data.volunteer?.description || { en: '', bn: '' },
+      roles: volunteerRoles.map(r => ({
+        title: { en: r.titleEn, bn: r.titleBn || '' },
+        description: { en: r.descriptionEn || '', bn: r.descriptionBn || '' },
+      })),
+    },
+    partnerSection: {
+      heading: data.partner?.heading || { en: '', bn: '' },
+      body: data.partner?.description || { en: '', bn: '' },
+    },
+    partnerFormLabels: data.partnerFormLabels || {},
+    specimenChequeImage: data.bank?.chequeUrl?.en || '',
+    donationTiers: donationTiers.map(t => ({
+      amount: t.amount,
+      label: { en: t.labelEn, bn: t.labelBn || '' },
+    })),
+  }
+  usePreviewSync(iframeRef, draft, 'getInvolved', fullContent)
+
   const styles = {
     container: { maxWidth: '1020px' },
     section: { background: '#fff', border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1.5rem', marginBottom: '1.5rem' },
@@ -450,6 +487,7 @@ export default function GetInvolvedEditor() {
   }
 
   return (
+    <SplitLayout previewPage="/get-involved" iframeRef={iframeRef}>
     <div style={styles.container}>
       <h1 style={{ marginBottom: '1.5rem', fontSize: '1.8rem' }}>Get Involved Page Editor</h1>
 
@@ -478,27 +516,27 @@ export default function GetInvolvedEditor() {
           <div style={{ display: 'grid', gap: '0.85rem' }}>
             {donationTiers.map((tier, index) => (
               <div key={tier.id} style={{ border: '1px solid #e5e7eb', borderRadius: '0.5rem', padding: '1rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr auto', gap: '0.75rem', alignItems: 'start' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
                   <input
                     type="number"
                     value={tier.amount ?? ''}
                     onChange={(event) => updateTier(tier.id, 'amount', event.target.value)}
                     placeholder="500"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '1 1 100px', minWidth: '80px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={tier.labelEn || ''}
                     onChange={(event) => updateTier(tier.id, 'labelEn', event.target.value)}
                     placeholder="feeds a family"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
                   <input
                     value={tier.labelBn || ''}
                     onChange={(event) => updateTier(tier.id, 'labelBn', event.target.value)}
                     placeholder="একটি পরিবারকে খাবার"
-                    style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                    style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
                   />
-                  <button type="button" onClick={() => confirmDeleteDonationTier(tier.id)} disabled={saving} style={{ ...styles.button, marginTop: 0, background: '#b91c1c' }}>
+                  <button type="button" onClick={() => confirmDeleteDonationTier(tier.id)} disabled={saving} style={{ flex: '0 0 auto', padding: '0.6rem 1.25rem', background: '#b91c1c', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600 }}>
                     Delete
                   </button>
                 </div>
@@ -511,27 +549,27 @@ export default function GetInvolvedEditor() {
 
           <div style={{ marginTop: '1rem', borderTop: '1px solid #e5e7eb', paddingTop: '1rem' }}>
             <div style={{ fontWeight: 700, marginBottom: '0.75rem' }}>Add Tier</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr auto', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
               <input
                 value={newTier.amount}
                 onChange={(event) => setNewTier({ ...newTier, amount: event.target.value })}
                 type="number"
                 placeholder="250"
-                style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                style={{ flex: '1 1 100px', minWidth: '80px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
               />
               <input
                 value={newTier.labelEn}
                 onChange={(event) => setNewTier({ ...newTier, labelEn: event.target.value })}
                 placeholder="supports a child"
-                style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
               />
               <input
                 value={newTier.labelBn}
                 onChange={(event) => setNewTier({ ...newTier, labelBn: event.target.value })}
                 placeholder="একটি শিশুকে সহায়তা"
-                style={{ padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
+                style={{ flex: '2 1 140px', minWidth: '100px', padding: '0.65rem 0.8rem', border: '1px solid #d1d5db', borderRadius: '0.4rem' }}
               />
-              <button type="button" onClick={addDonationTier} disabled={saving} style={{ ...styles.button, marginTop: 0 }}>
+              <button type="button" onClick={addDonationTier} disabled={saving} style={{ flex: '0 0 auto', padding: '0.6rem 1.25rem', background: '#0f172a', color: '#fff', border: 'none', borderRadius: '0.4rem', cursor: 'pointer', fontWeight: 600 }}>
                 Add
               </button>
             </div>
@@ -1088,5 +1126,6 @@ export default function GetInvolvedEditor() {
         onCancel={() => setDeleteConfirm({ isOpen: false, itemId: null, kind: '' })}
       />
     </div>
+    </SplitLayout>
   )
 }

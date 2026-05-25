@@ -50,11 +50,11 @@ Edits the large hero panel at the top of the public Home page.
 
 #### Hero Photo
 
-| Admin Label | "Hero Photo" |
+The large image displayed on the right side of the hero panel.
+
+| Admin Field | How it's managed |
 |---|---|
-| Helper text | "This image appears in the main Home page hero panel." |
-| Public location | The large image on the right side of the hero panel |
-| Action | Click the upload area to add/replace; click × to delete |
+| **Label:** "Hero Photo" | Click the upload area to add or replace. Click × to delete. |
 | Format | JPEG / PNG / WebP. Auto-resized to 1920px max dimension. |
 
 #### Text Fields
@@ -76,7 +76,19 @@ Edits the large hero panel at the top of the public Home page.
 |---|---|---|
 | **Photo Caption (EN)** | Text caption below the hero photo | `"Community learning in action"` |
 | **Photo Caption (Bangla)** | Same, in Bengali | `"সম্প্রদায়ের শিক্ষা কার্যক্রম"` |
-| **Registration Certificate Thumbnail** | Small image below hero photo | Upload a small thumbnail (~120×120px) of the registration cert |
+
+#### Registration Certificate Thumbnail
+
+A small thumbnail image (~120×120px) displayed below the hero photo.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Registration Certificate Thumbnail" | Click upload area to add/replace. Click × to delete. |
+
+| Admin Label | Example |
+|---|---|
+| **Cert Caption (EN)** | `"Registration proof available on About page"` |
+| **Cert Caption (BN)** | `"নিবন্ধনের প্রমাণ 'আমাদের কথা' পাতায়"` |
 
 #### Hero CTA Buttons
 
@@ -86,8 +98,6 @@ Edits the large hero panel at the top of the public Home page.
 | **Primary CTA Label (BN)** | Same, in Bengali | `"সহায়তা করুন"` |
 | **Secondary CTA Label (EN)** | "Explore Our Work" button text | `"Explore Our Work"` |
 | **Secondary CTA Label (BN)** | Same, in Bengali | `"আমাদের কাজ দেখুন"` |
-| **Cert Caption (EN)** | Text below certificate thumbnail | `"Registration proof available on About page"` |
-| **Cert Caption (BN)** | Same, in Bengali | `"নিবন্ধনের প্রমাণ 'আমাদের কথা' পাতায়"` |
 
 > **Save button:** Click **"Save Hero"** after editing text (images save automatically on upload).
 
@@ -97,7 +107,7 @@ Edits the large hero panel at the top of the public Home page.
 
 Manages the numbered stats row (e.g., "200+ Children Supported").
 
-| Admin Label | Public Location |
+| Admin Field | Public Display |
 |---|---|
 | **Value** (text input, placeholder `"e.g., 200+"`) | The large number |
 | **Label in English** (placeholder `"Label in English"`) | Text below the number |
@@ -135,17 +145,22 @@ Each stat has 3 inputs (Value, EN label, BN label). Use **"Add New Stat"** to cr
 
 ### Tab: Showcase Images
 
-Maximum 6 images that appear in the photo mosaic on the Home page (right side, below the activity posts).
+**Public location:** Right column of the activity section on the Home page.  
+These are the photos with a single caption underneath (e.g., "Learning Space").  
+Up to 6 images.
 
-Each slot has:
+| Admin Field | Public Display |
+|---|---|
+| Image upload | The photo |
+| **Label (English)** | The caption below the photo |
+| **Label (Bangla)** | Bengali caption |
 
-| Field | Label | Example |
-|---|---|---|
-| Image upload | `"Image {N}"` | Upload area |
-| **Label (English)** | `"Label (English)"` | `"Learning Space"` |
-| **Label (Bangla)** | `"Label (Bangla)"` | `"শিক্ষা কেন্দ্র"` |
-
-> **Save:** Click **"Save Showcase Labels"** after editing labels.
+**How to manage:**
+- **Add:** Click upload area for any empty slot
+- **Replace:** Click upload area for an occupied slot
+- **Delete:** Click × on the image preview
+- **Edit caption:** Type in the Label (English) / Label (Bangla) fields
+- **Save labels:** Click **"Save Showcase Labels"**
 
 ---
 
@@ -190,9 +205,18 @@ Edits all section eyebrow and heading labels on the Home page.
 
 ### Tab: Page Intro
 
+#### Hero Photo
+
+**Public location:** Image displayed on the right side of the About page intro section.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Hero Photo" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Public Location | Example |
 |---|---|---|
-| **Hero Photo** | Image on the right side of the intro section | Upload area |
 | **Page Title (EN)** | Large heading | `"About Us"` |
 | **Page Title (Bangla)** | Same, in Bengali | `"আমাদের কথা"` |
 | **Intro Paragraph (EN)** | Text below the title | `"Heritage of Hope Foundation..."` |
@@ -272,11 +296,32 @@ Edits all section eyebrow and heading labels on the Home page.
 
 ### Tab: Registration
 
+#### Certificate Image
+
+**Public location:** The registration certificate image displayed on the About page.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Certificate Image" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Example |
 |---|---|
-| **Certificate Image** | Upload the registration certificate image |
 | **Registration Body Text (EN)** | Paragraph explaining the registration status |
 | **Registration Body Text (Bangla)** | Same, in Bengali |
+
+---
+
+### Image Summary: About Page
+
+| Public Section | Image Source | Managed In |
+|---|---|---|
+| Hero image (right of intro) | About Editor → Page Intro tab → "Hero Photo" | `/admin/about` |
+| Registration certificate image | About Editor → Registration tab → "Certificate Image" | `/admin/about` |
+| Team member photos (cards) | Team Editor → each member has a "Photo" field | `/admin/team` |
+| Partner logos | Partners Editor → each partner has a "Logo" field | `/admin/partners` |
+| Program images (on Our Work page) | Programs Editor → each program has a "Program Image" | `/admin/programs` |
 
 ---
 
@@ -291,9 +336,18 @@ No tabs — all sections are stacked vertically.
 
 ### Intro Section
 
+#### Hero Photo
+
+**Public location:** Hero panel at the top of the Our Work page.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Hero Photo" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Example |
 |---|---|
-| **Hero Photo** | Upload area — appears in the hero panel |
 | **Page Title (EN)** | `"Our Work"` |
 | **Page Title (Bangla)** | `"আমাদের কাজ"` |
 | **Page Intro (EN)** | Paragraph summarizing the foundation's work |
@@ -361,15 +415,31 @@ No tabs — all sections are stacked vertically.
 
 ### Showcase Photos
 
-Up to 6 photo slots. Each has:
+**Public location:** Photo grid section on the Our Work page. Up to 6 images with labels.
 
-| Field | Type |
+**Note:** These use **text input** for image URLs (no file upload widget). You must paste a Cloudinary URL manually.
+
+| Admin Field | How to manage |
 |---|---|
-| **Image URL** | Text input — paste a Cloudinary URL directly (no file upload widget) |
-| **Label (EN)** | Text input |
-| **Label (BN)** | Text input |
+| **Image URL** (text input) | Paste a direct Cloudinary URL (e.g., `https://res.cloudinary.com/...`) |
+| **Label (EN)** | Caption text in English |
+| **Label (BN)** | Caption text in Bengali |
 
-> **To add an image:** Upload the image in Gallery Manager first, then copy its Cloudinary URL and paste into the Image URL field.
+**How to add an image:**
+1. Upload the image in Gallery Manager (`/admin/gallery`) first
+2. Open the uploaded image in a browser tab and copy its URL
+3. Paste the URL into the **Image URL** field
+4. Click **"Save Showcase Photos"**
+
+---
+
+### Image Summary: Our Work Page
+
+| Public Section | Image Source | Managed In |
+|---|---|---|
+| Hero image (top panel) | OurWork Editor → Intro Section → "Hero Photo" | `/admin/our-work` |
+| Showcase photos (grid) | OurWork Editor → Showcase Photos → text URL | `/admin/our-work` |
+| Program cards (in the main content) | Programs Editor | `/admin/programs` |
 
 ---
 
@@ -456,7 +526,7 @@ A percentage breakdown of how funds are used. Each row has:
 | Admin Label | Example |
 |---|---|
 | **Page Eyebrow (EN)** | `"Impact"` |
-| **Page Eyewbrow (Bangla)** | `"প্রভাব"` |
+| **Page Eyebrow (Bangla)** | `"প্রভাব"` |
 | **Promise Label (EN)** | `"Our Promise"` |
 | **Promise Label (Bangla)** | Bengali version |
 | **Fund Section Eyebrow (EN)** | `"Where Your Money Goes"` |
@@ -467,6 +537,8 @@ A percentage breakdown of how funds are used. Each row has:
 | **Feedback Label (Bangla)** | Bengali version |
 | **Report Label (EN)** | `"Annual Report"` |
 | **Report Label (Bangla)** | Bengali version |
+
+> **Note:** The Impact page has **no image fields** — it's text + stats only.
 
 ---
 
@@ -507,21 +579,25 @@ Edits text visible on the public Gallery page.
 
 ### Upload Photos Section
 
-| Field | Type |
+**Public location:** The `/gallery` page — all photos displayed in a filterable grid.
+
+| Admin Field | Public Display |
 |---|---|
-| **Category** | Dropdown: Gallery, Team, Events, Programs |
-| **Alt Text EN** | Text input |
-| **Alt Text BN** | Text input |
-| **Image files** | Drag-drop or file picker (up to 5 files at once, JPG/PNG/WebP, max 5MB each) |
-| **Upload button** | `"Upload {N} Image(s)"` |
+| **Category** (dropdown) | Determines which filter tab the photo appears under (Gallery / Team / Events / Programs) |
+| **Alt Text EN** | Accessibility text for the image (English) |
+| **Alt Text BN** | Accessibility text for the image (Bengali) |
+| Image files | The photo itself |
 
-### Editing Existing Photos
+**How to upload:**
+1. Select **Category** from dropdown
+2. Enter **Alt Text** (EN and/or BN)
+3. Drag-drop or click to select image(s) — up to 5 at once, JPG/PNG/WebP, max 5MB each
+4. Click **"Upload N Image(s)"**
 
-Click **Edit** ✏ on any photo to change:
-- Category dropdown
-- Alt text (EN/BN)
-
-Use **▲/▼** to reorder. Click **Delete** 🗑 to permanently remove from Cloudinary + database.
+**How to edit an existing photo:**
+- **Edit alt text / category:** Click **Edit** ✏ → change fields → **"Save"**
+- **Reorder:** Click **▲/▼** arrows
+- **Delete:** Click **Delete** 🗑 → confirm dialog
 
 ---
 
@@ -560,6 +636,16 @@ Click **"Save Tiers"** to save changes.
 
 ### Tab: Bank Details
 
+#### Specimen Cheque Image
+
+**Public location:** A sample cheque image shown for reference in the bank details section.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Specimen Cheque Image" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Example |
 |---|---|
 | **Account Name (EN)** | `"Heritage of Hope Foundation"` |
@@ -568,15 +654,18 @@ Click **"Save Tiers"** to save changes.
 | **Bank & Branch (BN)** | Bengali version |
 | **Account Number (English only)** | `"43107075580"` |
 | **IFSC Code (English only)** | `"SBIN0008438"` |
-| **Specimen Cheque Image** | Upload area — image of a sample cheque for reference |
 
 ---
 
 ### Tab: UPI / Payment
 
-| Admin Label | Details |
+#### UPI QR Code
+
+**Public location:** The QR code image displayed on the Get Involved page for UPI donations.
+
+| Admin Field | How it's managed |
 |---|---|
-| **UPI QR Code** | Upload a scan-friendly QR code image (600px max, quality 100) |
+| **Label:** "UPI QR Code" | Click upload area to add/replace. Uploaded at 600px max dimension, quality 100 (must be scan-friendly). Click × to delete. |
 
 > No text fields on this tab. The QR image uploads immediately.
 
@@ -609,9 +698,18 @@ Use **Add Role** to create a new one. **Delete** to remove.
 
 ### Tab: Partner Section
 
+#### Partnership Photo
+
+**Public location:** Image displayed in the partnership section of the Get Involved page.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "Partnership Photo" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Example |
 |---|---|
-| **Partnership Photo** | Upload area — image displayed in the partnership section |
 | **Partner Heading (EN)** | `"Partner With Us"` |
 | **Partner Heading (Bangla)** | Bengali version |
 | **Partner Description (EN)** | Paragraph about partnerships |
@@ -709,6 +807,16 @@ Same structure as Volunteer Form Labels but for the partner inquiry form:
 
 ---
 
+### Image Summary: Get Involved Page
+
+| Public Section | Image Source | Managed In |
+|---|---|---|
+| UPI QR code | GetInvolved Editor → UPI/Payment tab → "UPI QR Code" | `/admin/get-involved` |
+| Specimen cheque image | GetInvolved Editor → Bank Details tab → "Specimen Cheque Image" | `/admin/get-involved` |
+| Partnership photo | GetInvolved Editor → Partner Section tab → "Partnership Photo" | `/admin/get-involved` |
+
+---
+
 ## 7. Contact Page Editor
 
 **URL:** `/admin/contact`  
@@ -767,14 +875,21 @@ Each field has English + Bengali inputs:
 
 ### Mosaic Images Section
 
-4 image slots shown in the photo strip at the bottom of the Contact page.  
-Each slot has:
+**Public location:** The photo strip at the bottom of the Contact page (right column).  
+4 image slots, each with a caption.
 
-| Field | Example |
+| Admin Field | Public Display |
 |---|---|
-| Image upload | Click to upload |
-| **Label (EN)** | `"In Action"` |
-| **Label (BN)** | `"সক্রিয় অবস্থায়"` |
+| Image upload (slot 1–4) | The photo in the mosaic |
+| **Label (EN)** | Caption below the photo |
+| **Label (BN)** | Bengali caption |
+
+**How to manage:**
+- **Add:** Click upload area for any empty slot
+- **Replace:** Click upload area for an occupied slot
+- **Delete:** Click × on the image preview
+- **Edit caption:** Type in the Label fields
+- **Save labels:** Click **"Save Mosaic Labels"**
 
 ---
 
@@ -796,31 +911,35 @@ Each slot has:
 
 ---
 
+### Image Summary: Contact Page
+
+| Public Section | Image Source | Managed In |
+|---|---|---|
+| Mosaic images (bottom strip) | Contact Editor → Mosaic Images section | `/admin/contact` |
+| Activity posts (left column, posts 4–6) | Activity Posts Editor | `/admin/activity-posts` |
+
+---
+
 ## 8. Team Editor
 
 **URL:** `/admin/team`
 
 Manages team member cards shown on the About page.
 
-### Add/Edit Form
+**Public location:** The "Meet the Team" section on the About page — each member appears as a card with photo, name, and role.
 
-| Admin Label | Details |
+| Admin Field | Public Display |
 |---|---|
-| **Name \*** | Required, bilingual not available (single text) — e.g., `"Dr. Sharma"` |
-| **Role (English)** | Text — e.g., `"Founder & Director"` |
-| **Role (Bengali)** | Text — e.g., `"প্রতিষ্ঠাতা ও পরিচালক"` |
-| **Photo** | File input — JPG/PNG/WebP |
+| **Name \*** | The person's name on the card |
+| **Role (English)** | Role/title text (English) |
+| **Role (Bengali)** | Role/title text (Bengali) |
+| **Photo** | The person's photo on the card |
 
-### Actions
-
-| Button | What it does |
-|---|---|
-| **Add Member** | Creates a new team member |
-| **Update Member** | Saves edits to an existing member |
-| **Cancel** | Cancels editing |
-| **Edit** (per row) | Opens the member in edit mode |
-| **Delete** (per row) | Removes the member permanently |
-| **▲/▼** (per row) | Reorder display order |
+**How to manage:**
+- **Add:** Click **"Add Member"** → fill form → choose photo → click **"Add Member"**
+- **Replace photo (edit):** Click **Edit** ✏ → upload new photo → **"Update Member"** (leave photo empty to keep current)
+- **Delete:** Click **Delete** 🗑 → confirm
+- **Reorder:** **▲/▼** arrows
 
 ---
 
@@ -830,25 +949,20 @@ Manages team member cards shown on the About page.
 
 Manages partner logos shown on the About page.
 
-### Add/Edit Form
+**Public location:** Partner logos displayed in the About page partners section.
 
-| Admin Label | Details |
+| Admin Field | Public Display |
 |---|---|
-| **Partner Name \*** | Required, e.g., `"Global Health Initiative"` |
-| **Logo** | File input for the partner's logo image |
-| **Active (show on public site)** | Checkbox — unchecked partners are hidden |
+| **Partner Name \*** | Displayed as a pill/badge |
+| **Logo** | The partner's logo image |
+| **Active (show on public site)** | Checkbox — unchecked partners are hidden from the site |
 
-### Actions
-
-| Button | What it does |
-|---|---|
-| **Add Partner** | Create new partner |
-| **Update Partner** | Save edits |
-| **Cancel** | Cancel editing |
-| **Edit** (per row) | Edit a partner |
-| **Delete** (per row) | Remove permanently |
-| **View** (per row) | Opens logo in a new tab |
-| **▲/▼** (per row) | Reorder |
+**How to manage:**
+- **Add:** Click **"Add Partner"** → fill name → upload logo → click **"Add Partner"**
+- **Replace logo (edit):** Click **Edit** ✏ → upload new logo → **"Update Partner"**
+- **Delete:** Click **Delete** 🗑 → confirm
+- **Reorder:** **▲/▼** arrows
+- **View:** Opens logo in a new tab
 
 ---
 
@@ -856,33 +970,30 @@ Manages partner logos shown on the About page.
 
 **URL:** `/admin/programs`
 
-Manages featured program cards. These appear as mission pillar cards on the Home page and as program cards on the Our Work page.
+Manages featured program cards. These serve dual purpose:
+- **Home page (Mission Pillars):** The top 3 programs (by sort order) appear as pillar cards
+- **Our Work page:** All programs appear as program cards
 
-### Add/Edit Form
+**Public location:** Home page (pillar section) and Our Work page (program grid).
 
-| Admin Label | Details |
+| Admin Field | Public Display |
 |---|---|
-| **Slug \*** | URL-friendly identifier, e.g., `"education-initiative"` (lowercase, hyphens only) |
-| **Title (EN)** | Bilingual — e.g., `"Education Initiative"` |
-| **Title (BN)** | Bengali title |
-| **Category (EN)** | Bilingual — e.g., `"Education"` |
+| **Slug \*** | URL-friendly identifier (not shown publicly) |
+| **Title (EN)** | Card heading |
+| **Title (BN)** | Card heading (Bengali) |
+| **Category (EN)** | Pill/category label on the card |
 | **Category (BN)** | Bengali category |
-| **Description (EN)** | Bilingual, textarea — short description |
+| **Description (EN)** | Card description text |
 | **Description (BN)** | Bengali description |
-| **Highlight (EN)** | Bilingual — a standout stat or phrase |
+| **Highlight (EN)** | A standout stat or phrase |
 | **Highlight (BN)** | Bengali highlight |
-| **Program Image** | Image upload — required when creating |
+| **Program Image** | The card image — required when creating |
 
-### Actions
-
-| Button | What it does |
-|---|---|
-| **Create** | Create new program |
-| **Update** | Save edits |
-| **Cancel** | Cancel editing |
-| **Edit** (per row) | Edit a program |
-| **Delete** (per row) | Remove permanently |
-| **▲/▼** (per row) | Reorder (top 3 appear as pillars on Home page) |
+**How to manage:**
+- **Add:** Click **"Add Program"** → fill form → upload image → click **"Create"**
+- **Replace image (edit):** Click **Edit** ✏ → upload new image → **"Update"** (leave photo empty to keep current)
+- **Delete:** Click **Delete** 🗑 → confirm
+- **Reorder:** **▲/▼** arrows (top 3 = Home page pillars)
 
 ---
 
@@ -890,31 +1001,30 @@ Manages featured program cards. These appear as mission pillar cards on the Home
 
 **URL:** `/admin/activity-posts`
 
-Manages activity posts that appear as a Facebook-style feed on the Home page (first 4) and Contact page (posts 4–6).
+Manages activity posts that appear as a Facebook-style feed.
 
-### Add/Edit Form
+**Public location:** 
+- **Home page** — left column of the activity section (first 4 posts, sorted by sort order)
+- **Contact page** — left column of the Facebook section (posts 4–6, i.e., `slice(3,6)`)
 
-| Admin Label | Details |
+Each post displays as a card with: thumbnail image → date → title → excerpt (body text).
+
+| Admin Field | Public Display |
 |---|---|
-| **Date \*** | Date picker — required |
-| **Title (English) \*** | Required, 3–150 characters |
-| **Title (Bengali)** | Optional, max 150 characters |
-| **Body (English)** | Textarea, max 2000 characters |
-| **Body (Bengali)** | Textarea, max 2000 characters |
-| **Photo** | File input for the post image |
-| **Published (visible on public site)** | Checkbox — unchecked posts are drafts (hidden) |
+| **Date \*** | The date line (e.g., `2026-01-04`) |
+| **Title (English) \*** | The heading |
+| **Title (Bengali)** | Bengali heading |
+| **Body (English)** | The description/excerpt text |
+| **Body (Bengali)** | Bengali description |
+| **Photo** | The thumbnail image on the left of the card |
+| **Published** checkbox | Uncheck to hide from the site (kept as draft) |
 
-### Actions
-
-| Button | What it does |
-|---|---|
-| **Create Post** | New activity post |
-| **Update Post** | Save edits |
-| **Cancel** | Cancel editing |
-| **Edit** (per row) | Edit a post |
-| **Delete** (per row) | Remove permanently |
-| **▲/▼** (per row) | Reorder |
-| **Published / Draft** badge | Visual indicator of publish status |
+**How to manage:**
+- **Add:** Fill form at top → choose date → pick photo → enter title/body → check Published → **"Create Post"**
+- **Replace photo (edit):** Click **Edit** ✏ → upload new photo → **"Update Post"**
+- **Delete:** Click **Delete** 🗑 → confirm
+- **Reorder:** **▲/▼** arrows
+- **Publish/Unpublish:** Uncheck "Published" checkbox → **"Update Post"**
 
 ---
 
@@ -924,29 +1034,23 @@ Manages activity posts that appear as a Facebook-style feed on the Home page (fi
 
 Manages PDF documents (trust certificates, reports) shown on the About page.
 
-### Add/Edit Form
+**Public location:** "Certificates & Reports" section on the About page.
 
-| Admin Label | Details |
+| Admin Field | Public Display |
 |---|---|
-| **Title (English) \*** | Required, 3–200 characters |
-| **Title (Bengali)** | Optional, max 200 characters |
-| **Description (English)** | Textarea, max 1000 characters |
-| **Description (Bengali)** | Textarea, max 1000 characters |
-| **Date** | Date picker |
-| **PDF File** | PDF upload (max 15MB). A preview image is auto-generated from the first page. |
+| **Title (English) \*** | Document name in the list |
+| **Title (Bengali)** | Bengali document name |
+| **Description (English)** | Short description below the title |
+| **Description (Bengali)** | Bengali description |
+| **Date** | Shown alongside the document |
+| **PDF File** | The downloadable PDF. A preview thumbnail is auto-generated from the first page. |
 
-### Actions
-
-| Button | What it does |
-|---|---|
-| **New Document** | Opens the form |
-| **Create document** | Create new document |
-| **Update document** | Save edits |
-| **Cancel edit** | Cancel editing |
-| **Edit** (per row) | Edit document |
-| **Delete** (per row) | Remove permanently (deletes PDF + preview from Cloudinary) |
-| **Download PDF** (per row) | Download the PDF file |
-| **▲/▼** (per row) | Reorder |
+**How to manage:**
+- **Add:** Click **"New Document"** → fill form → upload PDF → **"Create document"**
+- **Replace PDF (edit):** Click **Edit** ✏ → upload new PDF → **"Update document"**
+- **Delete:** Click **Delete** 🗑 → confirm (removes PDF + preview from Cloudinary)
+- **Download:** Click **"Download PDF"** link
+- **Reorder:** **▲/▼** arrows
 
 ---
 
@@ -1001,9 +1105,18 @@ No tabs. All fields are bilingual:
 
 ### Brand Identity Section
 
+#### NGO Logo
+
+**Public location:** Header (top-left) and footer of every page.
+
+| Admin Field | How it's managed |
+|---|---|
+| **Label:** "NGO Logo" | Click upload area to add/replace. Click × to delete. |
+
+#### Text Fields
+
 | Admin Label | Hint | Example |
 |---|---|---|
-| **NGO Logo** | Upload area — shown in header and footer | Upload a logo image |
 | **NGO Name** (single text) | "Shown in the public header and footer" | `"Heritage of Hope Foundation"` |
 | **Navbar Subtitle (EN)** | "Short line under the brand name in the public header" | `"Building brighter futures"` |
 | **Navbar Subtitle (Bangla)** | Same, in Bengali | Bengali version |
@@ -1032,7 +1145,7 @@ No tabs. All fields are bilingual:
 
 ### Trust Badges Section
 
-Bilingual badges shown in the trust strip on the Home page hero area.
+**Public location:** Trust strip in the Home page hero area.
 
 | Field | Example |
 |---|---|
@@ -1065,6 +1178,33 @@ Bilingual text for each header navigation link:
 | **Navigation Aria Label (Bangla)** | Bengali version |
 
 > **Save:** Click **"Save Settings"** .
+
+---
+
+### Image Summary: Every Page
+
+| Page | Public Section | Image Type | Managed In | Admin URL |
+|---|---|---|---|---|
+| **Home** | Hero panel (right side) | Hero photo | HomeEditor → Hero Section | `/admin/home` |
+| **Home** | Below hero photo | Cert thumbnail | HomeEditor → Hero Section | `/admin/home` |
+| **Home** | Activity section (left column) | Activity post thumbnails (with date/title/body) | Activity Posts Editor | `/admin/activity-posts` |
+| **Home** | Activity section (right column) | Showcase images (with single caption) | HomeEditor → Showcase Images | `/admin/home` |
+| **Home** | Mission pillar cards (top 3) | Program images | Programs Editor | `/admin/programs` |
+| **About** | Intro section (right side) | Hero photo | AboutEditor → Page Intro | `/admin/about` |
+| **About** | Registration section | Certificate image | AboutEditor → Registration | `/admin/about` |
+| **About** | Team section | Team member photos | Team Editor | `/admin/team` |
+| **About** | Partners section | Partner logos | Partners Editor | `/admin/partners` |
+| **About** | Documents section | PDF preview thumbnails | Documents Editor | `/admin/documents` |
+| **Our Work** | Hero panel | Hero photo | OurWorkEditor → Intro Section | `/admin/our-work` |
+| **Our Work** | Photo grid | Showcase photos (URL text input) | OurWorkEditor → Showcase Photos | `/admin/our-work` |
+| **Our Work** | Program cards | Program images | Programs Editor | `/admin/programs` |
+| **Gallery** | Filterable grid | Gallery photos by category | Gallery Manager | `/admin/gallery` |
+| **Get Involved** | UPI section | QR code | GetInvolvedEditor → UPI/Payment | `/admin/get-involved` |
+| **Get Involved** | Bank section | Specimen cheque | GetInvolvedEditor → Bank Details | `/admin/get-involved` |
+| **Get Involved** | Partner section | Partnership photo | GetInvolvedEditor → Partner Section | `/admin/get-involved` |
+| **Contact** | Bottom mosaic strip | Mosaic images (4 slots) | ContactEditor → Mosaic Images | `/admin/contact` |
+| **Contact** | Facebook section | Activity post thumbnails | Activity Posts Editor | `/admin/activity-posts` |
+| **All pages** | Header + footer | NGO logo | Settings → Brand Identity | `/admin/settings` |
 
 ---
 

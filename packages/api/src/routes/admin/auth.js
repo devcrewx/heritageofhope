@@ -101,9 +101,6 @@ router.post('/forgot-password', forgotLimiter, async (req, res) => {
   })
 
   const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${token}`
-  const SMTP_USER = process.env.SMTP_USER
-  const FROM_EMAIL = process.env.FROM_EMAIL || SMTP_USER || 'noreply@heritageofhope.org'
-
   try {
     const { sendEmail } = await import('../../lib/mailer.js')
     await sendEmail({

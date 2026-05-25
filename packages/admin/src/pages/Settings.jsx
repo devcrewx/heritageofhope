@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import MediaUploadField from '../components/MediaUploadField'
 import { Toast } from '../components/Toast'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 
 const fieldConfig = [
@@ -20,6 +23,8 @@ const fieldConfig = [
 ]
 
 function Settings() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   const [form, setForm] = useState({})
   const [trustBadges, setTrustBadges] = useState([])
   const [navItems, setNavItems] = useState({})
@@ -220,6 +225,26 @@ function Settings() {
     }
   }
 
+  const draft = {
+    ...form,
+    trustBadges,
+    phone: form.phone?.en || '',
+    email: form.email?.en || '',
+    orgName: form.org_name?.en || fullContent?.siteMeta?.orgName || '',
+    logoUrl: form.logo_url?.en || fullContent?.siteMeta?.logoUrl || '',
+    facebookUrl: form.facebook_url?.en || fullContent?.siteMeta?.facebookUrl || '',
+    estYear: form.est_year?.en || fullContent?.siteMeta?.estYear || '',
+    navSubtitle: form.navbar_subtitle || fullContent?.siteMeta?.navSubtitle || { en: '', bn: '' },
+    registeredBadge: form.registered_badge || fullContent?.siteMeta?.registeredBadge || { en: '', bn: '' },
+    donateButtonLabel: form.donate_button_label || fullContent?.siteMeta?.donateButtonLabel || { en: '', bn: '' },
+    facebookLabel: form.facebook_label || fullContent?.siteMeta?.facebookLabel || { en: '', bn: '' },
+    footerMission: form.footer_mission || fullContent?.siteMeta?.footerMission || { en: '', bn: '' },
+    address: form.address || fullContent?.siteMeta?.address || { en: '', bn: '' },
+    hamburgerAriaLabel: form.hamburger_aria_label || fullContent?.siteMeta?.hamburgerAriaLabel || { en: '', bn: '' },
+    navAriaLabel: form.nav_aria_label || fullContent?.siteMeta?.navAriaLabel || { en: '', bn: '' },
+  }
+  usePreviewSync(iframeRef, draft, 'siteMeta', fullContent)
+
   if (loading) {
     return (
       <section>
@@ -230,6 +255,7 @@ function Settings() {
   }
 
   return (
+    <SplitLayout previewPage="/" iframeRef={iframeRef}>
     <section className="max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">Site Settings</h1>
@@ -449,6 +475,7 @@ function Settings() {
         />
       )}
     </section>
+    </SplitLayout>
   )
 }
 

@@ -9,11 +9,6 @@ export default function SubmissionsInbox() {
   const [loading, setLoading] = useState(true)
   const [selectedSubmission, setSelectedSubmission] = useState(null)
 
-  useEffect(() => {
-    fetchStats()
-    fetchSubmissions('contact')
-  }, [])
-
   const fetchStats = async () => {
     try {
       const res = await apiClient.get('/api/admin/forms/stats')
@@ -36,6 +31,11 @@ export default function SubmissionsInbox() {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    fetchStats()
+    fetchSubmissions('contact')
+  }, [])
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)

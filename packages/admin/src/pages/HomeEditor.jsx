@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import BilingualField from '../components/BilingualField'
 import { Toast } from '../components/Toast'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import MediaUploadField from '../components/MediaUploadField'
+import SplitLayout from '../components/SplitLayout'
+import { usePreviewSync } from '../hooks/usePreviewSync'
+import { SiteContentContext } from '../App'
 import apiClient from '../lib/api'
 
 function HomeEditor() {
+  const iframeRef = useRef(null)
+  const fullContent = useContext(SiteContentContext)
   // Hero section
   const [heroEyebrowEn, setHeroEyebrowEn] = useState('')
   const [heroEyebrowBn, setHeroEyebrowBn] = useState('')
@@ -70,6 +75,43 @@ function HomeEditor() {
   )
   const [showcaseUploading, setShowcaseUploading] = useState(Array(6).fill(false))
 
+  const draft = {
+    hero: {
+      eyebrow: { en: heroEyebrowEn, bn: heroEyebrowBn },
+      headline: { en: heroHeadlineEn, bn: heroHeadlineBn },
+      intro: { en: heroIntroEn, bn: heroIntroBn },
+      heroFootnote: { en: heroFootnoteEn, bn: heroFootnoteBn },
+      heroImage: heroImageUrl,
+      regCertThumb: regCertThumbUrl,
+      figcaption: { en: figcaptionEn, bn: figcaptionBn },
+      ctaPrimaryLabel: { en: ctaPrimaryLabelEn, bn: ctaPrimaryLabelBn },
+      ctaSecondaryLabel: { en: ctaSecondaryLabelEn, bn: ctaSecondaryLabelBn },
+      certCaption: { en: certCaptionEn, bn: certCaptionBn },
+    },
+    mission: {
+      heading: { en: missionHeadingEn, bn: missionHeadingBn },
+    },
+    cta: {
+      headline: { en: ctaHeadlineEn, bn: ctaHeadlineBn },
+      body: { en: ctaBodyEn, bn: ctaBodyBn },
+      buttonLabel: { en: ctaButtonLabelEn, bn: ctaButtonLabelBn },
+    },
+    pageContent: {
+      statsLabel: { en: pageStatsLabelEn, bn: pageStatsLabelBn },
+      statsHeading: { en: pageStatsHeadingEn, bn: pageStatsHeadingBn },
+      pillarLabel: { en: pagePillarLabelEn, bn: pagePillarLabelBn },
+      activityLabel: { en: pageActivityLabelEn, bn: pageActivityLabelBn },
+      activityHeading: { en: pageActivityHeadingEn, bn: pageActivityHeadingBn },
+      donationLabel: { en: pageDonationLabelEn, bn: pageDonationLabelBn },
+    },
+    showcaseImages: showcaseSlots.map(s => ({
+      image: s.url,
+      label: { en: s.labelEn, bn: s.labelBn },
+    })),
+  }
+
+  usePreviewSync(iframeRef, draft, 'home', fullContent)
+
   // UI state
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -78,7 +120,7 @@ function HomeEditor() {
   const [activeTab, setActiveTab] = useState('hero')
   const [toast, setToast] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, statId: null })
-  const [lastSavedTime, setLastSavedTime] = useState(null)
+  const [, setLastSavedTime] = useState(null)
 
   // Fetch content on mount
   useEffect(() => {
@@ -157,7 +199,7 @@ function HomeEditor() {
         // Fetch stats separately
         const statsResponse = await apiClient.get('/api/admin/stats')
         setStats(statsResponse.data || [])
-      } catch (error) {
+      } catch {
         showToast('Failed to load content', 'error')
       } finally {
         setLoading(false)
@@ -242,7 +284,7 @@ function HomeEditor() {
       setStats(stats.filter(s => s.id !== statId))
       setDeleteConfirm({ isOpen: false, statId: null })
       showToast('Stat deleted', 'success')
-    } catch (error) {
+    } catch {
       showToast('Failed to delete stat', 'error')
     }
   }
@@ -396,7 +438,7 @@ function HomeEditor() {
         i === index ? { ...slot, url: response.data?.data?.url || '' } : slot
       ))
       showToast(`Showcase image ${index + 1} updated`, 'success')
-    } catch (error) {
+    } catch {
       showToast('Failed to upload showcase image', 'error')
     } finally {
       setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
@@ -411,7 +453,7 @@ function HomeEditor() {
         i === index ? { url: '', labelEn: slot.labelEn, labelBn: slot.labelBn } : slot
       ))
       showToast(`Showcase image ${index + 1} removed`, 'success')
-    } catch (error) {
+    } catch {
       showToast('Failed to remove showcase image', 'error')
     } finally {
       setShowcaseUploading((prev) => prev.map((v, i) => (i === index ? false : v)))
@@ -434,7 +476,7 @@ function HomeEditor() {
         ])
       )
       showToast('Showcase labels saved', 'success')
-    } catch (error) {
+    } catch {
       showToast('Failed to save showcase labels', 'error')
     } finally {
       setSaving(false)
@@ -451,7 +493,8 @@ function HomeEditor() {
   }
 
   return (
-    <section className="max-w-4xl">
+    <SplitLayout previewPage="/" iframeRef={iframeRef}>
+      <section className="max-w-4xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold mb-2">Home Page Editor</h1>
         <p className="text-gray-600">Edit hero, stats, mission section, and donation CTA.</p>
@@ -892,6 +935,7 @@ function HomeEditor() {
         <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
       )}
     </section>
+    </SplitLayout>
   )
 }
 

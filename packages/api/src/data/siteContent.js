@@ -5,21 +5,11 @@ import {
   contactDetails as staticContactDetails,
   navItems,
   showcaseImages as staticShowcaseImages,
-  documents as staticDocuments,
   teamMembers as fallbackTeamMembers,
   ourWorkShowcase as fallbackOurWorkShowcase,
   featuredPrograms as fallbackFeaturedPrograms,
   impactMetrics as fallbackImpactMetrics,
 } from './staticContent.js'
-
-function safeJsonParse(str) {
-  try {
-    return JSON.parse(str)
-  } catch {
-    console.warn('Failed to parse JSON content field:', str?.slice(0, 80))
-    return null
-  }
-}
 
 const fallbackDocuments = [
   { title: { en: '12A Certificate', bn: '১২এ শংসাপত্র' }, href: '#', thumb: 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210277/heritage-of-hope/docs/thumbs/pdf-thumb.svg' },
@@ -106,7 +96,8 @@ export async function getSiteContent() {
     ])
 
     const settingsMap = settings.reduce((acc, item) => {
-      acc[item.fieldKey] = { en: item.valueEn, bn: item.valueBn }
+      if (!acc[item.section]) acc[item.section] = {}
+      acc[item.section][item.fieldKey] = { en: item.valueEn, bn: item.valueBn }
       return acc
     }, {})
 
@@ -150,11 +141,6 @@ export async function getSiteContent() {
         }))
       : fallbackTeamMembers
 
-    const transformedTeamMemberNames = teamMembers.map((member) => ({
-      en: member.name,
-      bn: member.name,
-    }))
-
     const transformedPartners = partners.map((p) => ({
       en: p.name,
       bn: p.name,
@@ -173,7 +159,7 @@ export async function getSiteContent() {
           highlight: { en: p.highlightEn || '', bn: p.highlightBn || '' },
         }))
       }
-    } catch (e) {
+    } catch {
       transformedPrograms = fallbackFeaturedPrograms
     }
 
@@ -554,12 +540,12 @@ export async function getSiteContent() {
         })
       }
     }
-    c.contact.pageTitle = settingsMap.general?.contact_page_title || c.contact.pageTitle
-    c.contact.intro = settingsMap.general?.contact_page_intro || c.contact.intro
-    c.contact.responseLabel = settingsMap.general?.contact_response_label || c.contact.responseLabel
-    c.contact.responseValue = settingsMap.general?.contact_response_value || c.contact.responseValue
-    c.contact.formLabel = settingsMap.general?.contact_form_label || c.contact.formLabel
-    c.contact.formHeading = settingsMap.general?.contact_form_heading || c.contact.formHeading
+    c.contact.pageTitle = settingsMap.contact?.contact_page_title || c.contact.pageTitle
+    c.contact.intro = settingsMap.contact?.contact_page_intro || c.contact.intro
+    c.contact.responseLabel = settingsMap.contact?.contact_response_label || c.contact.responseLabel
+    c.contact.responseValue = settingsMap.contact?.contact_response_value || c.contact.responseValue
+    c.contact.formLabel = settingsMap.contact?.contact_form_label || c.contact.formLabel
+    c.contact.formHeading = settingsMap.contact?.contact_form_heading || c.contact.formHeading
     c.contact.phoneLabel = settingsMap.general?.contact_phone_label || c.contact.phoneLabel
     c.contact.emailLabel = settingsMap.general?.contact_email_label || c.contact.emailLabel
     c.contact.addressLabel = settingsMap.general?.contact_address_label || c.contact.addressLabel
