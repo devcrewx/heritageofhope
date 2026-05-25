@@ -8,4 +8,5 @@ dist/
 .~lock.*
 audit-round*/
 full-stack-project-*
-heritageofhope-client-*test-results/
+heritageofhope-client-*
+test-results/
