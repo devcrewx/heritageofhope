@@ -2,9 +2,21 @@
 const config = {
   timeout: 60_000,
   use: {
-    // Base trace and other options can be enabled when debugging
     actionTimeout: 15_000,
   },
   testDir: './tests',
+  projects: [
+    {
+      name: 'api',
+      testMatch: /.*\.spec\.js/,
+    },
+    {
+      name: 'a11y',
+      testMatch: /a11y\.spec\.js/,
+      use: {
+        baseURL: process.env.WEB_URL || 'https://web-peach-six-y2ufgnodmc.vercel.app',
+      },
+    },
+  ],
 }
 module.exports = config

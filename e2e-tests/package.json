@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "scripts": {
     "test": "playwright test",
-    "test:api": "node run-api-tests.js"
+    "test:api": "node run-api-tests.js",
+    "test:a11y": "playwright test --project=a11y",
+    "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
     "form-data": "^4.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.40.0"
   }
 }
