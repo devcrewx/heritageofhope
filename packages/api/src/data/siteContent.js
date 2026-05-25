@@ -556,17 +556,21 @@ export async function getSiteContent() {
       facebookLabel: contactMap.pageContent?.facebookLabel || c.contact.pageContent.facebookLabel,
       facebookHeading: contactMap.pageContent?.facebookHeading || c.contact.pageContent.facebookHeading,
     }
+    const pickLabel = (dbVal, fallback) => {
+      if (dbVal && (dbVal.en?.trim() || dbVal.bn?.trim())) return dbVal
+      return fallback
+    }
     c.contact.formLabels = {
-      nameLabel: contactMap.formLabels?.nameLabel || c.contact.formLabels.nameLabel,
-      namePlaceholder: contactMap.formLabels?.namePlaceholder || c.contact.formLabels.namePlaceholder,
-      emailLabel: contactMap.formLabels?.emailLabel || c.contact.formLabels.emailLabel,
-      emailPlaceholder: contactMap.formLabels?.emailPlaceholder || c.contact.formLabels.emailPlaceholder,
-      subjectLabel: contactMap.formLabels?.subjectLabel || c.contact.formLabels.subjectLabel,
-      messageLabel: contactMap.formLabels?.messageLabel || c.contact.formLabels.messageLabel,
-      messagePlaceholder: contactMap.formLabels?.messagePlaceholder || c.contact.formLabels.messagePlaceholder,
-      submitLabel: contactMap.formLabels?.submitLabel || c.contact.formLabels.submitLabel,
-      submittingLabel: contactMap.formLabels?.submittingLabel || c.contact.formLabels.submittingLabel,
-      errorMessage: contactMap.formLabels?.errorMessage || c.contact.formLabels.errorMessage,
+      nameLabel: pickLabel(contactMap.formLabels?.nameLabel, c.contact.formLabels.nameLabel),
+      namePlaceholder: pickLabel(contactMap.formLabels?.namePlaceholder, c.contact.formLabels.namePlaceholder),
+      emailLabel: pickLabel(contactMap.formLabels?.emailLabel, c.contact.formLabels.emailLabel),
+      emailPlaceholder: pickLabel(contactMap.formLabels?.emailPlaceholder, c.contact.formLabels.emailPlaceholder),
+      subjectLabel: pickLabel(contactMap.formLabels?.subjectLabel, c.contact.formLabels.subjectLabel),
+      messageLabel: pickLabel(contactMap.formLabels?.messageLabel, c.contact.formLabels.messageLabel),
+      messagePlaceholder: pickLabel(contactMap.formLabels?.messagePlaceholder, c.contact.formLabels.messagePlaceholder),
+      submitLabel: pickLabel(contactMap.formLabels?.submitLabel, c.contact.formLabels.submitLabel),
+      submittingLabel: pickLabel(contactMap.formLabels?.submittingLabel, c.contact.formLabels.submittingLabel),
+      errorMessage: pickLabel(contactMap.formLabels?.errorMessage, c.contact.formLabels.errorMessage),
     }
     c.contact.mapEmbedUrl = contactMap.map?.embedUrl?.en || ''
     c.contact.mosaicImages = mosaicImages.length > 0 ? mosaicImages : staticShowcaseImages.contact
