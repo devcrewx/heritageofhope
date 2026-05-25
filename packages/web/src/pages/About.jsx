@@ -104,12 +104,6 @@ function About() {
               key={`${doc?.pdfUrl || 'doc'}-${idx}`}
               className="card doc-card"
               data-reveal
-              role="button"
-              tabIndex={0}
-              onClick={() => openDoc(doc)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') openDoc(doc)
-              }}
             >
               <div className="doc-thumb-wrap">
                 <img className="doc-thumb" src={doc?.thumbUrl || 'https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210277/heritage-of-hope/docs/thumbs/pdf-thumb.svg'} alt={titleText} />

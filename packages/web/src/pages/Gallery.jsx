@@ -43,7 +43,7 @@ function Gallery() {
       </section>
 
       <section className="panel">
-        <div className="filter-row" role="tablist" aria-label={resolve(language, page.filterAriaLabel || text('Gallery categories', 'ছবির বিভাগ'))}>
+        <div className="filter-row" role="group" aria-label={resolve(language, page.filterAriaLabel || text('Gallery categories', 'ছবির বিভাগ'))}>
           {categories.map((category) => (
             <button
               key={category.id}
