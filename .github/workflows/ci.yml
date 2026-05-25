@@ -14,7 +14,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run lint:web
+      - run: npm run lint
         working-directory: packages/web
       - run: npm run lint
         working-directory: packages/admin
