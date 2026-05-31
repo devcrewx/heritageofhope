@@ -59,11 +59,11 @@ export const fallbackSiteContent = {
   ],
   "siteMeta": {
     "orgName": "Heritage of Hope Foundation",
-    "logoUrl": "",
+    "logoUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779286331/heritage-of-hope/settings/general/uf0dx5zvnytcjyk7stie.webp",
     "phone": "+91 98765 43210",
     "email": "heritageofhopefoundation@gmail.com",
     "facebookUrl": "https://www.facebook.com/profile.php?id=61559891799273",
-    "estYear": "Est. 2024",
+    "estYear": "2005",
     "navSubtitle": {
       "en": "Registered NGO | West Bengal",
       "bn": "নিবন্ধিত সংস্থা | পশ্চিমবঙ্গ"
@@ -77,8 +77,8 @@ export const fallbackSiteContent = {
       "bn": "দক্ষিণ ২৪ পরগণার শিশু, নারী ও সম্প্রদায়ের পাশে আমরা কাজ করি।"
     },
     "registeredBadge": {
-      "en": "Registered NGO",
-      "bn": "নিবন্ধিত সংস্থা"
+      "en": "Test",
+      "bn": "পরীক্ষা"
     },
     "donateButtonLabel": {
       "en": "Donate Now",
@@ -741,43 +741,33 @@ export const fallbackSiteContent = {
   "ourWork": {
     "hero": {
       "pageTitle": {
-        "en": "Initiatives designed for real-world impact.",
-        "bn": "আমাদের কাজগুলো আসল দরকার মাথায় রেখেই করা হয়।"
+        "en": "",
+        "bn": ""
       },
       "intro": {
-        "en": "Our active programs focus on education, healthcare, and community welfare.",
-        "bn": "শিক্ষা, স্বাস্থ্য আর সমাজকল্যাণ—এই তিন দিকেই আমরা কাজ করি。"
+        "en": "",
+        "bn": ""
       }
     },
     "pageContent": {
       "eyebrow": {
-        "en": "Our Work",
-        "bn": "আমাদের কাজ"
+        "en": "",
+        "bn": ""
       },
       "approachLabel": {
-        "en": "Our Approach",
-        "bn": "আমাদের পদ্ধতি"
+        "en": "",
+        "bn": ""
       },
       "focusLabel": {
         "en": "Focus areas",
         "bn": "ফোকাস এরিয়া"
       },
       "joinLabel": {
-        "en": "Join the mission",
-        "bn": "আমাদের সাথে থাকুন"
+        "en": "",
+        "bn": ""
       }
     },
-    "focusTags": [
-      {
-        "tag": ""
-      },
-      {
-        "tag": ""
-      },
-      {
-        "tag": ""
-      }
-    ],
+    "focusTags": [],
     "featuredPrograms": [
       {
         "slug": "kishalaya-pathsala",
@@ -902,36 +892,19 @@ export const fallbackSiteContent = {
     ],
     "approach": {
       "heading": {
-        "en": "Our Approach",
-        "bn": "আমাদের পদ্ধতি"
+        "en": "",
+        "bn": ""
       },
-      "steps": [
-        {
-          "en": "Identify community needs",
-          "bn": "পাড়ার দরকারটা আগে বুঝে নিই"
-        },
-        {
-          "en": "Collaborate with local partners",
-          "bn": "স্থানীয় অংশীদারদের সাথে যৌথ উদ্যোগ"
-        },
-        {
-          "en": "Execute program and track impact",
-          "bn": "কাজটা করি আর কী হলো দেখি"
-        },
-        {
-          "en": "Provide ongoing support and review",
-          "bn": "চলতে থাকা সহায়তা আর খোঁজখবর রাখি"
-        }
-      ]
+      "steps": []
     },
     "joinBox": {
       "body": {
-        "en": "By partnering with us or volunteering, you help us bring these programs to life in underserved communities.",
-        "bn": "আমাদের সাথে যুক্ত হয়ে আপনিও প্রান্তিক মানুষের কাছে এই সেবাগুলো পৌঁছে দিতে পারেন।"
+        "en": "",
+        "bn": ""
       },
       "buttonLabel": {
-        "en": "Support this work",
-        "bn": "এই কাজটায় পাশে থাকুন"
+        "en": "",
+        "bn": ""
       }
     },
     "showcaseImages": [
@@ -1580,28 +1553,28 @@ export const fallbackSiteContent = {
   },
   "contact": {
     "pageTitle": {
-      "en": "",
-      "bn": ""
+      "en": "We'd love to hear from you.",
+      "bn": "আমরা আপনার কথা শুনতে চাই।"
     },
     "intro": {
-      "en": "",
-      "bn": ""
+      "en": "Reach out to us for inquiries, partnerships, or just to say hello.",
+      "bn": "কিছু জানতে চাইলে বা আমাদের সাথে কাজ করতে চাইলে সহজেই যোগাযোগ করুন।"
     },
     "responseLabel": {
-      "en": "",
-      "bn": ""
+      "en": "Response time",
+      "bn": "কত তাড়াতাড়ি উত্তর পাবেন"
     },
     "responseValue": {
-      "en": "",
-      "bn": ""
+      "en": "Usually within 2 business days",
+      "bn": "সাধারণত ২ কর্মদিবসের মধ্যে"
     },
     "formLabel": {
-      "en": "",
-      "bn": ""
+      "en": "Contact form",
+      "bn": "যোগাযোগের ফর্ম"
     },
     "formHeading": {
-      "en": "",
-      "bn": ""
+      "en": "Send us a direct message",
+      "bn": "সরাসরি একটা মেসেজ পাঠান"
     },
     "phoneLabel": {
       "en": "Phone",
@@ -1640,44 +1613,44 @@ export const fallbackSiteContent = {
     "mapEmbedUrl": "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed",
     "formLabels": {
       "nameLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Name",
+        "bn": "নাম"
       },
       "namePlaceholder": {
-        "en": "",
-        "bn": ""
+        "en": "Your name",
+        "bn": "আপনার নাম"
       },
       "emailLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Email",
+        "bn": "ইমেল"
       },
       "emailPlaceholder": {
-        "en": "",
+        "en": "you@example.com",
         "bn": ""
       },
       "subjectLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Subject",
+        "bn": "বিষয়"
       },
       "messageLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Message",
+        "bn": "বার্তা"
       },
       "messagePlaceholder": {
-        "en": "",
+        "en": "Tell us how you want to help",
         "bn": ""
       },
       "submitLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Send message",
+        "bn": "বার্তা পাঠান"
       },
       "submittingLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Sending...",
+        "bn": "পাঠানো হচ্ছে..."
       },
       "errorMessage": {
-        "en": "",
-        "bn": ""
+        "en": "Failed to submit form. Please try again.",
+        "bn": "ফর্ম জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"
       }
     },
     "mosaicImages": [
