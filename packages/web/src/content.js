@@ -59,8 +59,8 @@ export const fallbackSiteContent = {
   ],
   "siteMeta": {
     "orgName": "Heritage of Hope Foundation",
-    "logoUrl": "",
-    "phone": "+91 98765 43210",
+    "logoUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210218/heritage-of-hope/brand/profile_pic.webp",
+    "phone": "+91 8420119790",
     "email": "heritageofhopefoundation@gmail.com",
     "facebookUrl": "https://www.facebook.com/profile.php?id=61559891799273",
     "estYear": "Est. 2024",
@@ -104,8 +104,8 @@ export const fallbackSiteContent = {
         "bn": "ছোট ছোট কাজ, বড় ভরসা"
       },
       "headline": {
-        "en": "Education, healthcare and dignity for underserved communities.",
-        "bn": "প্রান্তিক মানুষের জন্য শিক্ষা, স্বাস্থ্য ও মর্যাদা।"
+        "en": "Edited Headline mpxm7hw1",
+        "bn": ""
       },
       "intro": {
         "en": "Heritage of Hope Foundation works across South 24 Parganas through learning spaces, health outreach and seasonal relief.",
@@ -180,6 +180,13 @@ export const fallbackSiteContent = {
         "label": {
           "en": "children supported",
           "bn": "শিশুর কাছে পৌঁছানো হয়েছে"
+        }
+      },
+      {
+        "value": "New 1780463275894",
+        "label": {
+          "en": "New metric",
+          "bn": "New metric"
         }
       },
       {
@@ -560,8 +567,8 @@ export const fallbackSiteContent = {
           "bn": "সহানুভূতি"
         },
         "description": {
-          "en": "We believe in leading with empathy, ensuring that every action we take is rooted in genuine care for those we serve.",
-          "bn": "আমরা মনে করি মানুষের পাশে দাঁড়ানোর মূল জিনিসটা হল অকৃত্রিম ভালোবাসা।"
+          "en": "Every action we take is rooted in empathy for the communities we serve, ensuring dignity and respect for all.",
+          "bn": "আমাদের প্রতিটি পদক্ষেপ সম্প্রদায়ের প্রতি সহানুভূতি থেকে নেওয়া, সবার জন্য মর্যাদা ও সম্মান নিশ্চিত করা।"
         }
       },
       {
@@ -570,8 +577,8 @@ export const fallbackSiteContent = {
           "bn": "স্বচ্ছতা"
         },
         "description": {
-          "en": "Our processes are open and clear; donors and beneficiaries see exactly where resources go.",
-          "bn": "আমরা যা কিছু করি তা খোলামেলা আর স্বচ্ছ, যাতে দাতা আর গ্রহীতা সবাই জানেন টাকাটা কোথায় লাগে。"
+          "en": "We operate with openness, ensuring that every contribution is accounted for and every decision is clear.",
+          "bn": "আমরা উন্মুক্তভাবে কাজ করি, নিশ্চিত করি প্রতিটি অনুদানের হিসাব এবং প্রতিটি সিদ্ধান্ত স্বচ্ছ।"
         }
       },
       {
@@ -580,8 +587,8 @@ export const fallbackSiteContent = {
           "bn": "সম্প্রদায়"
         },
         "description": {
-          "en": "We work alongside the community, respecting local needs and ensuring that solutions are shaped by the people.",
-          "bn": "আমরা মানুষের পাশে দাঁড়িয়ে কাজ করি, তাঁদের চাহিদা বুঝে সমাধান তৈরি করি。"
+          "en": "We believe in the power of collective action, working hand-in-hand with local leaders, families, and volunteers.",
+          "bn": "আমরা যৌথ উদ্যোগের শক্তিতে বিশ্বাস করি, স্থানীয় নেতা, পরিবার ও স্বেচ্ছাসেবকদের সাথে হাতে হাত মিলিয়ে কাজ করি।"
         }
       },
       {
@@ -590,8 +597,8 @@ export const fallbackSiteContent = {
           "bn": "স্বনির্ভরতা"
         },
         "description": {
-          "en": "Our goal is to help individuals and communities take charge of their own growth and future.",
-          "bn": "আমাদের লক্ষ্য মানুষকে নিজের পায়ে দাঁড়াতে সাহায্য করা。"
+          "en": "Our goal is not charity but capacity building — empowering individuals and communities to chart their own path forward.",
+          "bn": "আমাদের লক্ষ্য দান নয়, বরং সক্ষমতা তৈরি — ব্যক্তি ও সম্প্রদায়কে তাদের নিজস্ব পথ এগিয়ে নিতে শক্তিশালী করা।"
         }
       }
     ],
@@ -632,7 +639,7 @@ export const fallbackSiteContent = {
     ],
     "documents": [
       {
-        "id": 86,
+        "id": 110,
         "title": {
           "en": "Trust Registration Certificate",
           "bn": "ট্রাস্ট নিবন্ধন সার্টিফিকেট"
@@ -646,7 +653,7 @@ export const fallbackSiteContent = {
         "thumbUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210282/heritage-of-hope/docs/thumbs/trust-registration-certificate.png"
       },
       {
-        "id": 87,
+        "id": 111,
         "title": {
           "en": "NGO DARPAN (NITI AAYOG)",
           "bn": "NGO DARPAN (NITI AAYOG)"
@@ -660,7 +667,7 @@ export const fallbackSiteContent = {
         "thumbUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210276/heritage-of-hope/docs/thumbs/ngo-darpan-niti-ayog.png"
       },
       {
-        "id": 88,
+        "id": 112,
         "title": {
           "en": "12A Certificate (provisional)",
           "bn": "১২এ শংসাপত্র (অস্থায়ী)"
@@ -674,7 +681,7 @@ export const fallbackSiteContent = {
         "thumbUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210274/heritage-of-hope/docs/thumbs/hhp-12a.png"
       },
       {
-        "id": 89,
+        "id": 113,
         "title": {
           "en": "80G Certificate (provisional)",
           "bn": "৮০জি শংসাপত্র (অস্থায়ী)"
@@ -688,7 +695,7 @@ export const fallbackSiteContent = {
         "thumbUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210275/heritage-of-hope/docs/thumbs/hhp-80g.png"
       },
       {
-        "id": 90,
+        "id": 114,
         "title": {
           "en": "MCA CSR Registration (CSR-1)",
           "bn": "MCA CSR Registration (CSR-1)"
@@ -702,7 +709,7 @@ export const fallbackSiteContent = {
         "thumbUrl": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210271/heritage-of-hope/docs/thumbs/csr-1-hhf.png"
       },
       {
-        "id": 91,
+        "id": 115,
         "title": {
           "en": "Certificates & Awards",
           "bn": "শংসাপত্র ও পুরস্কার"
@@ -741,43 +748,33 @@ export const fallbackSiteContent = {
   "ourWork": {
     "hero": {
       "pageTitle": {
-        "en": "Initiatives designed for real-world impact.",
-        "bn": "আমাদের কাজগুলো আসল দরকার মাথায় রেখেই করা হয়।"
+        "en": "",
+        "bn": ""
       },
       "intro": {
-        "en": "Our active programs focus on education, healthcare, and community welfare.",
-        "bn": "শিক্ষা, স্বাস্থ্য আর সমাজকল্যাণ—এই তিন দিকেই আমরা কাজ করি。"
+        "en": "",
+        "bn": ""
       }
     },
     "pageContent": {
       "eyebrow": {
-        "en": "Our Work",
-        "bn": "আমাদের কাজ"
+        "en": "",
+        "bn": ""
       },
       "approachLabel": {
-        "en": "Our Approach",
-        "bn": "আমাদের পদ্ধতি"
+        "en": "",
+        "bn": ""
       },
       "focusLabel": {
         "en": "Focus areas",
         "bn": "ফোকাস এরিয়া"
       },
       "joinLabel": {
-        "en": "Join the mission",
-        "bn": "আমাদের সাথে থাকুন"
+        "en": "",
+        "bn": ""
       }
     },
-    "focusTags": [
-      {
-        "tag": ""
-      },
-      {
-        "tag": ""
-      },
-      {
-        "tag": ""
-      }
-    ],
+    "focusTags": [],
     "featuredPrograms": [
       {
         "slug": "kishalaya-pathsala",
@@ -902,36 +899,19 @@ export const fallbackSiteContent = {
     ],
     "approach": {
       "heading": {
-        "en": "Our Approach",
-        "bn": "আমাদের পদ্ধতি"
+        "en": "",
+        "bn": ""
       },
-      "steps": [
-        {
-          "en": "Identify community needs",
-          "bn": "পাড়ার দরকারটা আগে বুঝে নিই"
-        },
-        {
-          "en": "Collaborate with local partners",
-          "bn": "স্থানীয় অংশীদারদের সাথে যৌথ উদ্যোগ"
-        },
-        {
-          "en": "Execute program and track impact",
-          "bn": "কাজটা করি আর কী হলো দেখি"
-        },
-        {
-          "en": "Provide ongoing support and review",
-          "bn": "চলতে থাকা সহায়তা আর খোঁজখবর রাখি"
-        }
-      ]
+      "steps": []
     },
     "joinBox": {
       "body": {
-        "en": "By partnering with us or volunteering, you help us bring these programs to life in underserved communities.",
-        "bn": "আমাদের সাথে যুক্ত হয়ে আপনিও প্রান্তিক মানুষের কাছে এই সেবাগুলো পৌঁছে দিতে পারেন।"
+        "en": "",
+        "bn": ""
       },
       "buttonLabel": {
-        "en": "Support this work",
-        "bn": "এই কাজটায় পাশে থাকুন"
+        "en": "",
+        "bn": ""
       }
     },
     "showcaseImages": [
@@ -1029,6 +1009,13 @@ export const fallbackSiteContent = {
         }
       },
       {
+        "value": "New 1780463275894",
+        "label": {
+          "en": "New metric",
+          "bn": "New metric"
+        }
+      },
+      {
         "value": "15+",
         "label": {
           "en": "health & education drives",
@@ -1052,7 +1039,7 @@ export const fallbackSiteContent = {
     ],
     "fundAllocation": [
       {
-        "id": 53,
+        "id": 84,
         "category": {
           "en": "Education",
           "bn": "শিক্ষা"
@@ -1060,7 +1047,7 @@ export const fallbackSiteContent = {
         "percentage": 45
       },
       {
-        "id": 54,
+        "id": 85,
         "category": {
           "en": "Healthcare",
           "bn": "স্বাস্থ্য"
@@ -1068,7 +1055,7 @@ export const fallbackSiteContent = {
         "percentage": 25
       },
       {
-        "id": 55,
+        "id": 86,
         "category": {
           "en": "Relief drives",
           "bn": "মৌসুমি কল্যাণ সহায়তা"
@@ -1076,7 +1063,7 @@ export const fallbackSiteContent = {
         "percentage": 20
       },
       {
-        "id": 56,
+        "id": 87,
         "category": {
           "en": "Operations",
           "bn": "পরিচালনা ব্যয়"
@@ -1104,20 +1091,20 @@ export const fallbackSiteContent = {
         "bn": "ছবিঘর"
       },
       "heading": {
-        "en": "Photo Gallery",
-        "bn": "ছবির সংগ্রহ"
+        "en": "Moments of hope and action.",
+        "bn": "আমাদের সমাজসেবামূলক কাজের কিছু বিশেষ মুহূর্ত।"
       },
       "intro": {
-        "en": "Moments from our programs and community events.",
-        "bn": "আমাদের কাজ আর অনুষ্ঠানের কিছু মুহূর্ত।"
+        "en": "A visual journey through our health camps, learning centers, and community outreach events.",
+        "bn": "আমাদের স্বাস্থ্য শিবির, শিক্ষাকেন্দ্র এবং বিভিন্ন সামাজিক অনুষ্ঠানের কিছু খণ্ডচিত্র।"
       },
       "filterLabel": {
-        "en": "Filter by category",
-        "bn": "বিভাগ অনুযায়ী দেখুন"
+        "en": "Explore",
+        "bn": "ঘুরে দেখুন"
       },
       "filterText": {
-        "en": "Browse photos",
-        "bn": "ছবি দেখুন"
+        "en": "Filter photos by our core impact areas.",
+        "bn": "কোন কাজের ছবি দেখতে চান, সেটা বেছে নিন।"
       },
       "filterChipAll": {
         "en": "All",
@@ -1142,84 +1129,84 @@ export const fallbackSiteContent = {
     },
     "items": [
       {
-        "id": 183,
+        "id": 237,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210226/heritage-of-hope/gallery/gallery_learning.webp",
         "altEn": "Learning in Kishalaya",
         "altBn": "কিশলয়ে পাঠদান",
         "category": "Education"
       },
       {
-        "id": 184,
+        "id": 238,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210228/heritage-of-hope/gallery/gallery_health.webp",
         "altEn": "Free health camp",
         "altBn": "বিনামূল্যের স্বাস্থ্য শিবির",
         "category": "Healthcare"
       },
       {
-        "id": 185,
+        "id": 239,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210229/heritage-of-hope/gallery/gallery_winter.webp",
         "altEn": "Winter distribution",
         "altBn": "শীতবস্ত্র পৌঁছে দেওয়া",
         "category": "Welfare"
       },
       {
-        "id": 186,
+        "id": 240,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210230/heritage-of-hope/gallery/gallery_reg.webp",
         "altEn": "Notebook distribution day",
         "altBn": "খাতা বিতরণের দিন",
         "category": "Education"
       },
       {
-        "id": 187,
+        "id": 241,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210232/heritage-of-hope/gallery/gallery_blood.webp",
         "altEn": "Blood donation drive",
         "altBn": "রক্তদান কর্মসূচি",
         "category": "Healthcare"
       },
       {
-        "id": 188,
+        "id": 242,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210233/heritage-of-hope/gallery/gallery_monsoon.webp",
         "altEn": "Monsoon relief",
         "altBn": "বর্ষাকালীন সহায়তা",
         "category": "Welfare"
       },
       {
-        "id": 189,
+        "id": 243,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210235/heritage-of-hope/gallery/gallery_feast.webp",
         "altEn": "Community feast by the river",
         "altBn": "নদীর ধারে একসাথে খাওয়া",
         "category": "Welfare"
       },
       {
-        "id": 190,
+        "id": 244,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210238/heritage-of-hope/gallery/gallery_study.webp",
         "altEn": "Students reading at Kishalaya",
         "altBn": "কিশলয়ে শিক্ষার্থীদের পঠনপাঠন",
         "category": "Education"
       },
       {
-        "id": 191,
+        "id": 245,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210239/heritage-of-hope/gallery/gallery_mothers.webp",
         "altEn": "Sarees for mothers — Durga Puja",
         "altBn": "মায়েদের জন্য শাড়ি — দুর্গাপূজা",
         "category": "Welfare"
       },
       {
-        "id": 192,
+        "id": 246,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210242/heritage-of-hope/gallery/gallery_puja.webp",
         "altEn": "Durga Puja clothes for children",
         "altBn": "শিশুদের জন্য পূজার নতুন জামা",
         "category": "Welfare"
       },
       {
-        "id": 193,
+        "id": 247,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210243/heritage-of-hope/gallery/gallery_checkup.webp",
         "altEn": "Pre-donation health checkup",
         "altBn": "রক্ত দেওয়ার আগে স্বাস্থ্য পরীক্ষা",
         "category": "Healthcare"
       },
       {
-        "id": 194,
+        "id": 248,
         "url": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210244/heritage-of-hope/gallery/gallery_joy.webp",
         "altEn": "Children celebrating together",
         "altBn": "শিশুদের আনন্দ উদযাপন",
@@ -1235,7 +1222,7 @@ export const fallbackSiteContent = {
       },
       "intro": {
         "en": "Whether through donations, volunteering, or partnerships, your involvement drives our mission forward.",
-        "bn": "অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়。"
+        "bn": "অনুদান, স্বেচ্ছাসেবা বা অংশীদারিত্ব—যেভাবেই পারেন, পাশে থাকলে আমাদের কাজ এগোয়।"
       }
     },
     "pageContent": {
@@ -1300,12 +1287,12 @@ export const fallbackSiteContent = {
         "bn": "ব্যাংক তথ্য"
       },
       "chequeModalTitle": {
-        "en": "Donate via Cheque",
-        "bn": "চেকের মাধ্যমে দান করুন"
+        "en": "Specimen cheque",
+        "bn": "নমুনা চেক"
       },
       "chequeButtonLabel": {
-        "en": "Donate via Cheque",
-        "bn": "চেকের মাধ্যমে দান করুন"
+        "en": "View specimen cheque",
+        "bn": "চেক দেখুন"
       }
     },
     "bankDetails": {
@@ -1320,11 +1307,11 @@ export const fallbackSiteContent = {
       "accountNumber": "A/C No: 43107075580",
       "ifsc": "IFSC: SBIN0008438"
     },
-    "upiImage": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779291892/heritage-of-hope/upi/emysyabyzhifxbmmngad.jpg",
+    "upiImage": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210270/heritage-of-hope/documents/upi-qr.jpg",
     "upiDeepLink": "upi://pay?pa=8420119790%40okbizaxis&pn=Heritage%20of%20Hope%20Foundation&cu=INR",
     "donationTiers": [
       {
-        "id": 35,
+        "id": 68,
         "amount": 199,
         "label": {
           "en": "one child gets warm clothing",
@@ -1332,7 +1319,7 @@ export const fallbackSiteContent = {
         }
       },
       {
-        "id": 36,
+        "id": 69,
         "amount": 500,
         "label": {
           "en": "learning materials for a month",
@@ -1340,7 +1327,7 @@ export const fallbackSiteContent = {
         }
       },
       {
-        "id": 37,
+        "id": 70,
         "amount": 1000,
         "label": {
           "en": "health outreach support",
@@ -1348,11 +1335,19 @@ export const fallbackSiteContent = {
         }
       },
       {
-        "id": 38,
+        "id": 71,
         "amount": 5000,
         "label": {
           "en": "sponsor a learning journey",
           "bn": "একজনের শিক্ষার দায়িত্ব নিন"
+        }
+      },
+      {
+        "id": 72,
+        "amount": 250,
+        "label": {
+          "en": "Test Tier",
+          "bn": "Test Tier"
         }
       }
     ],
@@ -1367,7 +1362,7 @@ export const fallbackSiteContent = {
       },
       "roles": [
         {
-          "id": 36,
+          "id": 74,
           "title": {
             "en": "Teaching support",
             "bn": "শিক্ষাদানে সহায়তা"
@@ -1378,7 +1373,7 @@ export const fallbackSiteContent = {
           }
         },
         {
-          "id": 37,
+          "id": 75,
           "title": {
             "en": "Event coordination",
             "bn": "অনুষ্ঠান গোছানো"
@@ -1389,7 +1384,7 @@ export const fallbackSiteContent = {
           }
         },
         {
-          "id": 38,
+          "id": 76,
           "title": {
             "en": "Photography",
             "bn": "ফটোগ্রাফি"
@@ -1400,7 +1395,7 @@ export const fallbackSiteContent = {
           }
         },
         {
-          "id": 39,
+          "id": 77,
           "title": {
             "en": "Social media",
             "bn": "সামাজিক মাধ্যম"
@@ -1411,7 +1406,7 @@ export const fallbackSiteContent = {
           }
         },
         {
-          "id": 40,
+          "id": 78,
           "title": {
             "en": "Healthcare assistance",
             "bn": "স্বাস্থ্যসেবায় সহায়তা"
@@ -1576,32 +1571,32 @@ export const fallbackSiteContent = {
       },
       "image": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210223/heritage-of-hope/partners/get_involved_partner.webp"
     },
-    "specimenChequeImage": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779290611/heritage-of-hope/getInvolved/bank/a7yzyq8cv6xwwvgelnwd.jpg"
+    "specimenChequeImage": "https://res.cloudinary.com/dsa6xl7wt/image/upload/v1779210262/heritage-of-hope/documents/empty-cheque.jpg"
   },
   "contact": {
     "pageTitle": {
-      "en": "",
-      "bn": ""
+      "en": "We'd love to hear from you.",
+      "bn": "আমরা আপনার কথা শুনতে চাই।"
     },
     "intro": {
-      "en": "",
-      "bn": ""
+      "en": "Reach out to us for inquiries, partnerships, or just to say hello.",
+      "bn": "কিছু জানতে চাইলে বা আমাদের সাথে কাজ করতে চাইলে সহজেই যোগাযোগ করুন।"
     },
     "responseLabel": {
-      "en": "",
-      "bn": ""
+      "en": "Response time",
+      "bn": "কত তাড়াতাড়ি উত্তর পাবেন"
     },
     "responseValue": {
-      "en": "",
-      "bn": ""
+      "en": "Usually within 2 business days",
+      "bn": "সাধারণত ২ কর্মদিবসের মধ্যে"
     },
     "formLabel": {
-      "en": "",
-      "bn": ""
+      "en": "Contact form",
+      "bn": "যোগাযোগের ফর্ম"
     },
     "formHeading": {
-      "en": "",
-      "bn": ""
+      "en": "Send us a direct message",
+      "bn": "সরাসরি একটা মেসেজ পাঠান"
     },
     "phoneLabel": {
       "en": "Phone",
@@ -1616,12 +1611,12 @@ export const fallbackSiteContent = {
       "bn": "ঠিকানা"
     },
     "visitFacebookLabel": {
-      "en": "Visit our Facebook page",
-      "bn": "আমাদের ফেসবুক পেজ দেখুন"
+      "en": "Visit Official Facebook Page →",
+      "bn": "অফিসিয়াল ফেসবুক পেজ দেখুন →"
     },
     "mapTitle": {
-      "en": "Find us here",
-      "bn": "এখানে খুঁজুন"
+      "en": "Heritage of Hope Foundation location",
+      "bn": "হেরিটেজ অফ হোপ ফাউন্ডেশনের অবস্থান"
     },
     "pageContent": {
       "eyebrow": {
@@ -1629,55 +1624,55 @@ export const fallbackSiteContent = {
         "bn": "যোগাযোগ"
       },
       "facebookLabel": {
-        "en": "Facebook",
-        "bn": "ফেসবুক"
+        "en": "Featured from Facebook",
+        "bn": "ফেসবুকের পাতা থেকে"
       },
       "facebookHeading": {
-        "en": "Follow us",
-        "bn": "আমাদের অনুসরণ করুন"
+        "en": "Recent moments from the page",
+        "bn": "সাম্প্রতিক মুহূর্তগুলো"
       }
     },
     "mapEmbedUrl": "https://www.google.com/maps?q=Sukantapally,+Subhas+Gram,+West+Bengal+700147&output=embed",
     "formLabels": {
       "nameLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Name",
+        "bn": "নাম"
       },
       "namePlaceholder": {
-        "en": "",
-        "bn": ""
+        "en": "Your name",
+        "bn": "আপনার নাম"
       },
       "emailLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Email",
+        "bn": "ইমেল"
       },
       "emailPlaceholder": {
-        "en": "",
+        "en": "you@example.com",
         "bn": ""
       },
       "subjectLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Subject",
+        "bn": "বিষয়"
       },
       "messageLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Message",
+        "bn": "বার্তা"
       },
       "messagePlaceholder": {
-        "en": "",
+        "en": "Tell us how you want to help",
         "bn": ""
       },
       "submitLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Send message",
+        "bn": "বার্তা পাঠান"
       },
       "submittingLabel": {
-        "en": "",
-        "bn": ""
+        "en": "Sending...",
+        "bn": "পাঠানো হচ্ছে..."
       },
       "errorMessage": {
-        "en": "",
-        "bn": ""
+        "en": "Failed to submit form. Please try again.",
+        "bn": "ফর্ম জমা দিতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।"
       }
     },
     "mosaicImages": [
@@ -1788,20 +1783,20 @@ export const fallbackSiteContent = {
   "thankYou": {
     "pageContent": {
       "eyebrow": {
-        "en": "Thank You",
-        "bn": "ধন্যবাদ"
+        "en": "Submission received",
+        "bn": "আপনার বার্তাটি আমরা পেয়েছি"
       },
       "heading": {
-        "en": "Your message has been received",
-        "bn": "আপনার বার্তা পেয়েছি"
+        "en": "Thank you for reaching out.",
+        "bn": "যোগাযোগ করার জন্য ধন্যবাদ।"
       },
       "body": {
-        "en": "Thank you for reaching out. We'll get back to you soon.",
-        "bn": "যোগাযোগ করার জন্য ধন্যবাদ। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।"
+        "en": "We will review your message and respond as soon as possible.",
+        "bn": "আপনার বার্তাটা দেখে আমরা দ্রুতই যোগাযোগ করব।"
       },
       "buttonLabel": {
-        "en": "Back to home",
-        "bn": "হোমপেজে ফিরুন"
+        "en": "Return home",
+        "bn": "মূল পাতায় ফিরে যান"
       }
     }
   },
@@ -1809,19 +1804,19 @@ export const fallbackSiteContent = {
     "pageContent": {
       "eyebrow": {
         "en": "404",
-        "bn": "৪০৪"
+        "bn": "404"
       },
       "heading": {
         "en": "Page not found",
-        "bn": "পৃষ্ঠাটি পাওয়া যায়নি"
+        "bn": "পেজ পাওয়া যায়নি"
       },
       "body": {
-        "en": "The page you're looking for doesn't exist or has been moved.",
-        "bn": "আপনি যে পৃষ্ঠাটি খুঁজছেন তা নেই বা সরানো হয়েছে。"
+        "en": "Return to the homepage to continue exploring.",
+        "bn": "হোমপেজে ফিরে গিয়ে আবার ঘুরে দেখুন।"
       },
       "buttonLabel": {
-        "en": "Back to home",
-        "bn": "হোমপেজে ফিরুন"
+        "en": "Go home",
+        "bn": "মূল পাতায় ফিরে যান"
       }
     }
   }
